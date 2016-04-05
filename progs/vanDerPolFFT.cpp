@@ -64,7 +64,7 @@ int main()
 	phys::storage::Storage<double> transform;
 
 	transform.copy(x_axis, normG);
-	transform.write("/home/dwalker/src/Physlib/programs/bin/data/vdpFFT.txt");
+	transform.write("./data/vdpFFT.txt");
 
 	return 0;
 }

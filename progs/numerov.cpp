@@ -252,7 +252,7 @@ int main()
 	viewer.noAnimation();
 	viewer.withLines();
 	viewer.add_data(potential.get_independent(), potential.get_dependent(), true);
-	viewer.save("./harmonic.png"); 
+	viewer.save("./data/harmonic.png"); 
 
 	return 0;
 }

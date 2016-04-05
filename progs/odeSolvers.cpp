@@ -20,7 +20,7 @@
 int main()
 {
 	const int num_of_solvers = 7;
-	std::string root = "/home/dwalker/src/Physlib/programs/bin/data/";
+	std::string root = "./data/";
 
 	phys::diffs::Diff_eqn* shm_func = new phys::diffs::SHM_eqn(9.0, 1.0);//spring const., drag coeff.
 	

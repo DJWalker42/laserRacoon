@@ -26,7 +26,7 @@ int main()
 		viewer.plot(data);//, Viewer::XY);
 	}
 
-	//data.write("./cometOutput.txt");
+	data.write("./data/cometOutput.txt");
 
 	return 0; 
 }

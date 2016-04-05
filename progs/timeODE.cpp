@@ -35,7 +35,7 @@ int main()
 		std::cout << "Execution time: " << time_span.count() << " seconds.\n";
 	}
 
-	container.write("../Data/dummy1.txt");
+	container.write("./data/shm1.txt");
 	//reset system to initial values.
 	rk4->set_state(initial_system);
 	{
@@ -45,7 +45,7 @@ int main()
 		steady_clock::time_point t2 = steady_clock::now();
 		duration<double> time_span = duration_cast<duration<double>>(t2 - t1);
 		std::cout << "Execution time: " << time_span.count() << " seconds" << std::endl;
-		full_result.write("../Data/dummy2.txt");
+		full_result.write("./data/shm2.txt");
 	}
 	delete rk4;
 	delete shm_eqn;
