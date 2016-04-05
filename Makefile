@@ -82,6 +82,11 @@ $(LIB): $(OBJ)
 
 $(OBJDIR)/%.o: %.cpp $(INC)
 	$(CXX) $(CXXFLAGS) $(OPTIONS) -O2 -c $< -o $@ 
+	
+$(OBJ): | $(OBJDIR)
+
+$(OBJDIR):
+	mkdir -p $(OBJDIR)
 
 .PHONY: clean
 clean:
