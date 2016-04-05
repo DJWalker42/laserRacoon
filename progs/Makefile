@@ -1,11 +1,14 @@
+#note that this makefile is not optimal. Every time you make a change to one of the sample source files
+#each source file is recomplied. One solution would be to have a unique target for each source file.
+
 INCDIR=../inc
 LIBDIR=../lib
 OPENCVLIB=/usr/local/lib
 BINDIR=./bin
 
-LIBNAME=RareMagic
+LIBNAME=laserRacoon
 
-TARGETS=	animatePhys.cpp \
+SOURCES=	animatePhys.cpp \
 			rootSearchApp.cpp \
 			aniPhys.cpp \
 			comet.cpp \
@@ -29,7 +32,7 @@ LIBFLAGS=-L${LIBDIR}/ -l${LIBNAME} -L${OPENCVLIB}/ -lopencv_core -lopencv_highgu
 OPTIONS=
 
 LIB=$(addprefix $(LIBDIR)/lib, $(addsuffix .a, $(LIBNAME)))
-BIN=$(addprefix $(BINDIR)/, $(TARGETS:.cpp=))
+BIN=$(addprefix $(BINDIR)/, $(SOURCES:.cpp=))
 
 default: $(BIN)
 
