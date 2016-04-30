@@ -3,6 +3,7 @@
 
 double pi = 4.0*atan(1.0);
 
+//the fresenel functions
 double f1(double x){
 	return cos(pi*x*x/2);
 }
@@ -11,9 +12,9 @@ double f2(double x){
 	return sin(pi*x*x/2);
 }
 
-
 int fresnel_guass()
 {
+	//use gauss-legendre quadrature with 20 knots
 	phys::quad::Legendre lege(20);
 
 	//set lower limit to zero, increment upper limit to a max of 5.0
@@ -22,6 +23,7 @@ int fresnel_guass()
 	double delta = 0.05;
 	phys::stdVec_d v, I;
 
+	//compute fresnel integration
 	while (b < 5.0)
 	{
 		b += delta;
@@ -31,23 +33,17 @@ int fresnel_guass()
 		v.push_back(b);
 	}
 
-	
-
+	//plot result
 	phys::visual::Viewer viewer;
-
 	viewer.withLines();
-
 	viewer.set_plot_name("Guass");
-
 	viewer.plot(v, I);
 
-	return lege.get_func_calls(); 
-
+	return lege.get_func_calls(); //for comparison
 }
 
 int fresnel_romberg()
 {
-
 	phys::quad::Romberg romb;
 
 	//set lower limit to zero, adjust upper limit to a max of 5.0

@@ -16,7 +16,7 @@ double step = (x_rht - x_lft)/N;	//!< step size
 double u0 = 0.0;					//!< value of wavefunction at first grid point
 double u1 = 1.e-10;					//!< value of wavefunction at second grid point
 
-phys::stdVec_d phi;						//!< Storage for the wavefunction(s)
+phys::stdVec_d phi;					//!< Storage for the wavefunction(s)
 size_t i_match_p1;					//!< Index location where phi switchs from left to right integration.
 
 phys::ode::state u_lft(x_lft, u0, u1);	//!< Constructs for the Numerov solver Left initial
@@ -29,7 +29,7 @@ double V(double x)
 {
 	//return (0.5 * electron_mass * omega * omega * x * x);
 
-	return fabs(x) > 2.0 ? 10.0 : 0.0;
+	return fabs(x) > 2.0 ? 10.0 : 0.0; //square potential Vo = 10 eV, width = 4 nm
 }
 
 double find_match( double start, double step, double end )
