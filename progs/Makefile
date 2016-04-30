@@ -8,13 +8,13 @@ BINDIR=./bin
 
 LIBNAME=laserRacoon
 
-SOURCES=	animatePhys.cpp \
+SOURCES=	shm.cpp \
 			rootSearchApp.cpp \
-			aniPhys.cpp \
+			dampedSHM.cpp \
 			comet.cpp \
 			numerov.cpp \
 			dataFit.cpp \
-			em_main.cpp \
+			earth2moon.cpp \
 			fresnel.cpp \
 			interpolation.cpp \
 			laguerre.cpp \
@@ -24,7 +24,8 @@ SOURCES=	animatePhys.cpp \
 			odeSolvers.cpp \
 			quadrat.cpp \
 			vanDerPolFFT.cpp \
-			BvpODEchk.cpp
+			BvpODEchk.cpp \
+			resonance.cpp
 
 CXX=g++
 CXXFLAGS=-Wall -O2 -I${INCDIR}/ -std=c++11
