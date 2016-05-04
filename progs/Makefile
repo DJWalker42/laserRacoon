@@ -25,7 +25,8 @@ SOURCES=	shm.cpp \
 			quadrat.cpp \
 			vanDerPolFFT.cpp \
 			BvpODEchk.cpp \
-			resonance.cpp
+			resonance.cpp \
+			double_pendulum.cpp
 
 CXX=g++
 CXXFLAGS=-Wall -O2 -I${INCDIR}/ -std=c++11
