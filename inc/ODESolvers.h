@@ -34,7 +34,7 @@ namespace phys{
 			/*	Solves the system from initial independent value to end. */
 			virtual phys::storage::ODE_Storage fullSolve(double end) = 0;
 
-			/* Solves the system from initial independent value to end, wrapping the dependent varaible to the range -pi to +pi*/
+			/* Solves the system from initial independent value to end, wrapping the dependent variable to the range -pi to +pi*/
 			virtual phys::storage::ODE_Storage fullSolveWrapped(double end)
 			{
 				size_t N = num_steps(m_current.x, end), count = 0;
