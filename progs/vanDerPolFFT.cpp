@@ -2,6 +2,13 @@
 #include <ODESolvers.h>
 #include <Visualise.h>
 
+/*
+	***PROGRAM SOLVING THE VAN DER POL OSCILLATOR EQUATION***
+
+	Uses the Runge-Kutta algorithm to compute the solution to the Van Der Pol oscillator.
+	Passes the stable part of that solution to a fast fourier transform to have a look at the
+	frequencies making up the solution.
+*/
 
 int main()
 {

@@ -3,15 +3,34 @@
 #include <Storage.h>
 #include <Visualise.h>
 
-double E;							//!< Energy eigenvalues to find in eV
-double omega = 1.0;					//!< oscillator frequency (Hz)
+/*
+	***COMPUTES THE ELECTRON ENERGY STATES OF A GIVEN POTENTIAL FUNCTION USING THE NUMEROV ALGORITHM** 
+	
+	For a user defined potential computes the electron energy states of the well. It guesses at an
+	energy level and integrates the resulting wavefunction from the classically forbidden region
+	up to a mathcing point within the well. Then it integrates the wavefunction from the other 
+	direction again starting from the classically forbidden region, up to the matching point. It 
+	use the information of the guessed energy level and how close the wavefunctions get at the matching
+	point to improve the energy level guess; in essence it root searches for the precise energy level.
+
+	The matching point can be any arbritray point in the well however it convenient to take the
+	matching point where the guessed energy level crosses the rhs boundary of the potential function. 
+	We integrate from the classically forbidden region into the well to supress
+	the unwanted expoential growth term to Schrodingers equation that tends to blow up due to
+	floating point number precision. 
+
+*/
+
+
+double E;				//!< Energy eigenvalues to find in eV
+double omega = 1.0;		//!< oscillator frequency (Hz)
 /* 
 	The size of the frequency is arbritrary but will depend on choice of energy and length units
 	The natural choice for these is eV and nm making omega ~order 10^14 Hz, given the harmonic potential.
 */
 double N = 500;						//!< Total number of steps to take in the integration
-double x_lft = -5.0;				//!< Left extreme
-double x_rht =  5.0;				//!< Right extreme
+double x_lft = -3.0;				//!< Left extreme
+double x_rht =  3.0;				//!< Right extreme
 double step = (x_rht - x_lft)/N;	//!< step size
 double u0 = 0.0;					//!< value of wavefunction at first grid point
 double u1 = 1.e-10;					//!< value of wavefunction at second grid point
@@ -24,12 +43,11 @@ phys::ode::state u_rht(x_rht, u0, u1);	//!< Right initial
 
 phys::diffs::Diff_eqn* q_func = new phys::diffs::User_eqn(); //auto deleted at end of program
 
-//!< harmonic oscillator potential
+//!< harmonic oscillator potential / square potential well (uncomment choice)
 double V(double x)      
 {
-	//return (0.5 * electron_mass * omega * omega * x * x);
-
-	return fabs(x) > 2.0 ? 10.0 : 0.0; //square potential Vo = 10 eV, width = 4 nm
+	return (0.5 * electron_mass * omega * omega * x * x);// harmonic potential
+	//return fabs(x) > 1.0 ? 10.0 : 0.0; //square potential Vo = 10 eV, width = 2 nm
 }
 
 double find_match( double start, double step, double end )
@@ -55,13 +73,13 @@ double q (double x)
 	return 2 * 10.0 * electron_mass / (hbar_ev * hbar_ev) * (E - V(x));
 }
 
-//interface to differential equation object -- the vector y is size 2 so is cheap and quick to pass
+//interface to differential equation object -- compilier optimisations *may* remove redundent arguments here - but they are all cheap and quick to pass.
 double phys::diffs::User_eqn::differential_function(double x, const stdVec_d& y, int N, int i)
 {
 	return q(x);
 }
 
-//!< Search function
+//!< Search function - input an energy level guess, returns with the difference between wavefunctions at matching point.
 double F(double En)
 {
 
@@ -168,6 +186,7 @@ int main()
 
 	std::cout	<< " Eigenvalues of the Schroedinger equation\n"
 				<< " for the harmonic oscillator V(x) = 0.5 x^2\n"
+				<< " (you can change this to a function of choice in the source file)\n"
 				<< " ------------------------------------------\n";
 	double E_max;
 
@@ -217,7 +236,7 @@ int main()
 			convert.str("");
 
 			std::cout << "Found a level at E = " << E << "\n";
-			std::cout << "constant = " << E/(2*level - 1) << "\n";
+			//std::cout << "constant = " << E/(2*level - 1) << "\n";//this should be a constant for the harmonic potential
 		}
 	}while(E < E_max);
 

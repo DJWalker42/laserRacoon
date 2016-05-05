@@ -2,6 +2,14 @@
 #include <Visualise.h>
 #include <sstream>
 
+/*
+	***Program to simulate a double pendulum***
+
+	Uses the adaptive Runge-Kutta-Fehlberg algorithm to compute the motion of a double pendulum system.
+
+	The data is then animated using OpenCV.
+*/
+
 const int rows = 500;
 const int cols = rows;
 

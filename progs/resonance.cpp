@@ -3,6 +3,14 @@
 
 #include <iomanip>
 
+/*
+	***SIMULATION OF A DAMPED DRIVEN OSCILLATOR***
+	
+	This program shows how the repsonse of a driven oscillator is affected by damping.
+
+	How might you obtain the Q-factor from the data computed?
+*/
+
 //set global driving frequency to use in the the drive function
 //and which can be modified in tha main function
 const double omega_start = 1.;

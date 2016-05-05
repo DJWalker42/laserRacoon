@@ -10,7 +10,7 @@ LIBNAME=laserRacoon
 
 SOURCES=	shm.cpp \
 			rootSearchApp.cpp \
-			dampedSHM.cpp \
+			duffing.cpp \
 			comet.cpp \
 			numerov.cpp \
 			dataFit.cpp \

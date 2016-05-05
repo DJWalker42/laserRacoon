@@ -1,6 +1,14 @@
 #include <RootSearch.h>
 
 /*
+	***SHOW CASE OF ROOT SEARCHING ALGORITHMS***
+
+	Here we use the Legendre polynomial as our search function. The derivsative is required for the
+	Newton-Raphson search.
+
+*/
+
+/*
 	This power function works for n strictly positive but what if it is called
 	with n <= 0? How can we handle this? 
 */
@@ -54,19 +62,16 @@ int main ()
 	phys::roots::RootSearch* newton = new phys::roots::Newton_Raphson(&function, &derivative, left);
 	phys::roots::RootSearch* hybri1 = new phys::roots::Hybrid_B_N_R(&function, &derivative, left, right);
 	phys::roots::RootSearch* hybri2 = new phys::roots::Hybrid_B_S(&function, left, right);
-	double root_bisect = bisect->find_root(1); //the argument requests the function to print its output
-	double root_secant = secant->find_root(1);
-	double root_newton = newton->find_root(1);
-	double root_hybri1 = hybri1->find_root(1);
-	double root_hybri2 = hybri2->find_root(1);
+	bisect->find_root(1); //the argument requests the function to print its output
+	secant->find_root(1);
+	newton->find_root(1);
+	hybri1->find_root(1);
+	hybri2->find_root(1);
 	delete bisect;
 	delete secant;
 	delete newton;
 	delete hybri1;
 	delete hybri2;
-
-	//to supress complier warnings do something with the results
-	std::cout << root_bisect << "\t" << root_secant << "\t" << root_newton << "\t" << root_hybri1 << "\t" << root_hybri2;
 
 	return 0;
 }

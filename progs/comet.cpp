@@ -2,6 +2,16 @@
 #include <PhysicalUnits.h>
 #include <Visualise.h>
 
+/*
+	***PROGRAM TO COMPUTE THE ORBIT OF HALLEY'S COMET***
+	
+	Uses the adaptive Runge-Kutta-Fehlberg algorithm to compute the orbit of Halley's comet around the Sun.
+	Note that Halley's comet is defined by its aphelion position and tangential velocity at that point.
+	To keep computer friendly numbers during the computation we use the Astronomical Unit (AU) for the distance 
+	unit and the number of seconds in an Earth year (yrs) for the time unit (both found in PhysicalUnits.h).
+
+	Here we assume no other gravitational interaction with other bodies in the solar system. 
+*/
 
 int main()
 {
@@ -23,7 +33,7 @@ int main()
 	{
 		using namespace phys::visual;
 		Viewer viewer;
-		viewer.plot(data);//, Viewer::XY);
+		viewer.plot(data, Viewer::XY);
 	}
 
 	data.write("./data/cometOutput.txt");
