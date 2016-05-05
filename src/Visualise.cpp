@@ -329,13 +329,13 @@ namespace phys{
 			{
 				draw_key(0, m_dt_colour);
 				plot_ani_impl(data);
-				m_BG = cv::Mat::zeros(m_rows, m_cols, CV_8UC3); //clears the display matrix
+				//m_BG = cv::Mat::zeros(m_rows, m_cols, CV_8UC3); //clears the display matrix
 			}
 			else
 			{
 				draw_key(0, m_dt_colour);
 				plot_impl(data);
-				m_BG = cv::Mat::zeros(m_rows, m_cols, CV_8UC3); //clears the display matrix
+				//m_BG = cv::Mat::zeros(m_rows, m_cols, CV_8UC3); //clears the display matrix
 			}
 		}
 
