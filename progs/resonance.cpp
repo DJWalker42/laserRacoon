@@ -9,6 +9,7 @@
 	This program shows how the repsonse of a driven oscillator is affected by damping.
 
 	How might you obtain the Q-factor from the data computed?
+
 */
 
 //set global driving frequency to use in the the drive function

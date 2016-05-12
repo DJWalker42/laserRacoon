@@ -1,6 +1,3 @@
-#note that this makefile is not optimal. Every time you make a change to one of the sample source files
-#each source file has to be recomplied. One solution would be to have a unique target for each source file.
-
 INCDIR=../inc
 LIBDIR=../lib
 OPENCVLIB=/usr/local/lib
