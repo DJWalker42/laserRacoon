@@ -89,8 +89,8 @@ int main()
 
 	//coordinate origin == centre of mass for the system: found at (cols/2, rows/2) in the window.
 
-	int earth_radius = int(scale*earth_radius/lunar_dist/1.e2);
-	int moon_radius = int(scale*moon_radius_check);
+	int i_earth_radius = int(scale*earth_radius/lunar_dist/1.e2);
+	int i_moon_radius = int(scale*moon_radius_check);
 
 	cv::Mat display, display2;
 
@@ -106,8 +106,8 @@ int main()
 		cv::Point moon_centre( int(m_coords[0] * scale) + cols/2, rows/2 - int(m_coords[1] * scale) );
 		cv::Point space_craft( int(scale*next.y[0]) + cols/2, rows/2 - int(scale*next.y[1]) );
 
-		cv::circle(display, earth_centre, earth_radius, cv::Scalar(255, 0, 0), -1);
-		cv::circle(display, moon_centre, moon_radius, cv::Scalar(255, 255, 255), -1);
+		cv::circle(display, earth_centre, i_earth_radius, cv::Scalar(255, 0, 0), -1);
+		cv::circle(display, moon_centre, i_moon_radius, cv::Scalar(255, 255, 255), -1);
 		cv::circle(display2, space_craft, 1, cv::Scalar(0,0,255), -1);
 
 		display2.copyTo(display,display2);
