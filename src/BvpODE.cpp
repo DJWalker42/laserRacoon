@@ -184,8 +184,8 @@ namespace phys{
 	{
 		/*
 			As we specify the boundary types and values in the sole constructor for the
-			BoundaryConditions class then the data memembers of that class are necessarily
-			set. 
+			BoundaryConditions class then the data memembers of that class are gaurenteed 
+			to be initialised. 
 		*/
 
 		//LHS boundary - xm == x[i-1] xp == x[i+1] here i = 1

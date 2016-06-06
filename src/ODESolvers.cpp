@@ -663,7 +663,7 @@ namespace phys{
 		}
 
 		/*	Set up the storage as a first order ode with one dimension --
-			avoids saving reapeat values from m_previous iteration
+			avoids saving repeat values from the previous iteration
 		*/ 
 		phys::storage::ODE_Storage Numerov::fullSolve(double end)
 		{
