@@ -6,7 +6,7 @@
 	For example,
 
 	GE is computed from the following:
-	UG = 6.67384e-11 mmm/kg/s/s
+	UG = 6.67384e-11 mmm/kg/s/s (universal gravitational constant)
 	mass_unit = 5.97219e24 (kg) (earth's mass)
 	time_unit = 2.36059e6 (s) (sidereal month in seconds)
 	distance_unit = 3.844e8 (m) (lunar distance; earth to moon)
