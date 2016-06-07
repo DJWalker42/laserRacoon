@@ -46,6 +46,7 @@ phys::diffs::Diff_eqn* q_func = new phys::diffs::User_eqn(); //auto deleted at e
 //!< harmonic oscillator potential / square potential well (uncomment choice)
 double V(double x)      
 {
+	using namespace phys::constants;
 	return (0.5 * electron_mass * omega * omega * x * x);// harmonic potential
 	//return fabs(x) > 1.0 ? 10.0 : 0.0; //square potential Vo = 10 eV, width = 2 nm
 }
@@ -70,6 +71,7 @@ double find_match( double start, double step, double end )
 //!< q(x) function for the Numerov method.
 double q (double x)
 {
+	using namespace phys::constants;
 	return 2 * 10.0 * electron_mass / (hbar_ev * hbar_ev) * (E - V(x));
 }
 

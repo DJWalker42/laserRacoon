@@ -112,7 +112,7 @@ namespace phys{
 				default:
 					__error_gravity_dims();
 				}
-	
+				using namespace constants; //for GS
 				double result = -GS * y[c]/r/r/r;
 				if( D != double())
 				{

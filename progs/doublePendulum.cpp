@@ -125,7 +125,7 @@ int main()
 
 	phys::stdVec_d theta(2), omega(2);
 
-	double rad = PI/180;
+	double rad = phys::constants::PI/180;
 	theta[0] = 0.;//120. * rad;
 	theta[1] = 0.;//-10. * rad;
 	omega[0] = 2.;//0.;

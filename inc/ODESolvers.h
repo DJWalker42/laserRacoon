@@ -52,6 +52,7 @@ namespace phys{
 			/* Wraps the dependent values of the current step to the range -pi to +pi*/
 			void wrap(){
 				for (size_t i = 0; i < m_dims; i++){
+					using namespace constants; //for PI
 					if (m_current.y[i] < -PI) m_current.y[i] += 2 * PI;
 					if (m_current.y[i] > +PI) m_current.y[i] -= 2 * PI;
 				}

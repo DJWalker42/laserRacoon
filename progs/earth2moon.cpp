@@ -25,12 +25,13 @@
 double e_coords[2] = {0.0}; 
 double m_coords[2] = {0.0}; 
 
-const double MM = moon_mass/earth_mass/1.e2;
+const double MM = phys::constants::moon_mass/phys::constants::earth_mass/1.e2;
 const double rm = 1 / ( MM + 1 );
 const double re = rm * MM;
 
 double phys::diffs::User_eqn::differential_function(double t, const std::vector<double>& y, int N, int c)
 {
+	using namespace phys::constants;
 	e_coords[0] = re * cos(2*PI*t + PI);
 	e_coords[1] = re * sin(2*PI*t + PI); 
 
@@ -49,6 +50,8 @@ double phys::diffs::User_eqn::differential_function(double t, const std::vector<
 
 int main()
 {
+	using namespace phys::constants;
+
 	int rows = 1000;
 	int cols = 1000;
 

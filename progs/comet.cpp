@@ -18,6 +18,7 @@ int main()
 	phys::stdVec_d position(2), velocity(2);
 	double step = .1, t = .0; 
 
+	using namespace phys::constants;
 	position[0] = 0.;
 	position[1] = 35.1; //distance of comet at aphelion in AU
 	velocity[0] = 8.79e2 * yrs * 1.e-4 / AU;   //speed of comet at aphelion in AU per year 
