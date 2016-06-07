@@ -1,5 +1,23 @@
 #include "PhysicalUnits.h"
 
+/*	Any "magic" numbers found in expressions, e.g. * 10.0 or * 1e-2, 
+	are required to obtain the correct exponent calculation. 
+
+	For example,
+
+	GE is computed from the following:
+	UG = 6.67384e-11 mmm/kg/s/s
+	mass_unit = 5.97219e24 (kg) (earth's mass)
+	time_unit = 2.36059e6 (s) (sidereal month in seconds)
+	distance_unit = 3.844e8 (m) (lunar distance; earth to moon)
+
+	GE = UG * mass_unit * time_unit * time_unit / distance_unit / distance_unit / distance_unit
+	GE = (6.67384 * 5.97219 * 2.36059 * 2.36059 / 3.844 / 3.844 / 3.844) * pow(10, -11 + 24 + 6 + 6 - 8 - 8 - 8)
+	GE = 3.9102 * pow(10, 1) = 3.9102 * 10
+
+	hence the * 10 in the expression.
+*/
+
 namespace phys{
 	namespace constants{
 		/* ----	Maths constants ---- */
