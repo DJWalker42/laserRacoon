@@ -89,6 +89,9 @@
 	For more details go to:
 	http://www.cplusplus.com/reference/random/
 
+	TODO:	1. Change the system_clock to high_resolution_clock on the unsigned seeds  
+			2. Change functional style casts to static_casts
+
 
 */
 namespace phys{
