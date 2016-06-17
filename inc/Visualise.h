@@ -129,7 +129,7 @@ namespace phys{
 
 		/* Viewer class */
 		class Viewer{
-			/* Allows m_shape sub-classes to access private Viewer members */
+			/* Allows shape sub-classes to access private Viewer members */
 			friend class Circle; friend class Square; friend class Triangle;
 			friend class Cross; friend class Arrow;
 		private:

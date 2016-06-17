@@ -31,7 +31,7 @@ namespace phys{
 			/* Advances the system a single step.*/
 			virtual state solve()=0;
 
-			/*	Solves the system from initial independent value to end. */
+			/*	Solves the system from initial independent value to the specified end. */
 			virtual phys::storage::ODE_Storage fullSolve(double end) = 0;
 
 			/* Solves the system from initial independent value to end, wrapping the dependent variable to the range -pi to +pi*/
@@ -79,7 +79,8 @@ namespace phys{
 				Prototype for solver methods that require an initialisation step.
 				Derived methods that do not require initialisation call this function
 				that is implicitly inlined and has a null body - it should be removed
-				by compiler optimisation.
+				by compiler optimisation. init_method is called from set_system and 
+				set_step member functions.
 			*/
 			virtual void init_method(){ /* null body */ }
 			stdVec_d deriv(double x, const stdVec_d& y);

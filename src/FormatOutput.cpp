@@ -22,7 +22,7 @@ namespace phys{
 			for (int i = 1; i < sf; ++i) //start at 1 as "0." is already 1 s.f.
 				ss << 0;
 		}
-		else if ((abs_n < minSci || abs_n > maxSci)) //anything less than minSci or greater than or equal to maxSci is displayed in scientific format
+		else if ((abs_n < minSci || abs_n > maxSci)) //anything less than minSci or greater than maxSci is displayed in scientific format
 		{
 			int d = int(ceil(log10(abs_n)));
 			double order = pow(10, sf - d);

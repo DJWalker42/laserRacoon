@@ -151,7 +151,6 @@ namespace phys{
 		(*m_pLhsMat)[m_numNodes - 3][m_numNodes - 3] = m_pODE->m_Uxx * beta + m_pODE->m_U;
 
 		//Interior nodes
-
 		for (size_t i = 1; i < m_numNodes - 3; ++i)
 		{
 			xm = m_pGrid->m_Nodes[i - 1].getX();
