@@ -570,7 +570,6 @@ namespace phys{
 			const cv::Scalar label_clr = m_dt_colour;
 			const int tick_space = int(val_s * scale);
 			double disp_val = val_o;
-			std::ostringstream convert;
 			cv::Point tsize;
 			int axis_end;
 			int tick_loc;
@@ -598,9 +597,7 @@ namespace phys{
 					tloc = cv::Point(tick_loc, axis_o.y);
 					label_loc = cv::Point(tick_loc - 10, axis_o.y + X_offset);
 					cv::line(m_BG, tloc, tloc + tsize, m_ax_colour);
-					convert << format(disp_val, 3, 1.e-2, 1.e4);
-					cv::putText(m_BG, convert.str(), label_loc, CV_FONT_HERSHEY_PLAIN, .8*m_font_scale, label_clr);
-					convert.str(""); //clear stringstream
+					cv::putText(m_BG, format(disp_val, 3, 1.e-2, 1.e4), label_loc, CV_FONT_HERSHEY_PLAIN, .8*m_font_scale, label_clr);
 					tick_loc += tick_space;
 					disp_val += val_s;
 				} while (tick_loc <= axis_end);
@@ -614,9 +611,7 @@ namespace phys{
 					tloc = cv::Point(tick_loc, axis_o.y);
 					label_loc = cv::Point(tick_loc - 10, axis_o.y + X_offset);
 					cv::line(m_BG, tloc, tloc + tsize, m_ax_colour);
-					convert << format(disp_val, 3, 1.e-2, 1.e4);
-					cv::putText(m_BG, convert.str(), label_loc, CV_FONT_HERSHEY_PLAIN, .8*m_font_scale, label_clr);
-					convert.str("");
+					cv::putText(m_BG, format(disp_val, 3, 1.e-2, 1.e4), label_loc, CV_FONT_HERSHEY_PLAIN, .8*m_font_scale, label_clr);
 					tick_loc -= tick_space;
 					disp_val -= val_s;
 				}
@@ -631,9 +626,7 @@ namespace phys{
 					tloc = cv::Point(axis_o.x, tick_loc);
 					label_loc = cv::Point(Y_offset, tick_loc);
 					cv::line(m_BG, tloc, tloc + tsize, m_ax_colour);
-					convert << format(disp_val, 3, 1.e-2, 1.e4);
-					cv::putText(m_BG, convert.str(), label_loc, CV_FONT_HERSHEY_PLAIN, .8*m_font_scale, label_clr);
-					convert.str("");
+					cv::putText(m_BG, format(disp_val, 3, 1.e-2, 1.e4), label_loc, CV_FONT_HERSHEY_PLAIN, .8*m_font_scale, label_clr);
 					tick_loc -= tick_space;
 					disp_val += val_s;
 				} while (tick_loc >= axis_end);
@@ -648,9 +641,7 @@ namespace phys{
 					tloc = cv::Point(axis_o.x, tick_loc);
 					label_loc = cv::Point(Y_offset, tick_loc);
 					cv::line(m_BG, tloc, tloc + tsize, m_ax_colour);
-					convert << format(disp_val, 3, 1.e-2, 1.e4);
-					cv::putText(m_BG, convert.str(), label_loc, CV_FONT_HERSHEY_PLAIN, .8*m_font_scale, label_clr);
-					convert.str("");
+					cv::putText(m_BG, format(disp_val, 3, 1.e-2, 1.e4), label_loc, CV_FONT_HERSHEY_PLAIN, .8*m_font_scale, label_clr);
 					tick_loc += tick_space;
 					disp_val -= val_s;
 				}
