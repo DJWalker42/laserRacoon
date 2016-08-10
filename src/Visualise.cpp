@@ -1,6 +1,8 @@
 #include <iomanip>
 #include <cmath>
 
+#include <opencv2/imgproc.hpp>
+
 #include "Visualise.h"
 #include "FormatOutput.h"
 
