@@ -23,7 +23,7 @@ int main()
 	{
 		using namespace phys::visual;
 		Viewer viewer;
-		viewer.plot(data);//, Viewer::XY);
+		viewer.plot(data, Viewer::XY);
 	}
 
 	data.write("./data/cometOutput.txt");
