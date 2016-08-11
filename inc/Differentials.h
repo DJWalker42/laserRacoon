@@ -6,11 +6,13 @@
 
 namespace phys{
 	namespace diffs{
+        
+        using uint = unsigned int;
 
 		class Diff_eqn{
 		protected:
 			/* Constructor */
-			Diff_eqn(size_t eqn_order = 2) :order(eqn_order){ check_order(); }
+			Diff_eqn(uint eqn_order = 2) :order(eqn_order){ check_order(); }
 		public:
 			/* Destructor */
 			virtual ~Diff_eqn(){}
@@ -23,14 +25,14 @@ namespace phys{
 			virtual double differential_function(	double inde_var, 
 													const stdVec_d& depend_vars,
 													int num_of_dims, int var_flag)=0;
-			void set_order(size_t order_to_set)
+			void set_order(uint order_to_set)
 			{
 				order = order_to_set;	
 				check_order();
 			}		
-			int get_order() const {return order;}
+			uint get_order() const {return order;}
 		protected:
-			size_t order;
+			uint order;
 		private:
 
 			void check_order()
