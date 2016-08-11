@@ -6,7 +6,7 @@
 
 namespace phys{
 
-	FiniteDifferenceGrid::FiniteDifferenceGrid(	size_t numNodes, 
+	FiniteDifferenceGrid::FiniteDifferenceGrid(	uint numNodes, 
 												double xMin, 
 												double xMax) :
 												m_Nodes(numNodes)
@@ -25,7 +25,7 @@ namespace phys{
 		}
 
 		double step = (xMax - xMin) / double (numNodes - 1);
-		for(size_t i = 0; i < m_Nodes.size(); ++i)
+		for(uint i = 0; i < m_Nodes.size(); ++i)
 		{
 			m_Nodes[i] = Node(xMin + i * step);
 		}
@@ -37,16 +37,16 @@ namespace phys{
 
 	std::vector<double> FiniteDifferenceGrid::getGrid1D() const
 	{
-		size_t n = m_Nodes.size();
+		uint n = static_cast<uint>(m_Nodes.size());
 		std::vector<double> retval(n);
-		for (size_t i = 0; i < n; ++i){
+		for (uint i = 0; i < n; ++i){
 			retval[i] = m_Nodes[i].getX();
 		}		
 		return retval;
 	}
 
 
-	FiniteDifferenceGridZ::FiniteDifferenceGridZ(	size_t numNodesX,
+	FiniteDifferenceGridZ::FiniteDifferenceGridZ(	uint numNodesX,
 													double xMin,
 													double xMax ) :
 		m_boundaryNodes(),
@@ -72,7 +72,7 @@ namespace phys{
 
 		m_interiorNodes.reserve(numNodesX - 2);
 
-		for(size_t i = 1; i < numNodesX - 1; ++i) //note the range
+		for(uint i = 1; i < numNodesX - 1; ++i) //note the range
 		{
 			m_interiorNodes.push_back(Node(xMin + i * step_x));
 		}
@@ -80,10 +80,10 @@ namespace phys{
 		m_dimensions = D1;
 	}
 
-	FiniteDifferenceGridZ::FiniteDifferenceGridZ(	size_t numNodesX,
+	FiniteDifferenceGridZ::FiniteDifferenceGridZ(	uint numNodesX,
 													double xMin,
 													double xMax,
-													size_t numNodesY,
+													uint numNodesY,
 													double yMin,
 													double yMax) :
 													m_boundaryNodes(),
@@ -119,29 +119,29 @@ namespace phys{
 		/********Boundary Nodes********/
 
 		//first row of nodes
-		for (size_t i = 0; i < numNodesX; ++i)
+		for (int i = 0; i < numNodesX; ++i)
 		{
 			m_boundaryNodes.push_back(Node(xMin + i * step_x, yMin, 0)); //x coord, y coord, globalIdx (row index)
 		}
 
 		//boundaries across the interior per row (two either side of the domain)
-		for (size_t j = 1; j < numNodesY - 1; ++j)
+		for (int j = 1; j < numNodesY - 1; ++j)
 		{
 			m_boundaryNodes.push_back(Node(xMin, yMin + j * step_y, j)); //left boundary
 			m_boundaryNodes.push_back(Node(xMax, yMin + j * step_y, j)); //right boundary
 		}
 
 		//last row of nodes
-		for (size_t i = 0; i < numNodesX; ++i)
+		for (int i = 0; i < numNodesX; ++i)
 		{
 			m_boundaryNodes.push_back(Node(xMin + i * step_x, yMax, numNodesY - 1)); //x coord, y coord, globalIdx (row index)
 		}
 
 		/****Interior Nodes*****/
 
-		for (size_t j = 1; j < numNodesY - 1; ++j)
+		for (uint j = 1; j < numNodesY - 1; ++j)
 		{
-			for (size_t i = 1; i < numNodesX - 1; ++i)
+			for (uint i = 1; i < numNodesX - 1; ++i)
 			{
 				m_interiorNodes.push_back(Node(xMin + i * step_x, yMin + j * step_y, j));
 			}
@@ -151,13 +151,13 @@ namespace phys{
 	}
 
 
-	FiniteDifferenceGridZ::FiniteDifferenceGridZ(	size_t numNodesX,
+	FiniteDifferenceGridZ::FiniteDifferenceGridZ(	uint numNodesX,
 													double xMin,
 													double xMax,
-													size_t numNodesY,
+													uint numNodesY,
 													double yMin,
 													double yMax,
-													size_t numNodesZ,
+													uint numNodesZ,
 													double zMin,
 													double zMax) :
 													m_boundaryNodes(),

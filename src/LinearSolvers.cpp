@@ -32,7 +32,7 @@ namespace phys{
 	{}
 
 	Cholesky::Cholesky(	const mat&A ) : LinearSolver(A),
-						m_dim(A.size()),
+						m_dim(static_cast<uint>(A.size())),
 						m_spd(true)
 	{
 		decompose();
@@ -43,7 +43,7 @@ namespace phys{
 		if(!A.empty())
 		{
 			m_factor = A;
-			m_dim = m_factor.size();
+			m_dim = static_cast<uint>(m_factor.size());
 			m_spd = true;
 		}
 		//else m_factor created from A in constructor
@@ -57,9 +57,9 @@ namespace phys{
 			return;
 		}
 		//check A is symmetric
-		for( size_t i = 0; i < m_dim; ++i )
+		for( uint i = 0; i < m_dim; ++i )
 		{
-			for( size_t j = 0; j < m_dim; ++ j )
+			for( uint j = 0; j < m_dim; ++ j )
 			{
 				if( m_factor[i][j] != m_factor[j][i] )
 				{
@@ -75,13 +75,13 @@ namespace phys{
 		mat L(m_dim, m_dim);
 
 		// Main loop.
-		for (size_t j = 0; j < m_dim; j++) 
+		for (uint j = 0; j < m_dim; j++) 
 		{
 			double d = 0.0;
-			for (size_t k = 0; k < j; k++) 
+			for (uint k = 0; k < j; k++) 
 			{
 				double s = 0.0;
-				for (size_t i = 0; i < k; i++) 
+				for (uint i = 0; i < k; i++) 
 				{
 					s += L[k][i]*L[j][i];
 				}
@@ -111,7 +111,7 @@ namespace phys{
 			std::cout << "Matrix A not factorised; returning null\n";
 			return stdVec_d();
 		}
-		//size_t m_cols = m_factor.size();
+		//uint m_cols = m_factor.size();
 		if (b.size() != m_dim)
 		{
 			std::cout << "b is non-conformant; returning null\n";
@@ -119,9 +119,9 @@ namespace phys{
 		}
 		stdVec_d x(b);
 		// Solve L*y = b;
-		for (size_t k = 0; k < m_dim; ++k) 
+		for (uint k = 0; k < m_dim; ++k) 
 		{
-			for (size_t i = 0; i < k; ++i) 
+			for (uint i = 0; i < k; ++i) 
 				x[k] -= x[i]*m_factor[k][i];
 			x[k] /= m_factor[k][k];
 	
@@ -129,7 +129,7 @@ namespace phys{
 		// Solve L'*x = y;
 		for (int k = m_dim - 1; k >= 0; --k) //using an int due to >= 0 condition.
 		{
-			for (size_t i = k + 1; i < m_dim; i++){
+			for (uint i = k + 1; i < m_dim; i++){
 				x[k] -= x[i] * m_factor[i][k];
 			}
 			x[k] /= m_factor[k][k];
@@ -153,14 +153,14 @@ namespace phys{
 			return mat();
 		}
 
-		size_t nx = X[0].size(); //num of cols
+		uint nx = static_cast<uint>(X[0].size()); //num of cols
 
 		// Solve L*Y = B;
-		for (size_t j=0; j< nx; ++j)
+		for (uint j=0; j< nx; ++j)
 		{
-			for (size_t k = 0; k < m_dim; ++k) 
+			for (uint k = 0; k < m_dim; ++k) 
 			{
-				for (size_t i = 0; i < k; ++i){ 
+				for (uint i = 0; i < k; ++i){ 
 					X[k][j] -= X[i][j] * m_factor[k][i];
 				}
 				X[k][j] /= m_factor[k][k];
@@ -168,11 +168,11 @@ namespace phys{
 		}
 
 		// Solve L'*X = Y;
-		for (size_t j = 0; j < nx; ++j)
+		for (uint j = 0; j < nx; ++j)
 		{
 			for (int k = m_dim - 1; k >= 0; --k) //using an int due to >= 0 condition.
 			{
-				for (size_t i = k+1; i < m_dim; ++i){ 
+				for (uint i = k+1; i < m_dim; ++i){ 
 					X[k][j] -= X[i][j] * m_factor[i][k];
 				}
 				X[k][j] /= m_factor[k][k];
@@ -189,8 +189,8 @@ namespace phys{
 	{}
 
 	QR::QR(	const mat&A	) : LinearSolver(A),
-			m_rows(A.size()),
-			m_cols(A[0].size()),
+			m_rows(static_cast<uint>(A.size())),
+			m_cols(static_cast<uint>(A[0].size())),
 			m_Rdiag(m_cols)
 	{
 		decompose();
@@ -200,8 +200,8 @@ namespace phys{
 	{
 		if(!A.empty()){
 			m_factor = A; //assign argument A
-			m_rows = m_factor.size();
-			m_cols = m_factor[0].size();
+			m_rows = static_cast<uint>(m_factor.size());
+			m_cols = static_cast<uint>(m_factor[0].size());
 			m_Rdiag.resize(m_cols); //values overwritten during algorithm
 		}
 		//else m_factor copied from A in constructor
@@ -209,10 +209,10 @@ namespace phys{
 		if(m_factor.empty()) return; //chk m_factor has been set
 
 		// Main loop.
-		for (size_t k = 0; k < m_cols; ++k) {
+		for (uint k = 0; k < m_cols; ++k) {
 			// Compute 2-norm of k-th column without under/overflow.
 			double nrm = 0;
-			for (size_t i = k; i < m_rows; ++i) 
+			for (uint i = k; i < m_rows; ++i) 
 			{
 				nrm = phys::maths::mag2D(nrm,m_factor[i][k]);
 			}
@@ -221,21 +221,21 @@ namespace phys{
 			{
 				// Form k-th Householder vector.
 				if (m_factor[k][k] < 0) nrm = -nrm;
-				for (size_t i = k; i < m_rows; i++) 
+				for (uint i = k; i < m_rows; i++) 
 					m_factor[i][k] /= nrm;
 
 				m_factor[k][k] += 1.0;
 
 				// Apply transformation to remaining columns.
-				for (size_t j = k + 1; j < m_cols; ++j) 
+				for (uint j = k + 1; j < m_cols; ++j) 
 				{
 					double s = 0.0; 
-					for (size_t i = k; i < m_rows; ++i) 
+					for (uint i = k; i < m_rows; ++i) 
 						s += m_factor[i][k] * m_factor[i][j];
 
 					s = -s / m_factor[k][k];
 
-					for (size_t i = k; i < m_rows; ++i) 
+					for (uint i = k; i < m_rows; ++i) 
 						m_factor[i][j] += s * m_factor[i][k];						
 				}
 			}
@@ -245,7 +245,7 @@ namespace phys{
 
 	bool QR::is_full_rank() const		
 	{
-		for (size_t j = 0; j < m_cols; ++j) 
+		for (uint j = 0; j < m_cols; ++j) 
 		{
 			if (m_Rdiag[j] == 0)
 			return false;
@@ -257,9 +257,9 @@ namespace phys{
 	{
 		mat H(m_rows, m_cols); //initialises zero everywhere
 
-		for (size_t i = 0; i < m_rows; ++i) 
+		for (uint i = 0; i < m_rows; ++i) 
 		{
-			for (size_t j = 0; j < m_cols; ++j) 
+			for (uint j = 0; j < m_cols; ++j) 
 			{
 				if (i >= j) 
 					H[i][j] = m_factor[i][j]; 
@@ -272,9 +272,9 @@ namespace phys{
 	const mat QR::getR() const
 	{
 		mat R(m_cols,m_cols); //intitialised with zeros everywhere
-		for (size_t i = 0; i < m_cols; ++i) 
+		for (uint i = 0; i < m_cols; ++i) 
 		{
-			for (size_t j = 0; j < m_cols; ++j) 
+			for (uint j = 0; j < m_cols; ++j) 
 			{
 				if (i < j) 
 					R[i][j] = m_factor[i][j];
@@ -292,17 +292,17 @@ namespace phys{
 		for (int k = m_cols - 1; k >= 0; --k) //int due to >=0 condition
 		{ 
 			Q[k][k] = 1.0;
-			for (size_t j = k; j < m_cols; ++j) 
+			for (uint j = k; j < m_cols; ++j) 
 			{
 				if (m_factor[k][k] != 0) 
 				{
 					double s = 0.0;
-					for (size_t i = k; i < m_rows; ++i)
+					for (uint i = k; i < m_rows; ++i)
 						s += m_factor[i][k] * Q[i][j];
 				
 					s = -s / m_factor[k][k];
 
-					for (size_t i = k; i < m_rows; ++i) 
+					for (uint i = k; i < m_rows; ++i) 
 						Q[i][j] += s * m_factor[i][k];						
 				}
 			}
@@ -317,15 +317,15 @@ namespace phys{
 		stdVec_d x(b);
 
 		// Compute Y = transpose(Q)*b
-		for (size_t k = 0; k < m_cols; ++k) 
+		for (uint k = 0; k < m_cols; ++k) 
 		{
 			double s = 0.0; 
-			for (size_t i = k; i < m_rows; ++i) 
+			for (uint i = k; i < m_rows; ++i) 
 			{
 				s += m_factor[i][k] * x[i];
 			}
 			s = -s / m_factor[k][k];
-			for (size_t i = k; i < m_rows; ++i) 
+			for (uint i = k; i < m_rows; ++i) 
 			{
 				x[i] += s * m_factor[i][k];
 			}
@@ -334,13 +334,13 @@ namespace phys{
 		for (int k = m_cols - 1; k >= 0; --k) //int due to >= 0 condition
 		{
 			x[k] /= m_Rdiag[k];
-			for (size_t i = 0; i < size_t(k); ++i) 
+			for (uint i = 0; i < uint(k); ++i) 
 				x[i] -= x[k] * m_factor[i][k];				
 		}
 
 		/* return m_cols portion of X */
 		stdVec_d x_(m_cols);
-		for (size_t i = 0; i < m_cols; ++i)
+		for (uint i = 0; i < m_cols; ++i)
 			x_[i] = x[i];
 
 		return x_;
@@ -351,20 +351,20 @@ namespace phys{
 		if( B.size() != m_rows ) return mat(); 
 		if( !is_full_rank() ) return mat();
 
-		size_t nx = B[0].size();
+		uint nx = static_cast<uint>(B[0].size());
 		mat X(B);
 
 		// Compute Y = transpose(Q)*B
-		for (size_t k = 0; k < m_cols; ++k) 
+		for (uint k = 0; k < m_cols; ++k) 
 		{
-			for (size_t j = 0; j < nx; ++j) 
+			for (uint j = 0; j < nx; ++j) 
 			{
 				double s = 0.0; 
-				for (size_t i = k; i < m_rows; ++i) 
+				for (uint i = k; i < m_rows; ++i) 
 					s += m_factor[i][k] * X[i][j];
 				
 				s = -s / m_factor[k][k];
-				for (size_t i = k; i < m_rows; ++i) 
+				for (uint i = k; i < m_rows; ++i) 
 					X[i][j] += s * m_factor[i][k];
 				
 			}
@@ -372,18 +372,18 @@ namespace phys{
 		// Solve R*X = Y;
 		for (int k = m_cols - 1; k >= 0; --k) //int due to >= 0 condition
 		{ 
-			for (size_t j = 0; j < nx; ++j)
+			for (uint j = 0; j < nx; ++j)
 				X[k][j] /= m_Rdiag[k];
 			
-			for (size_t i = 0; i < size_t(k); ++i) 
-				for (size_t j = 0; j < nx; ++j) 
+			for (uint i = 0; i < uint(k); ++i) 
+				for (uint j = 0; j < nx; ++j) 
 					X[i][j] -= X[k][j] * m_factor[i][k];				
 		}
 
 		/* return m_cols x nx portion of X */
 		mat X_(m_cols,nx);
-		for (size_t i = 0; i < m_cols; ++i)
-			for (size_t j = 0; j < nx; ++j)
+		for (uint i = 0; i < m_cols; ++i)
+			for (uint j = 0; j < nx; ++j)
 				X_[i][j] = X[i][j];
 
 		return X_;
@@ -397,8 +397,8 @@ namespace phys{
 	{}
 
 	LU::LU(	const mat&A) : LinearSolver(A),
-			m_rows(A.size()),
-			m_cols(A[0].size()),
+			m_rows(static_cast<uint>(A.size())),
+			m_cols(static_cast<uint>(A[0].size())),
 			m_pivot(m_rows)
 	{
 		decompose();
@@ -408,41 +408,41 @@ namespace phys{
 	{
 		if(!A.empty()){ //i.e. calling function with an argument
 			m_factor = A;
-			m_rows = m_factor.size();
-			m_cols = m_factor[0].size();
+			m_rows = static_cast<uint>(m_factor.size());
+			m_cols = static_cast<uint>(m_factor[0].size());
 			m_pivot.resize(m_rows); //values overwritten at start of algorithm.
 		}
 		//else m_factor copied from A in constructor
 		if(m_factor.empty()) return;
 
 		// Use a "left-looking", dot-product, Doolittle algorithm.
-		for (size_t i = 0; i < m_rows; i++) 
+		for (uint i = 0; i < m_rows; i++) 
 			m_pivot[i] = i;
 		
 		m_pivsign = 1;
 		stdVec_d LUcolj(m_rows);
 
 		// Outer loop.
-		for (size_t j = 0; j < m_cols; j++) 
+		for (uint j = 0; j < m_cols; j++) 
 		{
 			// Take a copy of the j-th column.
-			for (size_t i = 0; i < m_rows; i++) 
+			for (uint i = 0; i < m_rows; i++) 
 				LUcolj[i] = m_factor[i][j];
 			
 			// Apply previous transformations using dot product
-			for (size_t i = 0; i < m_rows; i++) 
+			for (uint i = 0; i < m_rows; i++) 
 			{
-				size_t kmax = std::min(i,j);
+				uint kmax = std::min(i,j);
 				double s = 0.0;
-				for (size_t k = 0; k < kmax; k++) 
+				for (uint k = 0; k < kmax; k++) 
 					s += m_factor[i][k] * LUcolj[k];
 				
 				m_factor[i][j] = LUcolj[i] -= s; 
 			}
 
 			// Find m_pivot and exchange if necessary.
-			size_t p = j;
-			for (size_t i = j + 1; i < m_rows; i++) 
+			uint p = j;
+			for (uint i = j + 1; i < m_rows; i++) 
 			{
 				if (fabs(LUcolj[i]) > fabs(LUcolj[p])) 
 					p = i;
@@ -450,13 +450,13 @@ namespace phys{
 			}
 			if (p != j) 
 			{
-				for (size_t k = 0; k < m_cols; k++) 
+				for (uint k = 0; k < m_cols; k++) 
 				{
 					double t = m_factor[p][k]; 
 					m_factor[p][k] = m_factor[j][k]; 
 					m_factor[j][k] = t;
 				}
-				size_t kp = m_pivot[p]; 
+				uint kp = m_pivot[p]; 
 				m_pivot[p] = m_pivot[j]; 
 				m_pivot[j] = kp;
 				m_pivsign = -m_pivsign;
@@ -465,15 +465,15 @@ namespace phys{
 			// Compute multipliers.        
 			if ((j < m_rows) && (m_factor[j][j] != 0.0)) 
 			{
-				for (size_t i = j + 1; i < m_rows; i++) 
+				for (uint i = j + 1; i < m_rows; i++) 
 					m_factor[i][j] /= m_factor[j][j];
 			}
 		}
 	}
 
 	bool LU::is_nonsingular() const {
-		size_t jmax = std::min(m_cols,m_rows);
-		for (size_t j = 0; j < jmax; j++) 
+		uint jmax = std::min(m_cols,m_rows);
+		for (uint j = 0; j < jmax; j++) 
 		{
 			if (m_factor[j][j] == 0)
 				return false;
@@ -486,9 +486,9 @@ namespace phys{
 		if( m_rows > m_cols)	L_ = mat(m_rows,m_cols);
 		else		L_ = mat(m_rows,m_rows);//m_rows <= m_cols
 
-		for (size_t i = 0; i < m_rows; ++i) 
+		for (uint i = 0; i < m_rows; ++i) 
 		{
-			for (size_t j = 0; j < std::min(i,m_cols); ++j) 
+			for (uint j = 0; j < std::min(i,m_cols); ++j) 
 				L_[i][j] = m_factor[i][j];
 
 			L_[i][i] = 1.0;
@@ -500,15 +500,15 @@ namespace phys{
 		mat U_;
 		if (m_rows > m_cols)	U_ = mat(m_cols,m_cols);
 		else		U_ = mat(m_rows,m_cols);//m_rows <= m_cols
-		size_t imax = std::min(m_rows,m_cols);
-		for (size_t i = 0; i < imax; ++i) 
-			for (size_t j = i; j < m_cols; ++j) 
+		uint imax = std::min(m_rows,m_cols);
+		for (uint i = 0; i < imax; ++i) 
+			for (uint j = i; j < m_cols; ++j) 
 				U_[i][j] = m_factor[i][j];
 
 		return U_;
 	}
 
-	stdVec_s LU::getPivot() const 
+	stdVec_u LU::getPivot() const
 	{
 		return m_pivot;
 	}
@@ -517,7 +517,7 @@ namespace phys{
 		if (m_rows != m_cols) return double(0);
 		double d = double(m_pivsign);
 
-		for (size_t j = 0; j < m_cols; j++) 
+		for (uint j = 0; j < m_cols; j++) 
 			d *= m_factor[j][j];
 
 		return d;
@@ -532,15 +532,15 @@ namespace phys{
 		stdVec_d x = permute_copy(b);
 
 		// Solve L*Y = B(piv)
-		for (size_t k = 0; k < m_cols; ++k)
-			for (size_t i = k + 1; i < m_cols; ++i)
+		for (uint k = 0; k < m_cols; ++k)
+			for (uint i = k + 1; i < m_cols; ++i)
 				x[i] -= x[k] * m_factor[i][k];
 
 		// Solve U*X = Y;
 		for (int k = m_cols - 1; k >= 0; --k) //int due to >= 0 condition
 		{
 			x[k] /= m_factor[k][k];
-			for (size_t i = 0; i < size_t(k); i++)
+			for (uint i = 0; i < uint(k); i++)
 				x[i] -= x[k] * m_factor[i][k];
 		}
 		return x;
@@ -553,24 +553,24 @@ namespace phys{
 		if (!is_nonsingular()) {std::cout << "LU: A non-singular \n"; return mat();}
 
 		// Copy right hand side with pivoting applied
-		size_t nx = B[0].size();
+		uint nx = static_cast<uint>(B[0].size());
 		mat X = permute_copy(B);
 
 		// Solve L*Y = B(piv,:)
-		for (size_t k = 0; k < m_cols; ++k) 
-			for (size_t i = k + 1; i < m_cols; ++i) 
-				for (size_t j = 0; j < nx; ++j) 
+		for (uint k = 0; k < m_cols; ++k) 
+			for (uint i = k + 1; i < m_cols; ++i) 
+				for (uint j = 0; j < nx; ++j) 
 					X[i][j] -= X[k][j] * m_factor[i][k];
 							
 		// Solve U*X = Y;
 		for (int k = m_cols-1; k >= 0; --k) //int due to >= 0 condition
 		{ 
-			for (size_t j = 0; j < nx; ++j) 
+			for (uint j = 0; j < nx; ++j) 
 			{
 				X[k][j] /= m_factor[k][k];
 			}
-			for (size_t i = 0; i < size_t(k); ++i) 
-				for (size_t j = 0; j < nx; ++j) 
+			for (uint i = 0; i < uint(k); ++i) 
+				for (uint j = 0; j < nx; ++j) 
 					X[i][j] -= X[k][j] * m_factor[i][k];
 		}
 		return X;
@@ -578,20 +578,20 @@ namespace phys{
 
 	stdVec_d LU::permute_copy(const stdVec_d &b) const
 	{
-		size_t piv_length = m_pivot.size();
+		uint piv_length = static_cast<uint>(m_pivot.size());
 		stdVec_d x(piv_length);
-		for (size_t i = 0; i < piv_length; i++)
+		for (uint i = 0; i < piv_length; i++)
 			x[i] = b[m_pivot[i]];
 		return x;
 	}
 
 	mat LU::permute_copy(const mat &B) const
 	{
-		size_t piv_length = m_pivot.size();
-		size_t nx = B[0].size();
+		uint piv_length = static_cast<uint>(m_pivot.size());
+		uint nx = static_cast<uint>(B[0].size());
 		mat X(piv_length, nx);
-		for (size_t i = 0; i < piv_length; ++i)
-			for (size_t j = 0; j < nx; ++j)
+		for (uint i = 0; i < piv_length; ++i)
+			for (uint j = 0; j < nx; ++j)
 				X[i][j] = B[m_pivot[i]][j];
 		return X;
 	}
@@ -601,9 +601,9 @@ namespace phys{
 	// -------------------------------------------------------
 
 	//constructor
-	Band_matrix::Band_matrix(	size_t dim,
-								size_t nu,
-								size_t nl) :
+	Band_matrix::Band_matrix(	uint dim,
+								uint nu,
+								uint nl) :
 								matrix(nu + nl + 2, dim),
 								m_num_of_super(nu), //this gives the row index of the diagonal
 								m_num_of_sub(nl),
@@ -616,14 +616,14 @@ namespace phys{
 	double Band_matrix::operator() (int i, int j) const {
 		int row_idx = m_num_of_super - j + i;
 		assert(row_idx >= 0 && row_idx < int(m_last_row_idx));
-		return (*this)[size_t(row_idx)][size_t(j)];
+		return (*this)[uint(row_idx)][uint(j)];
 	}
 
 	// Write access operator
 	double& Band_matrix::operator() (int i, int j) {
 		int row_idx = m_num_of_super - j + i;
 		assert(row_idx >= 0 && row_idx < int(m_last_row_idx));
-		return (*this)[size_t(row_idx)][size_t(j)];
+		return (*this)[uint(row_idx)][uint(j)];
 	}
 
 	//	access to elements of the inverse of the diagonal (used in the decomposition) 
@@ -680,7 +680,7 @@ namespace phys{
 	// solves Ly=b
 	std::vector<double> Band_matrix::l_solve(const std::vector<double>& b) const 
 	{
-		assert(static_cast<size_t>(m_dimensions) == b.size());
+		assert(static_cast<uint>(m_dimensions) == b.size());
 		std::vector<double> x(m_dimensions);
 		int j_start;
 		double sum;
@@ -699,11 +699,11 @@ namespace phys{
 	// solves Rx=y
 	std::vector<double> Band_matrix::r_solve(const std::vector<double>& b) const 
 	{
-		assert(static_cast<size_t>(m_dimensions) == b.size());
+		assert(static_cast<uint>(m_dimensions) == b.size());
 		std::vector<double> x(m_dimensions);
 		int j_stop;
 		double sum;
-		for (int i = m_dimensions - 1; i >= 0; --i) //int due to >= 0 condition
+		for (int i = m_dimensions - 1; i >= 0; --i)
 		{ 
 			sum = 0;
 			j_stop = std::min(m_dimensions - 1, i + m_num_of_super);
@@ -716,7 +716,7 @@ namespace phys{
 
 	std::vector<double> Band_matrix::lu_solve(const std::vector<double>& b) 
 	{
-		assert(static_cast<size_t>(m_dimensions) == b.size());
+		assert(static_cast<uint>(m_dimensions) == b.size());
 		std::vector<double>  x, y;
 		if (m_is_lu_decomposed == false)
 			lu_decompose();

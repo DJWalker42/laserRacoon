@@ -26,7 +26,7 @@ const static cv::Scalar colour[] = {
 	cv::Scalar(0, 0, 0)			//black			
 };
 
-const static size_t colour_size = sizeof(colour) / sizeof(colour[0]);
+const static uint colour_size = sizeof(colour) / sizeof(colour[0]);
 
 namespace phys{
 	namespace visual{
@@ -93,7 +93,7 @@ namespace phys{
 				int x_new, x_old = int(round(m_scale_x*(x_vals[0] - origin_val_x)));
 				x_interp.push_back(double(x_old / m_scale_x + origin_val_x));
 				x_axis.push_back(x_old + origin.x);
-				for (size_t i = 1; i < x_vals.size(); ++i)
+				for (uint i = 1; i < x_vals.size(); ++i)
 				{
 					x_new = int(round(m_scale_x * (x_vals[i] - origin_val_x)));
 					if (x_new != x_old){
@@ -108,10 +108,10 @@ namespace phys{
 
 				phys::interp::Linear linear_interp(plot_data, sort);
 
-				for (size_t i = 0; i < x_interp.size(); ++i)
+				for (uint i = 0; i < x_interp.size(); ++i)
 					y_interp.push_back(linear_interp.interpolate(x_interp[i]));
 
-				for (size_t i = 0; i < x_interp.size(); ++i){
+				for (uint i = 0; i < x_interp.size(); ++i){
 					int y_temp = origin.y - int(round(m_scale_y*(y_interp[i] - origin_val_y)));
 					y_axis.push_back(y_temp);
 				}
@@ -120,7 +120,7 @@ namespace phys{
 
 				coords retval;
 
-				for (size_t i = 0; i < x_axis.size(); ++i){
+				for (uint i = 0; i < x_axis.size(); ++i){
 					retval.push_back(std::pair<int, int>(x_axis[i], y_axis[i]));
 				}
 				return retval;
@@ -148,7 +148,7 @@ namespace phys{
 				x_axis.push_back(x_old + origin.x);
 				y_axis.push_back(origin.y - y_old);
 				
-				for (size_t i = 1; i < x_vals.size(); ++i)
+				for (uint i = 1; i < x_vals.size(); ++i)
 				{
 					x_new = int(round(m_scale_x * (x_vals[i] - origin_val_x)));
 					y_new = int(round(m_scale_y * (y_vals[i] - origin_val_y)));
@@ -169,7 +169,7 @@ namespace phys{
 
 				coords retval;
 
-				for (size_t i = 0; i < x_axis.size(); ++i){
+				for (uint i = 0; i < x_axis.size(); ++i){
 					retval.push_back(std::pair<int, int>(x_axis[i], y_axis[i]));
 				}
 
@@ -182,8 +182,8 @@ namespace phys{
 		// ODE storage argument - makes a choice then calls usual plot function
 		void Viewer::plot(const phys::storage::ODE_Storage& data,
 			graph_choice choice,
-			size_t dim1,
-			size_t dim2)
+			uint dim1,
+			uint dim2)
 		{
 			if (data.get_independent().size() < 2){
 				throw std::runtime_error("Not enough data to make a plot - check your code\n");
@@ -344,7 +344,7 @@ namespace phys{
 
 		void Viewer::plot(const stdVec_d& x, const std::vector<stdVec_d>& y)
 		{
-			for (size_t i = 0; i < y.size(); ++i)
+			for (uint i = 0; i < y.size(); ++i)
 				assert(x.size() == y[i].size());
 
 			m_is_drawn = true;
@@ -365,7 +365,7 @@ namespace phys{
 
 			std::pair<double, double> data_origin(m_val_origin_x, m_val_origin_y);
 
-			for (size_t i = 0; i < y.size(); ++i)
+			for (int i = 0; i < y.size(); ++i)
 			{
 				do{
 					m_clr_counter = m_clr_counter % colour_size;
@@ -395,7 +395,7 @@ namespace phys{
 			return;
 		}
 
-		void Viewer::draw_key(size_t which, const cv::Scalar& colour)
+		void Viewer::draw_key(uint which, const cv::Scalar& colour)
 		{
 			if (m_key_titles.empty()) return; //Do nothing.
 			int offset = m_rows / 25;
@@ -443,7 +443,7 @@ namespace phys{
 			} while (key != 27);
 
 			//redraw data in case mulitple data being shown.
-			for (size_t i = 0; i < data.size(); ++i)
+			for (uint i = 0; i < data.size(); ++i)
 				m_pShape->draw(this, cv::Point(data[i].first, data[i].second));
 
 			return;
@@ -652,8 +652,8 @@ namespace phys{
 		}
 
 		void Viewer::add_data(const phys::storage::ODE_Storage& data,
-			size_t dim1,
-			size_t dim2)
+			uint dim1,
+			uint dim2)
 		{
 			switch (m_g_choice)
 			{
@@ -683,7 +683,7 @@ namespace phys{
 			const std::vector<stdVec_d>& y,
 			bool is_data_singular)
 		{
-			for (size_t i = 0; i < y.size(); ++i){
+			for (uint i = 0; i < y.size(); ++i){
 				draw_key(i, colour[BLUE + m_clr_counter]);
 				add_data(x, y[i], is_data_singular);
 			}
@@ -727,7 +727,7 @@ namespace phys{
 
 		void Viewer::chk_data(coords& data)
 		{
-			size_t count = 0;
+			uint count = 0;
 
 			//lft_bound always assigned in loop.
 			coords_it lft_bound, rht_bound = data.begin();
@@ -762,7 +762,7 @@ namespace phys{
 			}//else do nothing -- data that is out-of-bounds is still "plotted" but won't be seen.
 		}
 
-		void Viewer::set_shape(shape_choice sc, size_t sz)
+		void Viewer::set_shape(shape_choice sc, uint sz)
 		{
 			//delete the pointee of the m_pShape pointer first.
 			delete m_pShape;

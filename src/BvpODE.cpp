@@ -13,7 +13,7 @@ namespace phys{
 
 	BvpODE::BvpODE(	SecondOrderODE* pODE, 
 					BoundaryConditions* pBCs, 
-					size_t numNodes) :
+					uint numNodes) :
 					m_pODE(pODE),
 					m_pBCs(pBCs),
 					m_numNodes(numNodes),

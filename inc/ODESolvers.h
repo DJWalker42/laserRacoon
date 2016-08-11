@@ -102,9 +102,9 @@ namespace phys{
 			stdVec_d m_deriv_result;				//!< result of the derivative functions.
 			stdVec_d m_k[6];						//!< typically used to store intermediate derivative values.
 
-			size_t m_dims;							//!< dimensionality of the problem
-			size_t m_num_of_vars;					//!< total number of variables in the problem
-			size_t m_mid_idx;						//!< index at which y changes to dy in the dependent vector.
+			uint m_dims;							//!< dimensionality of the problem
+			uint m_num_of_vars;                     //!< total number of variables in the problem
+			uint m_mid_idx;                         //!< index at which y changes to dy in the dependent vector.
 		};
 
 		class Euler: public ODE_solver{

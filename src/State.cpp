@@ -31,7 +31,7 @@ namespace phys{
 			: x(independent_var), y(dependent_vars), dy(first_deriv)
 		{
 			if (dy.size() != y.size()) __error_message_dimensions();
-			num_dims = y.size();
+			num_dims = static_cast<unsigned int>(y.size());
 			y.insert(y.end(), dy.begin(), dy.end());
 		}
 

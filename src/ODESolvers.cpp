@@ -123,7 +123,7 @@ namespace phys{
 
 		stdVec_d ODE_solver::deriv_B(double x, const stdVec_d& y)
 		{
-			for(size_t i = m_mid_idx; i < m_num_of_vars; ++i)			
+			for(int i = m_mid_idx; i < m_num_of_vars; ++i)
 				m_deriv_result[i] = m_ptr_diff_eqn->differential_function(x,y,m_dims,i-m_mid_idx);
 			return m_deriv_result;
 		}

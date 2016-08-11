@@ -39,6 +39,8 @@ an image. To draw a rectangle you have to use the cv::rectangle function.
 namespace phys{
 	namespace visual{
 
+        using uint = unsigned int;
+        
 		/* typedefs for shorthand */
 		typedef std::vector<std::pair<int, int>> coords;
 		typedef coords::const_iterator ccoords_it;
@@ -54,48 +56,48 @@ namespace phys{
 		class Shape{
 		protected:
 			/* Constructor */
-			Shape(size_t h_x, size_t h_y, cv::Scalar clr) :
+			Shape(uint h_x, uint h_y, cv::Scalar clr) :
 				m_hull_x(h_x), m_hull_y(h_y), m_shape_colour(clr) {}
 		public:
 			virtual  ~Shape(){}
 		public:
 			virtual void draw(Viewer* v, const cv::Point& loc) = 0;
-			size_t hull_area() const { return m_hull_x * m_hull_y; }
+			uint hull_area() const { return m_hull_x * m_hull_y; }
 
 		protected:
-			size_t m_hull_x;				//!< (convex) hull x size
-			size_t m_hull_y;				//!< (convex) hull y size
+			uint m_hull_x;				//!< (convex) hull x size
+			uint m_hull_y;				//!< (convex) hull y size
 			cv::Scalar m_shape_colour;	//!< m_shape colour e.g. cv::Scalar(255,0,0) is blue.
 		};
 
 		/*	Derived classes of Shape	*/
 		class Circle : public Shape {
 		public:
-			Circle(size_t radius, cv::Scalar clr) : Shape(radius, radius, clr){}
+			Circle(uint radius, cv::Scalar clr) : Shape(radius, radius, clr){}
 			void draw(Viewer* v, const cv::Point& loc);
 		};
 
 		class Square : public Shape {
 		public:
-			Square(size_t side, cv::Scalar clr) : Shape(side, side, clr){}
+			Square(uint side, cv::Scalar clr) : Shape(side, side, clr){}
 			void draw(Viewer* v, const cv::Point& loc);
 		};
 
 		class Triangle : public Shape{
 		public:
-			Triangle(size_t height, cv::Scalar clr) : Shape(height, height, clr){}
+			Triangle(uint height, cv::Scalar clr) : Shape(height, height, clr){}
 			void draw(Viewer* v, const cv::Point& loc);
 		};
 
 		class Cross : public Shape{
 		public:
-			Cross(size_t length, cv::Scalar clr) : Shape(length, length, clr){}
+			Cross(uint length, cv::Scalar clr) : Shape(length, length, clr){}
 			void draw(Viewer* v, const cv::Point& loc);
 		};
 
 		class Arrow : public Shape{
 		public:
-			Arrow(size_t length, size_t head, double ang, cv::Scalar clr) :
+			Arrow(uint length, uint head, double ang, cv::Scalar clr) :
 				Shape(length, head, clr), m_angle(ang)
 			{
 				m_hull_y = (m_hull_y == 0) ? 2 : m_hull_y;
@@ -149,7 +151,7 @@ namespace phys{
 			cv::Scalar m_bg_colour;					//!< background colour
 			cv::Scalar m_ax_colour;					//!< axis colour
 			cv::Scalar m_dt_colour;					//!< data colour
-			size_t m_clr_counter;					//!< counter to change data colour if multiple data being plotted
+			uint m_clr_counter;					//!< counter to change data colour if multiple data being plotted
 			double m_val_origin_x;					//!< optional origin x value (in data units not pixels) 
 			double m_val_origin_y;					//!< optional origin y value (in data units not pixels) 
 			std::vector<std::string> m_key_titles;	//!< key titles if plotting multiple data
@@ -254,8 +256,8 @@ namespace phys{
 
 			void plot(const phys::storage::ODE_Storage& data,
 				graph_choice choice = DEPEN,
-				size_t dim1 = 1,
-				size_t dim2 = 2);
+				uint dim1 = 1,
+				uint dim2 = 2);
 
 			void plot(const phys::storage::Storage<double>& data, bool splitAxes = false);
 
@@ -266,8 +268,8 @@ namespace phys{
 			void plot_split(const stdVec_d& x, const std::vector<stdVec_d>& y);
 
 			void add_data(const phys::storage::ODE_Storage& data,
-				size_t dim1 = 1,
-				size_t dim2 = 2);
+				uint dim1 = 1,
+				uint dim2 = 2);
 
 			void add_data(const phys::storage::Storage<double>& data,
 				bool is_data_singular = true);
@@ -307,7 +309,7 @@ namespace phys{
 				m_BG = cv::Mat(m_rows, m_cols, CV_8UC3, m_bg_colour);
 			}
 
-			void set_shape(shape_choice shp_ch, size_t shp_sz);
+			void set_shape(shape_choice shp_ch, uint shp_sz);
 			void set_ax_col(const cv::Scalar& colour) { m_ax_colour = colour; }
 			void set_dt_col(const cv::Scalar& colour) { m_dt_colour = colour; }
 
@@ -372,7 +374,7 @@ namespace phys{
 			void plot_impl(const coords& data);
 			void plot_ani_impl(const coords& data, int delay = 10);
 
-			void draw_key(size_t which, const cv::Scalar& colour);
+			void draw_key(uint which, const cv::Scalar& colour);
 
 			void chk_data(coords& data);
 		};
@@ -473,7 +475,7 @@ namespace phys{
 			std::vector<T> min(values.size()), max(values.size());
 
 			//For each y find the max and min value and store to a vector.
-			for (size_t i = 0; i < values.size(); ++i)
+			for (uint i = 0; i < values.size(); ++i)
 				phys::maths::minMax(values[i], min[i], max[i]);
 
 			T temp;

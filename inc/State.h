@@ -16,9 +16,9 @@ namespace phys{
 		struct state{
 			//representation
 			double x;				//!<independent variable
-			stdVec_d y;					//!<dependent variable(s)
-			stdVec_d dy;					//!<first derivative(s) of the dependent variable(s)
-			unsigned num_dims;		//!<number of dimensions to for which to solve. Auto set by input size of y.
+			stdVec_d y;				//!<dependent variable(s)
+			stdVec_d dy;			//!<first derivative(s) of the dependent variable(s)
+			unsigned int num_dims;	//!<number of dimensions to for which to solve. Auto set by input size of y.
 
 			/* Default constructor*/
 			state();
