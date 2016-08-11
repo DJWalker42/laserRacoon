@@ -2,13 +2,20 @@
 #include <ODESolvers.h>
 #include <Visualise.h>
 
+/*
+	***PROGRAM SOLVING THE VAN DER POL OSCILLATOR EQUATION***
+
+	Uses the Runge-Kutta algorithm to compute the solution to the Van Der Pol oscillator.
+	Passes the stable part of that solution to a fast fourier transform to have a look at the
+	frequencies making up the solution.
+*/
 
 int main()
 {
 	const double M = 10;
 	const size_t N = size_t( pow(2,M) ); //1024
 
-	double h = 120.0/double(3*N); //0.0390625
+	double h = 120.0/double(3 * N); //0.0390625
 
 	phys::ode::state initial_sys(0.0, 1.0, 0.0);
 
@@ -17,6 +24,8 @@ int main()
 	phys::ode::RK4 runge_kutta(VDP, initial_sys, h);
 
 	phys::storage::ODE_Storage solution = runge_kutta.fullSolve(double(3*N) * h);
+    solution.set_x_name("Time");
+    solution.set_y_name("Amplitude");
 
 	phys::visual::Viewer viewerA;
 	viewerA.set_x_range(0., 20.);
@@ -52,11 +61,13 @@ int main()
 
 	//create x-axis in frequency units
 	for(size_t i = 0; i < 512; ++i)
-		x_axis[i] = 2*3.14159*double(i)/N/h;
+		x_axis[i] = 2 * 3.14159 * double(i)/N/h;
 
 	phys::visual::Viewer viewerB;
 
 	viewerB.set_x_range(0., 10.);
+    viewerB.set_x_name("Frequency");
+    viewerB.set_y_name("Power");
 	viewerB.withLines();
 
 	viewerB.plot(x_axis, normG); 
@@ -64,7 +75,7 @@ int main()
 	phys::storage::Storage<double> transform;
 
 	transform.copy(x_axis, normG);
-	transform.write("./data/vdpFFT.txt");
+	//transform.write(/*supply a location*/);
 
 	return 0;
 }

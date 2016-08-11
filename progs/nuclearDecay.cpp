@@ -1,11 +1,19 @@
 #include <RandomNumGen.h>
 #include <Visualise.h>
 #include <Storage.h>
+/*
+	***SIMULATED NUCLEAR DECAY OF AN ATOM***
+
+	Uses an pseudo-random number generator to simulate the spontaneous emission of radiation from an atom
+	due to nuclear decay. Exhibits the statisitical average exponential decay for large numbers of nuclei
+	but which breaks down into a more stochastic process as the number of nuclei drop below a certain number.
+*/
+
 
 int main(){
 
 	/*	Instantiate a (pseudo)random number generator with uniform distribution on the
-		interval [0,1). The generator is seeded using the time function found in <chrono> */
+		interval [0,1). The generator is seeded using the time function found in <chrono> handled by the constructor */
 	phys::RNG<	double,	
 				std::minstd_rand,
 				std::uniform_real_distribution<double>,

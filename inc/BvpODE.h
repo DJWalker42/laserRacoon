@@ -21,7 +21,7 @@ namespace phys{
 	class BvpODE{
 	public:
 
-		BvpODE(SecondOrderODE* pODE, BoundaryConditions* pBCs, size_t numNodes);
+		BvpODE(SecondOrderODE* pODE, BoundaryConditions* pBCs, uint numNodes);
 		~BvpODE();
 
 	private:
@@ -44,7 +44,7 @@ namespace phys{
 	private:
 		SecondOrderODE* m_pODE;
 		BoundaryConditions* m_pBCs;
-		size_t m_numNodes;
+		uint m_numNodes;
 
 		FiniteDifferenceGrid* m_pGrid;
 				

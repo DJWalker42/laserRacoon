@@ -11,6 +11,9 @@
 #include "DynMatrix.h"
 
 namespace phys{
+    
+    using uint = unsigned int;
+    
 	/**	Virtual base class for matrix factorisation methods */
 	class LinearSolver{
 	protected:
@@ -62,7 +65,7 @@ namespace phys{
 		const mat getL()const {return m_factor;}
 		bool is_spd() const { return m_spd;}
 	private:
-		size_t m_dim;
+		uint m_dim;
 		bool m_spd;
 	};
 
@@ -112,8 +115,8 @@ namespace phys{
 		*/
 		bool is_full_rank() const;
 	private:
-		size_t m_rows;
-		size_t m_cols;
+		uint m_rows;
+		uint m_cols;
 		stdVec_d m_Rdiag;
 	};
 
@@ -156,7 +159,7 @@ namespace phys{
 			Return pivot permutation vector
 			@return     pivot
 		*/
-		stdVec_s getPivot() const;
+		stdVec_u getPivot() const;
 		/** 
 			Compute determinant using LU factors.
 			@return determinant of A, or 0 if A is not square.
@@ -176,9 +179,9 @@ namespace phys{
 		mat permute_copy(const mat &B) const;
 
 	private: //LU specific representation
-		size_t m_rows;
-		size_t m_cols;
-		stdVec_s m_pivot;	//row i has been swapped with pivot[i].
+		uint m_rows;
+		uint m_cols;
+		stdVec_u m_pivot;	//row i has been swapped with pivot[i].
 		int m_pivsign;	//used in computation of the determinant
 	};
 
@@ -190,9 +193,9 @@ namespace phys{
 	class Band_matrix : public matrix<double> {
 	public:
 		// Constructor               
-		Band_matrix(	size_t dim, 
-						size_t nu, 
-						size_t nl	);                                                               
+		Band_matrix(	uint dim, 
+						uint nu, 
+						uint nl	);                                                               
 
 		// public access operator 
 		//-- here i and j refer to the row and column indices of the entire matrix.
@@ -214,7 +217,7 @@ namespace phys{
 		const int m_num_of_super;
 		const int m_num_of_sub;
 		const int m_dimensions;
-		const size_t m_last_row_idx;
+		const uint m_last_row_idx;
 		bool m_is_lu_decomposed;
 	};
 }

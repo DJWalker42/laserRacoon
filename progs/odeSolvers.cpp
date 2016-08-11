@@ -12,10 +12,10 @@
 
 	Note also that this means the first derivative storage vector will
 	contain only zeros for the Stormer-Verlet solution rendering a
-	phase-space plot meaningless. An exception is thrown if it is tried.
+	phase-space plot meaningless. A message is printed to the console
+	to that affect. 
 
 */
-
 
 int main()
 {

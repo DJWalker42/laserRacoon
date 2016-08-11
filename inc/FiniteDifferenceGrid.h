@@ -5,6 +5,8 @@
 #include "Node.h"
 
 namespace phys{
+    
+    using uint = unsigned int;
 
 	//forward declaration of the BvpODE class so we can declare it as a friend
 	class BvpODE;
@@ -13,7 +15,7 @@ namespace phys{
 		friend class BvpODE;
 	public:
 		/* Use this constructor for a uniform 1D grid */
-		FiniteDifferenceGrid(size_t numNodes, double xMin, double xMax); 
+		FiniteDifferenceGrid(uint numNodes, double xMin, double xMax); 
 		/* Use this constructor for a non-uniform 1D grid, you have to specify the nodes */
 		FiniteDifferenceGrid(const std::vector<Node>& customGrid);
 
@@ -28,16 +30,16 @@ namespace phys{
 		friend class BvpODE;
 	public:
 		/* Constructor for a uniform 1D grid */
-		FiniteDifferenceGridZ(	size_t numNodesX, double xMin, double xMax);  
+		FiniteDifferenceGridZ(	uint numNodesX, double xMin, double xMax);  
 
 		/* Constructor for a uniform 2D grid */
-		FiniteDifferenceGridZ(	size_t numNodesX, double xMin, double xMax, 
-								size_t numNodesY, double yMin, double yMax);
+		FiniteDifferenceGridZ(	uint numNodesX, double xMin, double xMax, 
+								uint numNodesY, double yMin, double yMax);
 
 		/* Constructor for a uniform 3D grid */
-		FiniteDifferenceGridZ(	size_t numNodesX, double xMin, double xMax, 
-								size_t numNodesY, double yMin, double yMax,
-								size_t numNodesZ, double zMin, double zMax);
+		FiniteDifferenceGridZ(	uint numNodesX, double xMin, double xMax, 
+								uint numNodesY, double yMin, double yMax,
+								uint numNodesZ, double zMin, double zMax);
 
 		/* How might you write a constructor for a user defined grid that can be used for one, two, or three dimensions? */
 

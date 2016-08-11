@@ -1,6 +1,15 @@
 #include <Quadrature.h>
 #include <iomanip>
 
+/*
+	***TEST QUADRATURE METHODS***
+
+	This should highlight the superiority of Gaussian quadrature over the others. 
+	However, if using Gaussian quadrature one should check the validity of results 
+	by performing the same integration using a different method.
+
+*/
+
 double f (double x)
 {
 	return 1./(x*x + 1.);

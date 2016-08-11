@@ -4,10 +4,20 @@
 
 #include <string>
 
-int main()
-{
+/*
+	***SHOW CASE OF THE DATA FITTING ROUTINES***
+	
+	Here we use a sample of Millikan's oil drop experimental data values to show how the data fitting algorithms can be used.
+*/
 
-	std::string filename = "../resource/millikan.txt";
+int main(int argc, char** argv)
+{
+	std::string filename = "../resource/millikanData.txt"; // change to absolute path if necessary 'path-to-repo/laserRacoon/progs/resource/millikanData.txt' or ...
+
+	//...use an argument in the call to the binary
+	if (argc > 1) {
+		filename = std::string (argv[1]); 
+	}
 
 	phys::storage::Storage<double> data;
 

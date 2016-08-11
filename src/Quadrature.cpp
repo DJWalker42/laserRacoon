@@ -13,13 +13,13 @@ namespace phys{
 		*	Quadrature base class
 		***********************************************************************************/
 		// Constructor
-		Quadrature::Quadrature(size_t n) : m_error(1.0), m_order(n), m_func_calls(0)
+		Quadrature::Quadrature(uint n) : m_error(1.0), m_order(n), m_func_calls(0)
 		{}
 
 		//---------------------------------------------------------------------------------
 		//	Quadrature Methods
 		//---------------------------------------------------------------------------------
-		double Mid_ordinate::integrate(double(*f)(double), double lft, double rht, size_t N)
+		double Mid_ordinate::integrate(double(*f)(double), double lft, double rht, uint N)
 		{
 			m_error = 0.0; 
 			double h = (rht - lft)/N;
@@ -28,7 +28,7 @@ namespace phys{
 			double f2 = f(x); 
 			double f3 = f(x+h);
 			double sum = f2 + f3;
-			for(size_t i = 2; i < N; ++i)
+			for(uint i = 2; i < N; ++i)
 			{	
 				x += h;
 				f1 = f2;
@@ -42,7 +42,7 @@ namespace phys{
 			return (sum*h);
 		}
 
-		double Trapeziod::integrate(double(*f)(double), double lft, double rht, size_t N)
+		double Trapeziod::integrate(double(*f)(double), double lft, double rht, uint N)
 		{
 			m_error = 0.0; 
 			double h = (rht - lft)/N;
@@ -51,7 +51,7 @@ namespace phys{
 			double f2 = f(x); 
 			double f3 = f(x+h);
 			double sum = f2 + 2*f3; //f(lft) + 2*f(lft + h)
-			for(size_t i = 2; i < N; ++i)
+			for(uint i = 2; i < N; ++i)
 			{	
 				x += h;
 				f1 = f2;
@@ -66,7 +66,7 @@ namespace phys{
 			return (sum*h/2);
 		}
 
-		double Simpson::integrate(double(*f)(double), double lft, double rht, size_t N)
+		double Simpson::integrate(double(*f)(double), double lft, double rht, uint N)
 		{
 			double sum = 0.0;
 			double h = (rht - lft)/2/N;
@@ -76,7 +76,7 @@ namespace phys{
 			double f3 = f(lft);
 			double f4 = f(lft + h);
 			double f5 = f(lft + 2*h);
-			for(size_t i=0; i<N; ++i)
+			for(uint i=0; i<N; ++i)
 			{
 				x += 2*h;
 				f1 = f3;	
@@ -93,12 +93,12 @@ namespace phys{
 			return (sum*h/3);
 		}
 
-		double Boole::integrate(double(*f)(double), double lft, double rht, size_t N)
+		double Boole::integrate(double(*f)(double), double lft, double rht, uint N)
 		{
 			double sum = 0.0;
 			double h = (rht - lft)/4/N;
 			double x = lft;
-			for(size_t i = 0; i < N; ++i)
+			for(uint i = 0; i < N; ++i)
 			{
 				x += 4*h;
 				sum += 7*f(x-4*h) + 32*f(x-3*h) + 12*f(x-2*h) 
@@ -128,10 +128,10 @@ namespace phys{
 		*	Gauss base class
 		***********************************************************************************/
 		//Constructor
-		Gauss::Gauss(size_t pts) : m_numKnots(pts), m_knots(), m_weights(), m_func_calls(0), m_precision(1.e-10)
+		Gauss::Gauss(uint pts) : m_numKnots(pts), m_knots(), m_weights(), m_func_calls(0), m_precision(1.e-10)
 		{}
 
-		void Gauss::set_points(size_t pts)
+		void Gauss::set_points(uint pts)
 		{
 			m_numKnots = pts;
 			m_knots.clear();
@@ -148,20 +148,20 @@ namespace phys{
 		}
 
 		//Legendre ----------------------------------------------------------------------
-		Legendre::Legendre(size_t points) : Gauss(points) 
+		Legendre::Legendre(uint points) : Gauss(points) 
 		{initialise();}
 
 		void Legendre::initialise() //function called in body of constructor
 		{
 			// operator >> in this context is bit shift: x >> 1 means bit shift the value in x one to the right.
-			size_t m = (m_numKnots + 1) >> 1;
+			uint m = (m_numKnots + 1) >> 1;
 			/* Load appropriate predefined values for abscissas and weights */
-			size_t i = 0;
-			size_t max = Legen::glawsize;
+			uint i = 0;
+			uint max = Legen::glawsize;
 			do{
 				if(m_numKnots == Legen::glaw[i].n)
 				{
-					for(size_t j = 0; j < m; ++j){
+					for(uint j = 0; j < m; ++j){
 						m_knots.push_back(Legen::glaw[i].x[j]);
 						m_weights.push_back(Legen::glaw[i].w[j]);
 					}
@@ -183,7 +183,7 @@ namespace phys{
 			double w0 = 0.0,  w1,  dw;	/* Weights */
 			double P0, P_1, P_2;	/* Legendre polynomial values */
 			double dpdx;			/* Legendre polynomial derivative */
-			size_t j;					/* iteration count*/
+			uint j;					/* iteration count*/
 			double t0, t1, t2, t3;	/* temporary varibales to compute P values */
 
 			/*	Add one to order and bit-shift one to right - this is so symmetry can be exploited
@@ -192,7 +192,7 @@ namespace phys{
 				if(n == even) m = n/2;
 				if(n == odd)  m = (n-1)/2 + 1;
 			*/			
-			size_t m = (m_numKnots+1)>>1;
+			uint m = (m_numKnots+1)>>1;
 			stdVec_d vx(m), vw(m);
 
 			/* Search for Francesco Tricomi for explanation of initial guess */
@@ -201,7 +201,7 @@ namespace phys{
 			t0 = 1.0 - (1.0/8.0/n2) + (1.0/8.0/n3);
 			t1 = 1.0/(4.0*(double)m_numKnots+2.0);
 
-			for (size_t i = 1; i <= m; i++)
+			for (uint i = 1; i <= m; i++)
 			{
 				/* Find i-th root of Legendre polynomial */
 
@@ -219,7 +219,7 @@ namespace phys{
 					P0  = x0;
 #if 0
 					/* Simple, not optimized version */
-					for (size_t k = 2; k <= m_numKnots; k++)
+					for (uint k = 2; k <= m_numKnots; k++)
 					{
 						P_2 = P_1;
 						P_1 = P0;
@@ -232,7 +232,7 @@ namespace phys{
 					if (m_numKnots<1024)
 					{
 						/* Use fast algorithm for small n*/
-						for (size_t k = 2; k <= m_numKnots; k++)
+						for (uint k = 2; k <= m_numKnots; k++)
 						{
 							P_2 = P_1;
 							P_1 = P0;
@@ -241,14 +241,14 @@ namespace phys{
 						}
 					}else{
 						/* Use general algorithm for other n */
-						for (size_t k = 2; k < 1024; k++)
+						for (uint k = 2; k < 1024; k++)
 						{
 							P_2 = P_1;
 							P_1 = P0;
 							t2  = x0*P_1;
 							P0 = t2 + Legen::ltbl[k]*(t2 - P_2);
 						}
-						for (size_t k = 1024; k <= m_numKnots; k++)
+						for (uint k = 1024; k <= m_numKnots; k++)
 						{
 							P_2 = P_1;
 							P_1 = P0;
@@ -293,21 +293,21 @@ namespace phys{
 			double B = 0.5 * (rht + lft);
 			/*	Bit shift (n+1) one to the right 
 				-- exploits symmetry of Legendre polynomials for both odd and even n */ 
-			size_t m = (m_numKnots + 1)>>1;
+			uint m = (m_numKnots + 1)>>1;
 			m_func_calls += 2 * m;
 			double s, Ax;
 			if(m_numKnots & 1) /* n - odd */
 			{
 				--m_func_calls;
 				s = m_weights[0]*(f(B));
-				for (size_t i = 1; i < m; i++)
+				for (uint i = 1; i < m; i++)
 				{
 					Ax = A * m_knots[i];
 					s += m_weights[i] * (f(B + Ax) + f(B - Ax));
 				}
 			}else{ /* n - even */	
 				s = 0.0;
-				for (size_t i = 0; i < m; i++)
+				for (uint i = 0; i < m; i++)
 				{
 					Ax = A * m_knots[i];
 					s += m_weights[i] * (f(B + Ax) + f(B - Ax));			
@@ -317,18 +317,18 @@ namespace phys{
 		}
 
 		//Laguerre -----------------------------------------------------------------
-		Laguerre::Laguerre( size_t points, bool modify ) : Gauss(points), modified(modify) 
+		Laguerre::Laguerre( uint points, bool modify ) : Gauss(points), modified(modify) 
 		{initialise();}
 
 		void Laguerre::initialise()//function called in body of constructor
 		{
 			/* Load appropriate predefined values for abscissa and weights */
-			size_t i = 0;
-			size_t max = Lague::glawsize;
+			uint i = 0;
+			uint max = Lague::glawsize;
 			do{
 				if (m_numKnots == Lague::glaw[i].n)
 				{
-					for(size_t j = 0; j < m_numKnots; ++j){
+					for(uint j = 0; j < m_numKnots; ++j){
 						m_knots.push_back(Lague::glaw[i].x[j]);
 						m_weights.push_back(Lague::glaw[i].w[j]);
 					}
@@ -343,7 +343,7 @@ namespace phys{
 			}
 
 			if(modified)
-				for(size_t i = 0; i < m_knots.size(); ++i)
+				for(uint i = 0; i < m_knots.size(); ++i)
 					m_weights[i] *= exp(m_knots[i]);
 		}
 
@@ -355,11 +355,11 @@ namespace phys{
 			double L_0, L_1, L_2;
 			double dldx;
 			double t1, t2, t3;
-			size_t j;
+			uint j;
 
 			stdVec_d vx(m_numKnots), vw(m_numKnots);
 
-			for (size_t i = 1; i <= m_numKnots; i++) {
+			for (uint i = 1; i <= m_numKnots; i++) {
 				if (i == 1)       // initial approximation for zeros (Stroud & Secrest)
 					x0 = 3./(1. + 2.4 * double(m_numKnots));             // 1st zero
 				else if (i == 2)
@@ -374,7 +374,7 @@ namespace phys{
 				do{
 					L_0 = 1.0 - x0;
 					L_1 = 1.0;
-					for(size_t k = 2; k<=m_numKnots; ++k){
+					for(uint k = 2; k<=m_numKnots; ++k){
 						L_2 = L_1;
 						L_1 = L_0;
 						t1 = 2*L_1 - L_2;
@@ -407,7 +407,7 @@ namespace phys{
 		double Laguerre::integrate( double(*f)(double), double lft, double )
 		{			
 			double sum = 0.0;	
-			for(size_t i = 0; i < m_numKnots; ++i)
+			for(uint i = 0; i < m_numKnots; ++i)
 				sum += m_weights[i] * f(lft+m_knots[i]);	
 
 			m_func_calls += m_numKnots;
@@ -418,7 +418,7 @@ namespace phys{
 		*	Other methods
 		*******************************************************************************************************/
 		//Adaptive extension --------------------------------------------------------------------------------
-		double Adaptive::integrate(double(*f)(double), double lft, double rht, size_t pts, double tol)
+		double Adaptive::integrate(double(*f)(double), double lft, double rht, uint pts, double tol)
 		{
 			if (tol != double()) m_tolerance = tol;
 			m_I = f;
@@ -437,7 +437,7 @@ namespace phys{
 			return retval;
 		}
 
-		double Adaptive::recursive(double lft, double rht, size_t strips, double tol, size_t&cnt, double&m_error)
+		double Adaptive::recursive(double lft, double rht, uint strips, double tol, uint&cnt, double&m_error)
 		{
 			double T0 = m_pQuad->integrate(m_I, lft, rht, strips);
 			double T1 = m_pQuad->integrate(m_I, lft, rht, strips * 2);
@@ -462,14 +462,14 @@ namespace phys{
 		}
 
 		//Romberg integration ----------------------------------------------------------------------------------
-		double Romberg::integrate(double(*f)(double), double lft, double rht, double tolerance, size_t max_level)
+		double Romberg::integrate(double(*f)(double), double lft, double rht, double tolerance, uint max_level)
 		{
 			if (tolerance != double()) m_tol = tolerance;
-			if (max_level != size_t()) m_level = max_level;
+			if (max_level != uint()) m_level = max_level;
 
 			unsigned lvl = m_level, k = 0;
 			stdVec_d s(lvl, 1.0);
-			double temp;
+			double temp = 0.0;
 
 			Trapeziod trap;
 
@@ -481,7 +481,7 @@ namespace phys{
 					if (i == 1)
 					{
 						temp = s[i];
-						s[i] = trap.integrate(f, lft, rht, size_t(pow(2, k - 1)));
+						s[i] = trap.integrate(f, lft, rht, uint(pow(2, k - 1)));
 					}
 					else
 					{

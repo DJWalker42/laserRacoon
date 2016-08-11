@@ -2,6 +2,10 @@
 #include <Visualise.h>
 #include <cmath>
 
+/*
+	***TEST OF THE GAUSS-LAGUERRE QUADRATURE ON SOME STANDARD INTEGRALS***
+*/
+
 #ifndef PI
 	#define PI 3.1415926535897932384626433832795028841971693993751 //slight overkill on pi precision
 #endif
@@ -45,17 +49,9 @@ double S8 = PI / 2.;
 
 typedef std::pair<double(*)(double), double> integral;
 
-std::string functions[] = { "sqrt(x) * exp(-x)", 
-							"exp(-x*x)", 
-							"x*x*exp(-x*x)", 
-							"x*x*x*exp(-x*x)", 
-							"x / (exp(x) - 1)", 
-							"x*x / (exp(x) - 1)", 
-							"x*x*x / (exp(x) - 1)", 
-							"sin(x) / x", 
-							"sin(x)*sin(x) / x / x"
-};
-
+std::string functions[] = { "sqrt(x) * exp(-x)", "exp(-x*x)", "x*x*exp(-x*x)", "x*x*x*exp(-x*x)", 
+							"x / (exp(x) - 1)", "x*x / (exp(x) - 1)", "x*x*x / (exp(x) - 1)", 
+							"sin(x) / x", "sin(x)*sin(x) / x / x" };
 
 int main(){
 	std::vector<integral> test(9);
@@ -75,6 +71,9 @@ int main(){
 	phys::stdVec_d numKnots;
 	phys::stdVec_d value;
 
+	//Integrate each standard integral for an increasing number of knots and store the result.
+	//Then plot the value computed as a function of the number of knots used, 
+	//drawing a constant line for the analytic solution. 
 	for(size_t i = 0; i < 9; ++i){
 		for(size_t j = 1; j < 101; ++j){
 			p_lag->set_points(j);

@@ -1,8 +1,8 @@
 #include "Fourier.h"
 #include "Maths.h"
-
-static const size_t log2_lut[] = { 1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096, 8192, 16384, 32768, 65536, 131072}; 
-static const size_t log2_lut_size = sizeof(log2_lut)/sizeof(log2_lut[0]);
+//uncomment the following lines to use
+//static const size_t log2_lut[] = { 1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096, 8192, 16384, 32768, 65536, 131072};
+//static const size_t log2_lut_size = sizeof(log2_lut)/sizeof(log2_lut[0]);
 
 
 namespace phys{

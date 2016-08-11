@@ -13,7 +13,7 @@ namespace phys{
 
 	BvpODE::BvpODE(	SecondOrderODE* pODE, 
 					BoundaryConditions* pBCs, 
-					size_t numNodes) :
+					uint numNodes) :
 					m_pODE(pODE),
 					m_pBCs(pBCs),
 					m_numNodes(numNodes),
@@ -151,7 +151,6 @@ namespace phys{
 		(*m_pLhsMat)[m_numNodes - 3][m_numNodes - 3] = m_pODE->m_Uxx * beta + m_pODE->m_U;
 
 		//Interior nodes
-
 		for (size_t i = 1; i < m_numNodes - 3; ++i)
 		{
 			xm = m_pGrid->m_Nodes[i - 1].getX();
@@ -184,8 +183,8 @@ namespace phys{
 	{
 		/*
 			As we specify the boundary types and values in the sole constructor for the
-			BoundaryConditions class then the data memembers of that class are necessarily
-			set. 
+			BoundaryConditions class then the data memembers of that class are gaurenteed 
+			to be initialised. 
 		*/
 
 		//LHS boundary - xm == x[i-1] xp == x[i+1] here i = 1

@@ -123,7 +123,7 @@ namespace phys{
 
 		stdVec_d ODE_solver::deriv_B(double x, const stdVec_d& y)
 		{
-			for(size_t i = m_mid_idx; i < m_num_of_vars; ++i)			
+			for(int i = m_mid_idx; i < m_num_of_vars; ++i)
 				m_deriv_result[i] = m_ptr_diff_eqn->differential_function(x,y,m_dims,i-m_mid_idx);
 			return m_deriv_result;
 		}
@@ -663,7 +663,7 @@ namespace phys{
 		}
 
 		/*	Set up the storage as a first order ode with one dimension --
-			avoids saving reapeat values from m_previous iteration
+			avoids saving repeat values from the previous iteration
 		*/ 
 		phys::storage::ODE_Storage Numerov::fullSolve(double end)
 		{

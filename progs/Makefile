@@ -1,6 +1,3 @@
-#note that this makefile is not optimal. Every time you make a change to one of the sample source files
-#each source file has to be recomplied. One solution would be to have a unique target for each source file.
-
 INCDIR=../inc
 LIBDIR=../lib
 OPENCVLIB=/usr/local/lib
@@ -10,7 +7,7 @@ LIBNAME=laserRacoon
 
 SOURCES=	shm.cpp \
 			rootSearchApp.cpp \
-			dampedSHM.cpp \
+			duffing.cpp \
 			comet.cpp \
 			numerov.cpp \
 			dataFit.cpp \
@@ -25,7 +22,8 @@ SOURCES=	shm.cpp \
 			quadrat.cpp \
 			vanDerPolFFT.cpp \
 			BvpODEchk.cpp \
-			resonance.cpp
+			resonance.cpp \
+			double_pendulum.cpp
 
 CXX=g++
 CXXFLAGS=-Wall -O2 -I${INCDIR}/ -std=c++11

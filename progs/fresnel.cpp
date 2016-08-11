@@ -1,6 +1,18 @@
 #include <Quadrature.h>
 #include <Visualise.h>
 
+/*
+	*** CALCULATION OF THE FRESNEL DIFFRACTION PATTERN from a circular aperature ***
+	
+	By combining the two transcendental functions S(x) = [0,x] sin(t^2)dt and C(x) = [0,x] cos(t^2)dt,
+	where [a,b] means the intgral from  x = a to x = b, we can compute the (radial) diffraction pattern
+	observed when light passes through a circular aperture.
+	
+	The combination is
+	I(x) = ( (S(x) + 1/2)^2 + (C(x) + 1/2)^2 ) / 2
+*/
+
+
 double pi = 4.0*atan(1.0);
 
 //the fresenel functions

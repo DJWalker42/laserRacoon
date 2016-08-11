@@ -89,12 +89,12 @@ namespace phys{
 	template<typename T>
 	const std::vector<T> sub_vector( const std::vector<T>& vec, size_t start, size_t end); 
 
-	/* Type definitions for convenience */
-	typedef std::vector<double>		stdVec_d;
-	typedef std::vector<int>		stdVec_i;
-	typedef std::vector<size_t>		stdVec_s;
-
-	typedef std::vector<phys::complex>	stdVec_c;
+	/* Type definitions for convenience */    
+    using stdVec_d = std::vector<double>;
+    using stdVec_i = std::vector<int>;
+    using stdVec_u = std::vector<unsigned int>;
+    using stdVec_s = std::vector<size_t>;
+    using stdVec_c = std::vector<phys::complex>;
 }
 
 template<typename T>

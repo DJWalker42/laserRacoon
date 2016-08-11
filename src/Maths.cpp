@@ -87,7 +87,7 @@ namespace phys{
 		double stdDevVec( const stdVec_d& v , double mu ) 
 		{
 			size_t n = v.size();
-			if(n < 2) return DBL_MAX;
+			if(n < 2) return DBL_MAX; //yeah!! screw you passing just one value
 			double sum = 0.;
 			for(size_t i = 0; i < n; ++i)
 				sum += (v[i] - mu)*(v[i] - mu);

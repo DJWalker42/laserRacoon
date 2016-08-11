@@ -31,10 +31,10 @@ namespace phys{
 			/* Advances the system a single step.*/
 			virtual state solve()=0;
 
-			/*	Solves the system from initial independent value to end. */
+			/*	Solves the system from initial independent value to the specified end. */
 			virtual phys::storage::ODE_Storage fullSolve(double end) = 0;
 
-			/* Solves the system from initial independent value to end, wrapping the dependent varaible to the range -pi to +pi*/
+			/* Solves the system from initial independent value to end, wrapping the dependent variable to the range -pi to +pi*/
 			virtual phys::storage::ODE_Storage fullSolveWrapped(double end)
 			{
 				size_t N = num_steps(m_current.x, end), count = 0;
@@ -52,6 +52,7 @@ namespace phys{
 			/* Wraps the dependent values of the current step to the range -pi to +pi*/
 			void wrap(){
 				for (size_t i = 0; i < m_dims; i++){
+					using namespace constants; //for PI
 					if (m_current.y[i] < -PI) m_current.y[i] += 2 * PI;
 					if (m_current.y[i] > +PI) m_current.y[i] -= 2 * PI;
 				}
@@ -78,7 +79,8 @@ namespace phys{
 				Prototype for solver methods that require an initialisation step.
 				Derived methods that do not require initialisation call this function
 				that is implicitly inlined and has a null body - it should be removed
-				by compiler optimisation.
+				by compiler optimisation. init_method is called from set_system and 
+				set_step member functions.
 			*/
 			virtual void init_method(){ /* null body */ }
 			stdVec_d deriv(double x, const stdVec_d& y);
@@ -100,9 +102,9 @@ namespace phys{
 			stdVec_d m_deriv_result;				//!< result of the derivative functions.
 			stdVec_d m_k[6];						//!< typically used to store intermediate derivative values.
 
-			size_t m_dims;							//!< dimensionality of the problem
-			size_t m_num_of_vars;					//!< total number of variables in the problem
-			size_t m_mid_idx;						//!< index at which y changes to dy in the dependent vector.
+			uint m_dims;							//!< dimensionality of the problem
+			uint m_num_of_vars;                     //!< total number of variables in the problem
+			uint m_mid_idx;                         //!< index at which y changes to dy in the dependent vector.
 		};
 
 		class Euler: public ODE_solver{

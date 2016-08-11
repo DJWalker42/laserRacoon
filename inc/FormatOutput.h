@@ -1,7 +1,7 @@
 #ifndef FORMATOUTPUT_HPP
 #define FORMATOUTPUT_HPP
 
-#include <sstream>
+#include <string>
 
 #ifndef DBL_EPSILON
 #define DBL_EPSILON 2.2204460492503131E-16

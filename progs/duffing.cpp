@@ -2,6 +2,14 @@
 #include <ODESolvers.h>
 #include <Visualise.h>
 
+/*
+	***PROGRAM TO COMPUTE THE SOLUTION TO THE DUFFING OSCILLATOR***
+	
+	The Duffing oscilator shows chaoctic motion for given sets of parameters and intitial conditions.
+	This can be seen in the phase space plot of the solution. 
+	See http://www.scholarpedia.org/article/Duffing_oscillator for a techincal explanation.
+*/
+
 int main ()
 {
 	double t = 0.0;

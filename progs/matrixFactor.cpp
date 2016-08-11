@@ -1,7 +1,11 @@
 #include <LinearSolvers.h>
 #include <iostream>
-using namespace phys;
 
+/*
+	***TEST THE MATRIX FACTORISATIONS (LINEAR SOLVER) METHODS***
+*/
+
+using namespace phys;
 
 int main(){
 
@@ -31,7 +35,7 @@ int main(){
 
 	LinearSolver* chol = new Cholesky( A );
 	
-	mat X = chol->solve(B);
+	mat X = chol->solve(B); //should give the solution vectors [1,2,3] and [-1,0,1]
 
 	std::cout << "Cholesky\n";
 	std::cout << X << "\n";
@@ -52,12 +56,12 @@ int main(){
 	QR qr(A);
 
 	std::cout << "QR decomp -> Q * R =\n";
-	std::cout << qr.getQ() * qr.getR() << "\n";
+	std::cout << qr.getQ() * qr.getR() << "\n"; //this should be equivalent to the original matrix
 
 	LU lu(A);
 
 	std::cout << "LU decomp -> L * U =\n";
-	std::cout << lu.getL() * lu.getU() << "\n";
+	std::cout << lu.getL() * lu.getU() << "\n"; //this should be equivalent to the original matrix
 
 	return 0;
 }

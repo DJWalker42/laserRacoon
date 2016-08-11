@@ -4,6 +4,26 @@
 #include <Maths.h>
 #include <iostream>
 
+/*
+	********** THE MONTE-CARLO DARTBOARD ***********
+
+	Monte-Carlo dart board experiment to estimate a value for pi.
+	User is asked for the number of darts to throw to get an estimate of pi.
+	Then asked the number of times to repeat the experiment for statistical analysis.
+	
+	Pi is estimated by throwing darts at a unit square board defined by (0,0), (1,0), (0,1), and (1,1). 
+	All darts thrown hit this unit square by design.
+	By comparing the ratio of darts to land within a unit quarter circle (centred at the origin) to those that
+	land outside said quarter circle we can obtain an estimate for pi.To explain, the probability that a randomly thrown
+	dart will land within a given area is proportional to the size of that given area. Thus, the probility that a
+	dart lands within the unit quarter circle is given by k.pi/4, where k is the constant of proportionality. 
+	In this case we can state that k is unity as we have designed all darts thrown to hit the unit square. Thus, the ratio
+	of "hits" (landed in the quarter circle) to "misses" (not landed in the quarter circle) should equal pi/4.
+	
+	Experiment with the number of darts thrown vs. the number of repeats paying specific attention to the statistics.
+	
+*/
+
 
 int main(){
 	size_t repeat, darts_to_throw;
@@ -14,9 +34,11 @@ int main(){
 	std::cout << "Input the number of repeats: "; 
 	std::cin >> repeat;
 
-	phys::stdVec_d bin(100,0.);
-	phys::stdVec_d pi_est;
+	phys::stdVec_d bin(100,0.); //vector to in-order to bin results to plot as a histogram
+	phys::stdVec_d pi_est; //value to store the current pi estimate for a given experiment
 	
+	
+	/** main loop **/
 	for(size_t k = 0; k < repeat; ++k)
 	{
 		phys::RNG<> rand_0_1(0.,1.);//,k);

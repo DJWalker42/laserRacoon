@@ -23,11 +23,11 @@ namespace phys{
 
 			m_x = m_data.x;
 			m_y = m_data.y;
-			size_t n = m_x.size();
+			uint n = static_cast<uint>(m_x.size());
 
 			phys::Band_matrix A(n, 1, 1);
 			std::vector<double>  rhs(n);
-			for (size_t i = 1; i < n - 1; i++) {
+			for (int i = 1; i < n - 1; i++) {
 				A(i, i - 1) = 1.0 / 3.0*(m_x[i] - m_x[i - 1]);
 				A(i, i) = 2.0 / 3.0*(m_x[i + 1] - m_x[i - 1]);
 				A(i, i + 1) = 1.0 / 3.0*(m_x[i + 1] - m_x[i]);
