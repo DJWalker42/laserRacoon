@@ -9,6 +9,7 @@
 #include "Maths.h"
 
 #include <exception> 
+#include <memory>
 
 /*
 Common OpenCV types and explanations:
@@ -134,6 +135,9 @@ namespace phys{
 			/* Allows shape sub-classes to access private Viewer members */
 			friend class Circle; friend class Square; friend class Triangle;
 			friend class Cross; friend class Arrow;
+            /* c++11 using typedef for covenience */
+            using UPtrShape = std::unique_ptr<Shape>;
+            
 		private:
 			int m_rows;								//!< height of the Viewer window
 			int m_cols;								//!< width of the Viewer window
@@ -151,19 +155,19 @@ namespace phys{
 			cv::Scalar m_bg_colour;					//!< background colour
 			cv::Scalar m_ax_colour;					//!< axis colour
 			cv::Scalar m_dt_colour;					//!< data colour
-			uint m_clr_counter;					//!< counter to change data colour if multiple data being plotted
+			uint m_clr_counter;                     //!< counter to change data colour if multiple data being plotted
 			double m_val_origin_x;					//!< optional origin x value (in data units not pixels) 
 			double m_val_origin_y;					//!< optional origin y value (in data units not pixels) 
 			std::vector<std::string> m_key_titles;	//!< key titles if plotting multiple data
 			std::string m_plot_name;				//!< Viewer window name
 			int m_g_choice;							//!< choice between x vs. y(x), x vs. dy/dx, y1(x) vs. y2(x), y(x) vs. dy/dx
-			int m_pause;							//!< optional delay makes plots hang for the set time; default is zero (Viewer hangs until key pressed). 
+			int m_pause;							//!< optional delay makes plot pause; default zero: Viewer hangs until key pressed.
 			bool m_lines;							//!< do you want m_lines with your points? 
 			bool m_animate;							//!< switches between a static and animated plot.
 			bool m_is_drawn;						//!< check that a plot has been plotted before trying to add data.
 			double m_font_scale;					//!< overall font scale for labels drawn.
 			cv::Mat m_BG;							//!< opencv matrix - this is the array to which we draw everything.
-			Shape* m_pShape;						//!< m_shape pointer - choice between circle, square, triangle and cross. 
+			UPtrShape m_pShape;						//!< m_shape pointer - choice between circle, square, triangle and cross.
 			enum axis{ X, Y, Y2 };					//!< enum to select between different axes
 		public:
 			Viewer() : m_rows(450),
@@ -194,7 +198,7 @@ namespace phys{
 				m_is_drawn(false),
 				m_font_scale(1.0),
 				m_BG(cv::Mat(m_rows, m_cols, CV_8UC3, m_bg_colour)),
-				m_pShape(new Circle(1, m_dt_colour))
+                m_pShape(UPtrShape{new Circle{1, m_dt_colour}})
 			{
 				cv::Point tl(int(m_cols*m_offset_x / 100), int(m_rows*m_offset_y / 100));
 				cv::Point br(m_cols - int(m_cols*m_offset_x / 100), m_rows - int(m_rows*m_offset_y / 100));
@@ -238,7 +242,7 @@ namespace phys{
 				m_is_drawn(false),
 				m_font_scale(m_rows*m_cols / 1000. / 1000.),
 				m_BG(cv::Mat(m_rows, m_cols, CV_8UC3, m_bg_colour)),
-				m_pShape(new Circle(1, m_dt_colour))
+				m_pShape(UPtrShape{new Circle{1, m_dt_colour}})
 			{
 				cv::Point tl(int(m_cols*m_offset_x / 100.), int(m_rows*m_offset_y / 100.));
 				cv::Point br(m_cols - int(m_cols*m_offset_x / 100.), m_rows - int(m_rows*m_offset_y / 100.));
@@ -249,7 +253,7 @@ namespace phys{
 
 			~Viewer()
 			{
-				delete m_pShape;
+				//delete m_pShape;
 			}
 
 			enum graph_choice { DEPEN, DERIV, XY, PHASE };

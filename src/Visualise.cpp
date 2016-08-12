@@ -765,27 +765,27 @@ namespace phys{
 		void Viewer::set_shape(shape_choice sc, uint sz)
 		{
 			//delete the pointee of the m_pShape pointer first.
-			delete m_pShape;
+			//delete m_pShape;
 			//reassign m_pShape pointer to the m_pShape wanted
 			switch (sc){
 			case CIRCLE:
-				m_pShape = new Circle(sz, m_dt_colour);
+                m_pShape = UPtrShape {new Circle{sz, m_dt_colour}};
 				break;
 			case SQUARE:
-				m_pShape = new Square(sz, m_dt_colour);
+                m_pShape = UPtrShape {new Square{sz, m_dt_colour}};
 				break;
 			case TRIANGLE:
-				m_pShape = new Triangle(sz, m_dt_colour);
+                m_pShape = UPtrShape {new Triangle{sz, m_dt_colour}};
 				break;
 			case CROSS:
-				m_pShape = new Cross(sz, m_dt_colour);
+                m_pShape = UPtrShape {new Cross{sz, m_dt_colour}};
 				break;
 			case ARROW:
-				m_pShape = new Arrow(sz, sz / 4, 0.0, m_dt_colour);
+                m_pShape = UPtrShape {new Arrow{sz, sz / 4, 0.0, m_dt_colour}};
 				break;
 			default:
 				std::cerr << "Shape not recognised. Using a circle.\n"; 
-				m_pShape = new Circle(sz, m_dt_colour);
+				m_pShape = UPtrShape {new Circle{sz, m_dt_colour}};
 				break;
 			}
 		}
