@@ -3,12 +3,14 @@
 #include <Storage.h>
 #include <Visualise.h>
 
+#include <algorithm>
+
 /*
 	***COMPUTES THE ELECTRON ENERGY STATES OF A GIVEN POTENTIAL FUNCTION USING THE NUMEROV ALGORITHM** 
 	
 	For a user defined potential computes the electron energy states of the well. It guesses at an
 	energy level and integrates the resulting wavefunction from the classically forbidden region
-	up to a mathcing point within the well. Then it integrates the wavefunction from the other 
+	up to a matching point within the well. Then it integrates the wavefunction from the other
 	direction again starting from the classically forbidden region, up to the matching point. It 
 	use the information of the guessed energy level and how close the wavefunctions get at the matching
 	point to improve the energy level guess; in essence it root searches for the precise energy level.
@@ -16,7 +18,7 @@
 	The matching point can be any arbritray point in the well however it convenient to take the
 	matching point where the guessed energy level crosses the rhs boundary of the potential function. 
 	We integrate from the classically forbidden region into the well to supress
-	the unwanted expoential growth term to Schrodingers equation that tends to blow up due to
+	the unwanted expoential growth term in the solution to Schrodinger's equation that tends to blow up due to
 	floating point number precision. 
 
 */
@@ -156,24 +158,19 @@ double F(double En)
 void normalize() 
 {
 	//We can erase the final three elements of phi as these 
-	//contain the overlapped values from the right integration.
+	//contain the overlapped values from the right integration (match + 1, match, match - 1).
 	phi.erase(phi.end() - 3, phi.end() );
 
-	size_t phi_size = phi.size();
-
-	// manipulate phi so that it is in x order i.e. -5 -> +5 
-	// current order is -5 -> match, +5 -> match
-	//insert the reversed back "half" of the vector at the matching-point-plus-one plus one
-	phi.insert(phi.begin() + i_match_p1 + 1, phi.rbegin(), phi.rend() - i_match_p1);
-
-	//erase original back "half" of the vector -- should have retained size.
-	phi.erase(phi.end() - phi_size + i_match_p1, phi.end());
+	// manipulate phi so that it is in x order i.e. [x_lft -> x_rht]
+	// current order is [x_lft -> match + 1, x_rht -> match + 2]
+	// so we reverse the back "half" of the vector at the matching-point-plus-one plus one
+    std::reverse(phi.begin() + i_match_p1 + 1, phi.end());
 
 	double norm = phys::squaredNorm(phi);
-	norm /= phi_size;
+	norm /= phi.size();
 	norm = sqrt(norm);
 	{
-		using phys::operator/=;
+		using phys::operator/=; //this will do an elementwise division
 		phi /= norm;
 		//alternate syntax without the using
 		/*phi = phys::operator/=(phi, norm);*/ 
@@ -182,13 +179,16 @@ void normalize()
 
 int main()
 {
-	std::string pot_filename = "./potential.txt"; 
-	std::string lvl_filename = "./levels.txt";
-	std::string wvf_filename = "./wavefunction.txt";
+    //change this to where you want it saved
+    //- make sure it exists first the write/save functions don't make directories (platform specific).
+    std::string rootDir = "/path/to/data/directory/quantum_well";
+    
+	std::string pot_filename = rootDir + "/potential.txt";
+	std::string lvl_filename = rootDir + "/levels.txt";
+	std::string wvf_filename = rootDir + "/wavefunction.txt";
 
 	std::cout	<< " Eigenvalues of the Schroedinger equation\n"
 				<< " for the harmonic oscillator V(x) = 0.5 x^2\n"
-				<< " (you can change this to a function of choice in the source file)\n"
 				<< " ------------------------------------------\n";
 	double E_max;
 
@@ -260,9 +260,8 @@ int main()
 			data[j][i] += energy[j];
 		}
 
-	std::vector<std::string> keys = wavefunction.get_key_names();
 	phys::visual::Viewer viewer;
-	viewer.set_key_name( keys );
+	viewer.set_key_name( wavefunction.get_key_names() );
 	viewer.set_x_name("x/nm");
 	viewer.set_y_name("Energy/eV");
 	viewer.set_shape(phys::visual::CROSS, 5);
@@ -273,7 +272,7 @@ int main()
 	viewer.noAnimation();
 	viewer.withLines();
 	viewer.add_data(potential.get_independent(), potential.get_dependent(), true);
-	viewer.save("./data/harmonic.png"); 
+	viewer.save(rootDir + "/harmonic.png");
 
 	return 0;
 }

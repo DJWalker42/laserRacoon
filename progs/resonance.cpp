@@ -84,6 +84,8 @@ int main()
 	viewer.set_y_range(0., .7);
 	viewer.set_key_name( key_names );
 	viewer.plot(omega_vals, amp_vals);
+    //to save an image of the plot uncomment line below and give a directory location and filename (.png, .jpg, .bmp).
+    //viewer.save(/*supply a loaction + filename*/);
 
 	return 0;
 }

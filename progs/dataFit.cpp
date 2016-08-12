@@ -12,9 +12,9 @@
 
 int main(int argc, char** argv)
 {
-	std::string filename = "../resource/millikanData.txt"; // change to absolute path if necessary 'path-to-repo/laserRacoon/progs/resource/millikanData.txt' or ...
+	std::string filename = "../../../../laserRacoon/progs/resource/millikanData.txt";
 
-	//...use an argument in the call to the binary
+	//... or use an argument in the call to the binary
 	if (argc > 1) {
 		filename = std::string (argv[1]); 
 	}
