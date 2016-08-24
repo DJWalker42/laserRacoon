@@ -6,7 +6,7 @@
 
 namespace phys{
 	namespace diffs{
-        
+
         using uint = unsigned int;
 
 		class Diff_eqn{
@@ -20,16 +20,16 @@ namespace phys{
 			/* Prevent copying */
 			Diff_eqn( const Diff_eqn& );
 			const Diff_eqn& operator= (const Diff_eqn& );
-		public:			
+		public:
 			/* Interface function to the ODE */
-			virtual double differential_function(	double inde_var, 
+			virtual double differential_function(	double inde_var,
 													const stdVec_d& depend_vars,
 													int num_of_dims, int var_flag)=0;
 			void set_order(uint order_to_set)
 			{
-				order = order_to_set;	
+				order = order_to_set;
 				check_order();
-			}		
+			}
 			uint get_order() const {return order;}
 		protected:
 			uint order;
@@ -37,13 +37,13 @@ namespace phys{
 
 			void check_order()
 			{
-				if (order > 2 ) 
+				if (order > 2 )
 				{
 					std::string errmsg = "Only order one and order two ODEs supported ";
 					throw(std::runtime_error(errmsg));
 				}
 			}
-			
+
 		};
 
 		class SHM_eqn : public Diff_eqn{
@@ -55,27 +55,27 @@ namespace phys{
 			/*	Default constructor
 				Default values: spring const, k = 9.0; drag coeff, D = 0.0.
 			*/
-			SHM_eqn():	Diff_eqn(), 
-						k(9.0), 
-						D(0.0), 
+			SHM_eqn():	Diff_eqn(),
+						k(9.0),
+						D(0.0),
 						drive_func() {}
 			/*	Constructor to set spring constant and drag.
 			*/
-			SHM_eqn(	double spring, 
-						double drag		): 
+			SHM_eqn(	double spring,
+						double drag		):
 						Diff_eqn(),
-						k(spring), 
-						D(drag), 
+						k(spring),
+						D(drag),
 						drive_func(){}
 			/*	Constructor for a user defined drive function */
-			SHM_eqn(	double spring, 
-						double drag, 
-						double(*d_func)(double)		): 
+			SHM_eqn(	double spring,
+						double drag,
+						double(*d_func)(double)		):
 						Diff_eqn(),
-						k(spring), 
+						k(spring),
 						D(drag),
 						drive_func(d_func){}
-			double differential_function(	double x, 
+			double differential_function(	double x,
 											const stdVec_d& y,
 											int N, int c	)
 			{
@@ -91,16 +91,16 @@ namespace phys{
 
 		class Gravity : public Diff_eqn{
 		public:
-			Gravity(	double drag = double(), 
-						int turb = -1	) : 
+			Gravity(	double drag = double(),
+						int turb = -1	) :
 						Diff_eqn(),
-						D(drag), 
+						D(drag),
 						turbulent(turb){}
-			double differential_function(	double x, 
+			double differential_function(	double x,
 											const stdVec_d& y,
-											int N, int c	) 
-			{				
-				double r;
+											int N, int c	)
+			{
+				double r{1.};
 				switch(N){
 				case 1:
 					r = fabs(y[0]);
@@ -139,9 +139,9 @@ namespace phys{
 
 		class Van_Der_Pol : public Diff_eqn{
 		public:
-			Van_Der_Pol() : Diff_eqn(), 
+			Van_Der_Pol() : Diff_eqn(),
 							mu(1.0) {}
-			Van_Der_Pol(double mu_val) :	Diff_eqn(), 
+			Van_Der_Pol(double mu_val) :	Diff_eqn(),
 											mu(mu_val) {}
 			double differential_function(double x, const stdVec_d& y, int N, int c)
 			{
@@ -155,29 +155,29 @@ namespace phys{
 		class Duffing : public Diff_eqn{
 		public:
 			/*	Default constructor sets up equation as SHM i.e. only beta non zero (= 9.0) */
-			Duffing() : Diff_eqn(), 
-						beta(9.0), 
-						alpha(0.0), 
-						delta(0.0), 
-						gamma(0.0), 
+			Duffing() : Diff_eqn(),
+						beta(9.0),
+						alpha(0.0),
+						delta(0.0),
+						gamma(0.0),
 						omega(0.0){}
 			//----------------------------------------------------------------------------------
-			Duffing(	double stiffness, 
-						double nonLinear, 
-						double damping, 
-						double amplitude, 
+			Duffing(	double stiffness,
+						double nonLinear,
+						double damping,
+						double amplitude,
 						double frequency	) :
 						Diff_eqn(),
-						beta(stiffness), 
-						alpha(nonLinear), 
-						delta(damping), 
-						gamma(amplitude), 
+						beta(stiffness),
+						alpha(nonLinear),
+						delta(damping),
+						gamma(amplitude),
 						omega(frequency){}
-			double differential_function(	double x, 
+			double differential_function(	double x,
 											const stdVec_d& y,
 											int N, int c	)
 			{
-				return (gamma*cos(omega*x)-(beta*y[c] + alpha*y[c]*y[c]*y[c] + delta*y[c+N])); 
+				return (gamma*cos(omega*x)-(beta*y[c] + alpha*y[c]*y[c]*y[c] + delta*y[c+N]));
 			}
 			void set_alpha(double a){alpha = a;} //!< non-linear
 			void set_beta (double b){beta  = b;} //!< stiffness
@@ -186,16 +186,16 @@ namespace phys{
 			void set_omega(double w){omega = w;} //!< drive frequency
 		private:
 			double beta;		//!< Stiffness (spring const.)
-			double alpha;		//!< Non-linear restoring force coefficient			
+			double alpha;		//!< Non-linear restoring force coefficient
 			double delta;		//!< Damping coefficient
-			double gamma;		//!< Amplitude of the periodic driving force			
+			double gamma;		//!< Amplitude of the periodic driving force
 			double omega;		//!< Frequency of the driving force
 		};
 
 
 		/*	Use to define your own differential_function using the member prototype. Default
 			order is 2. Use set_order to change to 1 if necessary. Note that only order
-			1 and 2 ODEs supported. The vector 'params' is available for you to use in 
+			1 and 2 ODEs supported. The vector 'params' is available for you to use in
 			your differential_function; just use set_parameters function in your main.
 		*/
 		class User_eqn : public Diff_eqn{
@@ -210,7 +210,7 @@ namespace phys{
 				@param N integer variable of the number of dimensions in the system
 				@param c integer variable of the specific dimension for which to compute the differential
 			*/
-			double differential_function(	double independent, 
+			double differential_function(	double independent,
 											const stdVec_d& dependent,
 											int num_of_dims, int dim_choice);
 		private:

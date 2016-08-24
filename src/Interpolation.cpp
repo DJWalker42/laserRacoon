@@ -11,7 +11,7 @@ namespace phys{
 		Interpolator::Interpolator() :	m_data(),
 										m_errorEstimate(0.0),
 										m_sortSwitch(true),
-										m_tolX(DBL_EPSILON) 
+										m_tolX(DBL_EPSILON)
 		{ /*no data to check*/}
 
 		Interpolator::Interpolator(	const stdVec_d& x_vals,
@@ -83,7 +83,7 @@ namespace phys{
 					++j; //put update in the body to ensure we know which condition breaks the loop
 
 				if( j < m_data.x.size() )
-					temp.y[j] = m_data.y[i]; 
+					temp.y[j] = m_data.y[i];
 				//else no match - which is impossible as temp is a copy of m_data
 			}
 			//assign sorted data back to m_data.
@@ -103,7 +103,7 @@ namespace phys{
 		*	Derived Class implementations
 		********************************************************************************/
 		double Linear::interpolate(double x)
-		{	
+		{
 			size_t i0 = find_base_idx(x);
 			/*	quick return if x equal or near to your data x value */
 			if (fabs(x - m_data.x[i0]) < m_tolX) return m_data.y[i0];
@@ -114,7 +114,7 @@ namespace phys{
 			/*	for left hand extrapolation outcome i0 will be zero which is not a problem */
 			double c1 = (x - m_data.x[i0+1])/(m_data.x[i0] - m_data.x[i0+1]);
 			double c2 = (x - m_data.x[i0])/(m_data.x[i0+1] - m_data.x[i0]);
-			return (c1*m_data.y[i0] + c2*m_data.y[i0+1]); 
+			return (c1*m_data.y[i0] + c2*m_data.y[i0+1]);
 		}
 
 		double Lagrange::interpolate(double x)
@@ -129,11 +129,11 @@ namespace phys{
 			{
 				for(size_t l = 0; l < m; ++l)
 				{
-					if(k != l) lambda[k] *= 
+					if(k != l) lambda[k] *=
 						(x - m_data.x[l])/(m_data.x[k] - m_data.x[l]);
 				}
 
-				retval += lambda[k]*m_data.y[k]; 
+				retval += lambda[k]*m_data.y[k];
 			}
 			return retval;
 		}
@@ -144,7 +144,7 @@ namespace phys{
 			size_t i0 = find_base_idx(x);
 			/*	quick return if x equal or near to your data x value */
 			if (fabs(x - m_data.x[i0]) < m_tolX) return m_data.y[i0];
-			
+
 			double x1, x2, f1 = 0.0, f2 = 0.0;
 			data temp(m_data);
 			for(size_t i = 1; i < m; ++i)
@@ -154,8 +154,8 @@ namespace phys{
 					x1 = temp.x[j];
 					x2 = temp.x[j+i];
 					f1 = temp.y[j];
-					f2 = temp.y[j+1]; 
-					
+					f2 = temp.y[j+1];
+
 					temp.y[j] = f2*(x - x1)/(x2 - x1) + f1*(x - x2)/(x1 - x2);
 				}
 			}
@@ -165,11 +165,11 @@ namespace phys{
 		}
 
 		double UpDown::interpolate(double x)
-		{	
+		{
 			const size_t n_max = 21; //i.e. max polynomial order of 20
 			size_t m = m_data.x.size();
 			assert(m <= n_max);
-	
+
 			size_t i0 = find_base_idx(x);
 			/*	quick return if x equal or near to your data x value */
 			if (fabs(x - m_data.x[i0]) < m_tolX) return m_data.y[i0];
@@ -178,22 +178,29 @@ namespace phys{
 			double dxt = (i0 < m_data.x.size() - 1)? fabs(x - m_data.x[i0+1]) : dx;
 			if(dxt < dx){++i0;}
 			size_t j0 = i0;
-			
-			// set up correction matrices and assign to zero.
-			double dp[n_max][n_max] = {0.0};
-			double dm[n_max][n_max] = {0.0}; 
+
+			// set up correction matrices and explictly assign to zero.
+			double dp[n_max][n_max];
+			double dm[n_max][n_max];
+
+			for(int i = 0; i < n_max; ++i){
+				for(int j = 0; j < n_max; ++j){
+					dp[i][j] = 0.0;
+					dm[i][j] = 0.0;
+				}
+			}
 
 			//Compute the correction matrices
 			for(size_t i = 0; i < m; ++i)
 			{
 				dp[i][i] = m_data.y[i];
 				dm[i][i] = m_data.y[i];
-			}			
+			}
 			for(size_t i = 1; i < m; ++i)
 			{
 				for(size_t j = 0; j < m - i; ++j)
 				{
-					size_t k = i + j; 
+					size_t k = i + j;
 					dx = (dp[j][k-1] - dm[j+1][k])/(m_data.x[k] - m_data.x[j]);
 					dp[j][k] = dx*(m_data.x[k] - x);
 					dm[j][k] = dx*(m_data.x[j] - x);
@@ -201,13 +208,13 @@ namespace phys{
 			}
 
 			//update the approximation
-			double retval = m_data.y[i0]; 
+			double retval = m_data.y[i0];
 			size_t it = (x < m_data.x[i0]) ? 1 : 0;
 			for(size_t i = 1; i < m; ++i)
 			{
 				if( it == 1 || j0 == m - 1)
 				{
-					i0 -= 1; 
+					i0 -= 1;
 					m_errorEstimate = dp[i0][j0];
 					retval += m_errorEstimate;
 					it = (j0 == m - 1) ? 1 : 0;
