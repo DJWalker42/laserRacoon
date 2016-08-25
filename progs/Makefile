@@ -1,43 +1,85 @@
 INCDIR=../inc
 LIBDIR=../lib
-OPENCVLIB=/usr/local/lib
+OCVINC=/opt/local/include
+OCVLIB=/opt/local/lib
 BINDIR=./bin
 
 LIBNAME=laserRacoon
+OCVLIBNAMES=-lopencv_core -lopencv_highgui -lopencv_imgproc
 
-SOURCES=	shm.cpp \
-			rootSearchApp.cpp \
-			duffing.cpp \
-			comet.cpp \
-			numerov.cpp \
-			dataFit.cpp \
-			earth2moon.cpp \
-			fresnel.cpp \
-			interpolation.cpp \
-			laguerre.cpp \
-			matrixFactor.cpp \
-			dartBoard.cpp \
-			nuclearDecay.cpp \
-			odeSolvers.cpp \
-			quadrat.cpp \
-			vanDerPolFFT.cpp \
-			BvpODEchk.cpp \
-			resonance.cpp \
-			double_pendulum.cpp
+SOURCES=$(wildcard *.cpp)
 
 CXX=g++
-CXXFLAGS=-Wall -O2 -I${INCDIR}/ -std=c++11
-LIBFLAGS=-L${LIBDIR}/ -l${LIBNAME} -L${OPENCVLIB}/ -lopencv_core -lopencv_highgui
+CXXFLAGS=-Wall -O2 -std=c++11
+INCFLAGS=-I${INCDIR}/
+LIBFLAGS=-L${LIBDIR}/ -l${LIBNAME}
+OCVINCFLAGS=-I${OCVINC}/
+LIBFLAGS_OCV=${LIBFLAGS} -L${OCVLIB}/ ${OCVLIBNAMES}
 OPTIONS=
+
+PREFIX=$(CXX) $(CXXFLAGS) $(OPTIONS) $(INCFLAGS)
+PREFIX_OCV=$(PREFIX) $(OCVINCFLAGS)
+
 
 LIB=$(addprefix $(LIBDIR)/lib, $(addsuffix .a, $(LIBNAME)))
 BIN=$(addprefix $(BINDIR)/, $(SOURCES:.cpp=))
 
 default: $(BIN)
 
-${BINDIR}/%: %.cpp ${LIB}
-	$(CXX) $(CXXFLAGS) $(OPTIONS) $< $(LIBFLAGS) -o $@ 
-	
+${BINDIR}/shm: shm.cpp ${LIB}
+	$(PREFIX_OCV) $< $(LIBFLAGS_OCV) -o $@
+
+${BINDIR}/rootSearch: rootSearch.cpp ${LIB}
+	$(PREFIX) $< $(LIBFLAGS) -o $@
+
+${BINDIR}/duffing: duffing.cpp ${LIB}
+	$(PREFIX_OCV) $< $(LIBFLAGS_OCV) -o $@
+
+${BINDIR}/comet: comet.cpp ${LIB}
+	$(PREFIX_OCV) $< $(LIBFLAGS_OCV) -o $@
+
+${BINDIR}/numerov: numerov.cpp ${LIB}
+	$(PREFIX_OCV) $< $(LIBFLAGS_OCV) -lopencv_imgcodecs -o $@
+
+${BINDIR}/dataFit: dataFit.cpp ${LIB}
+	$(PREFIX_OCV) $< $(LIBFLAGS_OCV) -o $@
+
+${BINDIR}/earth2moon: earth2moon.cpp ${LIB}
+	$(PREFIX_OCV) $< $(LIBFLAGS_OCV) -o $@
+
+${BINDIR}/fresnel: fresnel.cpp ${LIB}
+	$(PREFIX_OCV) $< $(LIBFLAGS_OCV) -o $@
+
+${BINDIR}/laguerre: laguerre.cpp ${LIB}
+	$(PREFIX_OCV) $< $(LIBFLAGS_OCV) -o $@
+
+${BINDIR}/matrixFactor: matrixFactor.cpp ${LIB}
+	$(PREFIX) $< $(LIBFLAGS) -o $@
+
+${BINDIR}/dartBoard: dartBoard.cpp ${LIB}
+	$(PREFIX_OCV) $< $(LIBFLAGS_OCV) -o $@
+
+${BINDIR}/nuclearDecay: nuclearDecay.cpp ${LIB}
+	$(PREFIX_OCV) $< $(LIBFLAGS_OCV) -o $@
+
+${BINDIR}/odeSolvers: odeSolvers.cpp ${LIB}
+	$(PREFIX_OCV) $< $(LIBFLAGS_OCV) -o $@
+
+${BINDIR}/quadrat: quadrat.cpp ${LIB}
+	$(PREFIX) $< $(LIBFLAGS) -o $@
+
+${BINDIR}/vanDerPolFFT: vanDerPolFFT.cpp ${LIB}
+	$(PREFIX_OCV) $< $(LIBFLAGS_OCV) -o $@
+
+${BINDIR}/BvpODEchk: BvpODEchk.cpp ${LIB}
+	$(PREFIX_OCV) $< $(LIBFLAGS_OCV) -o $@
+
+${BINDIR}/resonance: resonance.cpp ${LIB}
+	$(PREFIX_OCV) $< $(LIBFLAGS_OCV) -o $@
+
+${BINDIR}/double_pendulum: double_pendulum.cpp ${LIB}
+	$(PREFIX_OCV) $< $(LIBFLAGS_OCV) -o $@
+
 $(BIN): | $(BINDIR)
 
 $(BINDIR):
@@ -46,4 +88,3 @@ $(BINDIR):
 .PHONY: clean
 clean:
 	@rm -f $(BIN) ./*~
-
