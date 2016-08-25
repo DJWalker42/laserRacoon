@@ -77,7 +77,7 @@ ${BINDIR}/BvpODEchk: BvpODEchk.cpp ${LIB}
 ${BINDIR}/resonance: resonance.cpp ${LIB}
 	$(PREFIX_OCV) $< $(LIBFLAGS_OCV) -o $@
 
-${BINDIR}/double_pendulum: double_pendulum.cpp ${LIB}
+${BINDIR}/doublePendulum: doublePendulum.cpp ${LIB}
 	$(PREFIX_OCV) $< $(LIBFLAGS_OCV) -o $@
 
 $(BIN): | $(BINDIR)
