@@ -20,7 +20,6 @@ OPTIONS=
 PREFIX=$(CXX) $(CXXFLAGS) $(OPTIONS) $(INCFLAGS)
 PREFIX_OCV=$(PREFIX) $(OCVINCFLAGS)
 
-
 LIB=$(addprefix $(LIBDIR)/lib, $(addsuffix .a, $(LIBNAME)))
 BIN=$(addprefix $(BINDIR)/, $(SOURCES:.cpp=))
 

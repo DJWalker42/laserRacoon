@@ -9,7 +9,7 @@ LIBDIR=./lib
 
 #OpenCV include directory - Visualise module uses OpenCV
 #can be omitted if the Visulise module (header and source) removed from project
-#note this is for Mac OS X El Capitan for Unix distros try /usr/local/include
+#note this is for Mac OS X El Capitan. For Unix distros try /usr/local/include
 #you can locate OpenCV on your machine using the command: locate opencv
 OPENCV_INC=/opt/local/include
 
@@ -17,11 +17,12 @@ INCLUDE=-I$(INCDIR) -I$(OPENCV_INC)
 
 #grab a list of the header files; note we have both .h and .inl file extensions
 #we want the library build to depend on the headers.
+#actually do we? Maybe on the .inl files that contain templated defintions... to think about.
 HEADERS=$(wildcard $(INCDIR)/*.h)
 INLINES=$(wildcard $(INCDIR)/*.inl)
 HDR=$(HEADERS) $(INLINES)
 
-#grab a list the source files - use wildcard function to avoid the pitfall
+#grab a list the source files - use wildcard function to avoid the expansion pitfall
 SOURCES=$(wildcard $(SRCDIR)/*.cpp)
 
 #give the library a name
