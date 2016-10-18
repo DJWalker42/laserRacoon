@@ -9,19 +9,19 @@
 
 namespace phys{
 
-	/*	Read in a single vector by reference from a string of numbers; use getline to get string. 
+	/*	Read in a single vector by reference from a string of numbers; use getline to get string.
 		Returns size of the vector */
 	template<class T>
 	size_t import_vector(const std::string& line, std::vector<T>& vec)
 	{
-		std::istringstream is(line); 
+		std::istringstream is(line);
 		T n;
 		while (is >> n)
 			vec.push_back(n);
 		return vec.size();
 	}
 
-	/*	Read in an array of numbers from text file. 
+	/*	Read in an array of numbers from text file.
 		Appends values to the vector vec*/
 	template<class T>
 	void import_array(const std::string& filename, std::vector<T>&vec, size_t& rows, size_t& cols)
@@ -45,7 +45,7 @@ namespace phys{
 		{
 			std::cout << "Error opening " << filename << "\n";
 			std::cout << "Vector argument unmodified\n";
-		}		
+		}
 	}
 
 	template<class T>
