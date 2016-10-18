@@ -9,5 +9,7 @@ For the Visualisation module to work you will need a copy of OpenCV. Ubuntu 14.0
 
 In the 'progs' directory is a list of example programs using the library; the majority of these use the Visulisation module. For Linux users there is a MakeFile for your convenience; this will automatically link to the required OpenCV library files for the Visulisation module (tested on Ubuntu 14.04 and Mac OS X El Capitan). For others using an IDE you will have to provide the relevant information to your IDE to link with the correct OpenCV libraries namely, opencv_core, opencv_highgui, opencv_imgproc, and opencv_imgcodecs (when saving the viewer plot as an image). On Windows these library names append the version number and end in a .lib extension. For example if you have OpenCV2.4.9 on Windows then the "core" library is called "opencv_core249.lib".
 
+I wrote this library when trying to write a blog/tutorial on the C++ programming language and how to use it to write physics algorithms. That blog can be found [here](https://cppcomputationalphysics.wordpress.com/).
+
 
 Why laserRacoon? Well lasers are to do with physics and racoons are cute. Plus now you've all got an image in your head of racoons with lasers strapped to their furry little backs. It's memorable.
