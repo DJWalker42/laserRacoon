@@ -5,7 +5,7 @@
 	***SIMULATED NUCLEAR DECAY OF AN ATOM***
 
 	Uses an pseudo-random number generator to simulate the spontaneous emission of radiation from an atom
-	due to nuclear decay. Exhibits the statisitical average exponential decay for large numbers of nuclei
+	due to nuclear decay. Exhibits the statistical average exponential decay for large numbers of nuclei
 	but which breaks down into a more stochastic process as the number of nuclei drop below a certain number.
 */
 

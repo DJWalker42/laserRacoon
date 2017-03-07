@@ -19,7 +19,7 @@ namespace phys{
 		for(size_t i = 1; i < levels; ++i)
 			for(int j = 0; j < maths::power(2,int(i)); ++j)
 			{
-				//find mid_point between first two verticies
+				//find mid_point between first two vertices
 				point2 vertex0 = (*runner)()[0]();
 				point2 vertex1 = (*runner)()[1]();
 				point2 midpoint = (vertex0 + vertex1)/2.;
@@ -37,7 +37,7 @@ namespace phys{
 				//compute new vertex position based on the midpoint angle.
 				point2 new_point(cos(mid_angle), sin(mid_angle));
 				node<point2> new_vertex(new_point);
-				//create new triangle element using the new vetex and append to the mesh.
+				//create new triangle element using the new vertex and append to the mesh.
 				triangle t1(runner->item(0), new_vertex, runner->item(1));
 				append(t1);
 

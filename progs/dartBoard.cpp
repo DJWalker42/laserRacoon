@@ -15,7 +15,7 @@
 	All darts thrown hit this unit square by design.
 	By comparing the ratio of darts to land within a unit quarter circle (centred at the origin) to those that
 	land outside said quarter circle we can obtain an estimate for pi.To explain, the probability that a randomly thrown
-	dart will land within a given area is proportional to the size of that given area. Thus, the probility that a
+	dart will land within a given area is proportional to the size of that given area. Thus, the probability that a
 	dart lands within the unit quarter circle is given by k.pi/4, where k is the constant of proportionality. 
 	In this case we can state that k is unity as we have designed all darts thrown to hit the unit square. Thus, the ratio
 	of "hits" (landed in the quarter circle) to "misses" (not landed in the quarter circle) should equal pi/4.

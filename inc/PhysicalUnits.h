@@ -28,16 +28,16 @@ namespace phys {
 		extern const double moon_mass;		//!< the mass of the moon in kg (exponent == 22) kg
 		extern const double moon_radius;	//!< radius of the moon in units of earth-moon distance (exponent == 6) m
 
-		extern const double GS;	//!< gravitational constant in units of solar mass, yrs, and astronimcal units.(39.4861) (no exponent).
+		extern const double GS;	//!< gravitational constant in units of solar mass, yrs, and astronomical units.(39.4861) (no exponent).
 		extern const double GE;	//!< gravitational constant in units of earth mass, sidereal month, and lunar distance(39.1021) (no exponent).
 
 		/* ---- Quantum constants ---- */ 
 		extern const double planck;				//!< Planck's constant (exponent == -34) m*m*kg/s OR J.s
 		extern const double hbar;				//!< h/2PI (1.05457173)(exponent == -34) m*m*kg/s
 		extern const double electron_mass;		//!< (rest) mass of an electron (exponent == -31) kg
-		extern const double electron_charge;	//!< fundamental charge of an electron (exponent == e-19) C
-		extern const double planck_ev;			//!< plancks constant in electron-volts (4.13566750) (expoenent == -15) eV.s
-		extern const double hbar_ev;			//!< hbar in electron-volts (6.58211926) (expoenent == -16) eV.s
+		extern const double electron_charge;	//!< fundamental charge of an electron (exponent == -19) C
+		extern const double planck_ev;			//!< Planck's constant in electron-volts (4.13566750) (exponent == -15) eV.s
+		extern const double hbar_ev;			//!< hbar in electron-volts (6.58211926) (exponent == -16) eV.s
 	}
 }
 #endif

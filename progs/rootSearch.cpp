@@ -3,8 +3,8 @@
 /*
 	***SHOW CASE OF ROOT SEARCHING ALGORITHMS***
 
-	Here we use the Legendre polynomial as our search function. The derivsative is required for the
-	Newton-Raphson search.
+	Here we use the Legendre polynomial as our search function. The derivative is required for the
+	Newton-Raphson searches.
 
 */
 

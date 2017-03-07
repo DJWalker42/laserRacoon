@@ -6,14 +6,14 @@
 /*
 	***SIMULATION OF A DAMPED DRIVEN OSCILLATOR***
 	
-	This program shows how the repsonse of a driven oscillator is affected by damping.
+	This program shows how the response of a driven oscillator is affected by damping.
 
 	How might you obtain the Q-factor from the data computed?
 
 */
 
 //set global driving frequency to use in the the drive function
-//and which can be modified in tha main function
+//and which can be modified in the main function
 const double omega_start = 1.;
 double omega = omega_start;
 
@@ -58,7 +58,7 @@ int main()
 		omega = omega_start;
 		for(size_t j = 0; j < omega_N; ++j)
 		{
-			//solve up to 50 seconds to allow solution to stabalise
+			//solve up to 50 seconds to allow solution to stabilise
 			phys::storage::ODE_Storage data = rk4_solver.fullSolve(50.); 
 			viewer.plot(data);
 			viewer.clear();
@@ -85,7 +85,7 @@ int main()
 	viewer.set_key_name( key_names );
 	viewer.plot(omega_vals, amp_vals);
     //to save an image of the plot uncomment line below and give a directory location and filename (.png, .jpg, .bmp).
-    //viewer.save(/*supply a loaction + filename*/);
+    //viewer.save(/*supply a location + filename*/);
 
 	return 0;
 }

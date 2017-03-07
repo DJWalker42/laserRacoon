@@ -7,7 +7,9 @@
 /*
 	***SHOW CASE OF THE DATA FITTING ROUTINES***
 	
-	Here we use a sample of Millikan's oil drop experimental data values to show how the data fitting algorithms can be used.
+	Here we use a sample of Millikan's oil drop experimental data values* to show how the data fitting algorithms can be used.
+
+	*The "data" have been fabricated for illustrative purposes.
 */
 
 int main(int argc, char** argv)

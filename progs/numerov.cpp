@@ -15,11 +15,11 @@
 	use the information of the guessed energy level and how close the wavefunctions get at the matching
 	point to improve the energy level guess; in essence it root searches for the precise energy level.
 
-	The matching point can be any arbritray point in the well however it convenient to take the
-	matching point where the guessed energy level crosses the rhs boundary of the potential function. 
-	We integrate from the classically forbidden region into the well to supress
-	the unwanted expoential growth term in the solution to Schrodinger's equation that tends to blow up due to
-	floating point number precision. 
+	The matching point can be any arbitrary point in the well however it convenient to take the
+	matching point where the guessed energy level crosses the RHS boundary of the potential function.
+	We integrate from the classically forbidden region into the well to suppress the unwanted exponential
+	growth term in the solution to Schrodinger's equation that tends to blow up due to floating point
+	number precision.
 
 */
 
@@ -27,7 +27,7 @@
 double E;				//!< Energy eigenvalues to find in eV
 double omega = 1.0;		//!< oscillator frequency (Hz)
 /* 
-	The size of the frequency is arbritrary but will depend on choice of energy and length units
+	The size of the frequency is arbitrary but will depend on choice of energy and length units
 	The natural choice for these is eV and nm making omega ~order 10^14 Hz, given the harmonic potential.
 */
 double N = 500;						//!< Total number of steps to take in the integration
@@ -38,7 +38,7 @@ double u0 = 0.0;					//!< value of wavefunction at first grid point
 double u1 = 1.e-10;					//!< value of wavefunction at second grid point
 
 phys::stdVec_d phi;					//!< Storage for the wavefunction(s)
-size_t i_match_p1;					//!< Index location where phi switchs from left to right integration.
+size_t i_match_p1;					//!< Index location where phi switches from left to right integration.
 
 phys::ode::state u_lft(x_lft, u0, u1);	//!< Constructs for the Numerov solver Left initial
 phys::ode::state u_rht(x_rht, u0, u1);	//!< Right initial
@@ -180,7 +180,7 @@ void normalize()
 int main()
 {
     //change this to where you want it saved
-    //- make sure it exists first the write/save functions don't make directories (platform specific).
+    //- make sure it exists first, the write/save functions don't make directories.
     std::string rootDir = "/path/to/data/directory/quantum_well";
     
 	std::string pot_filename = rootDir + "/potential.txt";
@@ -224,7 +224,7 @@ int main()
 		if( secant.find_brackets(E, dE, E_max) )
 		{
 			E = secant.find_root();
-			//store x coorindates and energy values of the levels (for drawing)
+			//store x coordinates and energy values of the levels (for drawing)
 			secant.set_function(q);
 			secant.find_brackets(x_lft, step, (x_rht + x_lft)/2); //use mid-point for end		
 			levels.store(secant.lft_bracket(), E); 

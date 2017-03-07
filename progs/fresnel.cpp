@@ -2,10 +2,10 @@
 #include <Visualise.h>
 
 /*
-	*** CALCULATION OF THE FRESNEL DIFFRACTION PATTERN from a circular aperature ***
+	*** CALCULATION OF THE FRESNEL DIFFRACTION PATTERN from a circular aperture ***
 	
 	By combining the two transcendental functions S(x) = [0,x] sin(t^2)dt and C(x) = [0,x] cos(t^2)dt,
-	where [a,b] means the intgral from  x = a to x = b, we can compute the (radial) diffraction pattern
+	where [a,b] means the integral from  x = a to x = b, we can compute the (radial) diffraction pattern
 	observed when light passes through a circular aperture.
 	
 	The combination is
@@ -15,7 +15,7 @@
 
 double pi = 4.0*atan(1.0);
 
-//the fresenel functions
+//the Fresenel functions
 double f1(double x){
 	return cos(pi*x*x/2);
 }
@@ -26,7 +26,7 @@ double f2(double x){
 
 int fresnel_guass()
 {
-	//use gauss-legendre quadrature with 20 knots
+	//use Gauss-Legendre quadrature with 20 knots
 	phys::quad::Legendre lege(20);
 
 	//set lower limit to zero, increment upper limit to a max of 5.0
@@ -35,7 +35,7 @@ int fresnel_guass()
 	double delta = 0.05;
 	phys::stdVec_d v, I;
 
-	//compute fresnel integration
+	//compute Fresnel integration
 	while (b < 5.0)
 	{
 		b += delta;

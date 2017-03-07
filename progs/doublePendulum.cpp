@@ -8,8 +8,12 @@
 	***Program to simulate a double pendulum***
 
 	Uses the adaptive Runge-Kutta-Fehlberg algorithm to compute the motion of a double pendulum system.
+	Note that drag has not been considered (the system is undamped) and the motion is constrained to a
+	plane only.
 
-	The data is then animated using OpenCV.
+	The data is then animated using OpenCV. After quitting the animation (q,Q, or Esc) a phase-space
+	plot is shown. For the current parameters: pendulum_1 length 1 mass 1, pendulum_2 length .5 mass 2,
+	and run time of 100 this plot looks interesting.
 */
 
 const int rows = 500;
@@ -27,6 +31,8 @@ std::string winname = "Double Pendulum";
 double l[] = {1., .5}; //basic array representing the lengths of the two pendula
 double m[] = {1., 2.}; //basic array representing the masses of the two pendula
 
+
+//here the parameter 'y' contains the angular positions and velocities for both pendula.
 
 double phys::diffs::User_eqn::differential_function(double t, const phys::stdVec_d& y, int N, int c)
 {

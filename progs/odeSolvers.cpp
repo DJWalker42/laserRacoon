@@ -7,7 +7,7 @@
 	Take note that the Stormer-Verlet method is designed to work with 
 	differential equations containing only second derivatives of the 
 	dependent variable on the right-hand-side, i.e. the damping term 
-	is irrelevent. It will compute a solution with no damping i.e. 
+	is irrelevant. It will compute a solution with no damping i.e.
 	SHM for the given spring constant.
 
 	Note also that this means the first derivative storage vector will
@@ -75,6 +75,7 @@ int main()
 				std::cout << e.what() << std::endl;
 			}
 		}
+		viewer.clear();
 	}
 
 	return 0;

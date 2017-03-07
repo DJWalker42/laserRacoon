@@ -668,7 +668,7 @@ namespace phys{
 		phys::storage::ODE_Storage Numerov::fullSolve(double end)
 		{
 			size_t N = num_steps(m_current.x, end), count = 0;
-			state temp (0.0, 0.0); //arbritrary double values.
+			state temp (0.0, 0.0); //arbitrary double values.
 			phys::storage::ODE_Storage container(temp); //this just sets up the storage, it doesn't store data.
 			state next = m_current;
 			while( count++ < N )

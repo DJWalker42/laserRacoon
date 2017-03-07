@@ -6,7 +6,7 @@
 	***PROGRAM SOLVING THE VAN DER POL OSCILLATOR EQUATION***
 
 	Uses the Runge-Kutta algorithm to compute the solution to the Van Der Pol oscillator.
-	Passes the stable part of that solution to a fast fourier transform to have a look at the
+	Passes the stable part of that solution to a fast Fourier transform to have a look at the
 	frequencies making up the solution.
 */
 
@@ -47,7 +47,7 @@ int main()
 
 	phys::stdVec_d normG(N);
 
-	//The fourier coefficients of the VDP solution have a large dynamic range
+	//The Fourier coefficients of the VDP solution have a large dynamic range
 	//To compare the coefficient peaks we need to take the log of the values to plot.
 	for(size_t i = 0; i < N; ++i){
 		G[i] /= double(N); 
@@ -55,7 +55,7 @@ int main()
 	}
 
 	//FFT solution contains both positive and negative frequencies
-	//take only the postivie frequencies (first half of FFT solution).
+	//take only the positive frequencies (first half of FFT solution).
 	normG.resize(512);
 	phys::stdVec_d x_axis(512);
 

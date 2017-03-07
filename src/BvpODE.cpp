@@ -7,8 +7,8 @@
 
 namespace phys{
 	
-	/*	Note that we are embedding the boundary conditions into the rhs vector of knowns, and
-		the lhs matrix of coefficients such that the dimensions of the problem are 2 fewer than
+	/*	Note that we are embedding the boundary conditions into the RHS vector of known values, and
+		the LHS matrix of coefficients such that the dimensions of the problem are 2 fewer than
 		the number of nodes used in the 1D grid */
 
 	BvpODE::BvpODE(	SecondOrderODE* pODE, 
@@ -183,11 +183,11 @@ namespace phys{
 	{
 		/*
 			As we specify the boundary types and values in the sole constructor for the
-			BoundaryConditions class then the data memembers of that class are gaurenteed 
+			BoundaryConditions class then the data members of that class are guaranteed
 			to be initialised. 
 		*/
 
-		//LHS boundary - xm == x[i-1] xp == x[i+1] here i = 1
+		//LHS boundary
 		double xm = m_pGrid->m_Nodes[0].getX();
 		double x = m_pGrid->m_Nodes[1].getX();
 		double xp = m_pGrid->m_Nodes[2].getX();
