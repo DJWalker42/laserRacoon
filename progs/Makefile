@@ -87,6 +87,9 @@ ${BINDIR}/doublePendulum: doublePendulum.cpp ${LIB}
 	
 ${BINDIR}/spring: spring.cpp ${LIB}
 	$(PREFIX_OCV) $< $(LIBFLAGS_OCV) -o $@
+	
+${BINDIR}/car: car.cpp ${LIB}
+	$(PREFIX_OCV) $< $(LIBFLAGS_OCV) -o $@
 
 $(BIN): | $(BINDIR)
 
