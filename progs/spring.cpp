@@ -63,14 +63,7 @@ int main()
 	//create a viewer using the default constructor
 	phys::visual::Viewer viewer;
 	viewer.withLines(); //option to draw lines between points
-	//We're going to plot both the position and the velocity on the same graph using split vertical axes
-	//To ensure the zeros of both vertical axes align we set symmetrical ranges for both. 
-	//viewer.set_y_range(-1., 1.);
-	//viewer.set_y2_range(-6.3, 6.3);
 	viewer.plot(state, true); //plot the data using split vertical axes
-
-	//viewer.save("C:/TinyTina/spring_sim.png"); // save an image of the plot to the specified location
-
 
 	return 0;
 }
