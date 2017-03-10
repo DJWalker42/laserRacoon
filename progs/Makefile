@@ -78,6 +78,9 @@ ${BINDIR}/resonance: resonance.cpp ${LIB}
 
 ${BINDIR}/doublePendulum: doublePendulum.cpp ${LIB}
 	$(PREFIX_OCV) $< $(LIBFLAGS_OCV) -o $@
+	
+${BINDIR}/spring: spring.cpp ${LIB}
+	$(PREFIX_OCV) $< $(LIBFLAGS_OCV) -o $@
 
 $(BIN): | $(BINDIR)
 
