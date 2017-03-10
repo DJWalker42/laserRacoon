@@ -1,3 +1,7 @@
+# When making individual programs you have to use the command
+#	make bin/<prog_name>
+#
+
 INCDIR=../inc
 LIBDIR=../lib
 OCVINC=/opt/local/include
@@ -9,15 +13,17 @@ OCVLIBNAMES=-lopencv_core -lopencv_highgui -lopencv_imgproc
 
 SOURCES=$(wildcard *.cpp)
 
+INCFLAGS=-I${INCDIR}
+
 CXX=g++
 CXXFLAGS=-Wall -O2 -std=c++11
-INCFLAGS=-I${INCDIR}/
-LIBFLAGS=-L${LIBDIR}/ -l${LIBNAME}
-OCVINCFLAGS=-I${OCVINC}/
-LIBFLAGS_OCV=${LIBFLAGS} -L${OCVLIB}/ ${OCVLIBNAMES}
+
+LIBFLAGS=-L${LIBDIR} -l${LIBNAME}
+OCVINCFLAGS=-I${OCVINC}
+LIBFLAGS_OCV=${LIBFLAGS} -L${OCVLIB} ${OCVLIBNAMES}
 OPTIONS=
 
-PREFIX=$(CXX) $(CXXFLAGS) $(OPTIONS) $(INCFLAGS)
+PREFIX=$(CXX) $(CXXFLAGS) ${INCFLAGS} ${OPTIONS}
 PREFIX_OCV=$(PREFIX) $(OCVINCFLAGS)
 
 LIB=$(addprefix $(LIBDIR)/lib, $(addsuffix .a, $(LIBNAME)))

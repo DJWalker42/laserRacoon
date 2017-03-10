@@ -1,4 +1,4 @@
-#include <Visualise.hpp>
+#include <Visualise.h>
 
 const double PI = 4. * atan(1.);
 
@@ -40,6 +40,9 @@ int main()
 	double springConst = 4. * PI * PI; //this value gives an undamped time period of 1 unit (seconds)
 	double dragCoeff = .0;
 
+	std::cout << "Specify a drag coefficient (double): ";
+	std::cin >> dragCoeff;
+
 	//construct a spring object with the initial condition, and the physical constants
 	spring aSpring(initPos, initVel, springConst, dragCoeff); 
 
@@ -62,9 +65,9 @@ int main()
 	viewer.withLines(); //option to draw lines between points
 	//We're going to plot both the position and the velocity on the same graph using split vertical axes
 	//To ensure the zeros of both vertical axes align we set symmetrical ranges for both. 
-	viewer.set_y_range(-1., 1.);
-	viewer.set_y2_range(-6.3, 6.3);
-	viewer.plot(state, phys::visual::SPLIT); //plot the data using split vertical axes
+	//viewer.set_y_range(-1., 1.);
+	//viewer.set_y2_range(-6.3, 6.3);
+	viewer.plot(state, true); //plot the data using split vertical axes
 
 	//viewer.save("C:/TinyTina/spring_sim.png"); // save an image of the plot to the specified location
 
