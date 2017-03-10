@@ -1,8 +1,9 @@
 #ifndef VISUALISE_HPP
 #define VISUALISE_HPP
 
-#include <opencv2/core/core.hpp>
-#include <opencv2/highgui/highgui.hpp>
+#include <opencv2/core.hpp>
+#include <opencv2/highgui.hpp>
+#include <opencv2/imgproc.hpp>
 
 #include "Interpolation.h"
 #include "Storage.h"
