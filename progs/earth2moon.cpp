@@ -10,8 +10,8 @@
 	Uses the Runge-Kutta-Fehlberg algorithm to compute the craft's trajectory under the influence
 	of the Earth's and Moon's gravitation fields (other gravitational influences are assumed insignificant).
 	It is assumed the craft fires some booster rockets that provides an instantaneous kick to its
-	initial velocity. This assumption is okay as the rockets only fire for a few minutes whereas the total
-	journey will be several days at least.
+	tangential velocity. This assumption is okay as the rockets only fire for a few minutes whereas the
+	total journey will be on the order of days, at least.
 
 	The coordinate origin lies at the centre of mass between the Earth and the Moon. We assume the
 	Moon-Earth system moves in a circular orbit about this centre of mass. Motion of the space craft

@@ -17,7 +17,7 @@
 namespace phys{
 	namespace interp{
 
-		//Structure to coveniently handle the data to be interpolated
+		//Structure to conveniently handle the data to be interpolated
 		struct data{
 			stdVec_d x;			//!< Independent variable
 			stdVec_d y;			//!< Dependent variable

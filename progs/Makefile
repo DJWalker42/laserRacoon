@@ -90,6 +90,9 @@ ${BINDIR}/spring: spring.cpp ${LIB}
 	
 ${BINDIR}/car: car.cpp ${LIB}
 	$(PREFIX_OCV) $< $(LIBFLAGS_OCV) -o $@
+	
+${BINDIR}/linearInterp: linearInterp.cpp ${LIB}
+	$(PREFIX) $< $(LIBFLAGS) -o $@
 
 $(BIN): | $(BINDIR)
 
