@@ -22,7 +22,7 @@
 	.fullSolve() performs a full integration from initial independent value to the end
 	value specified as an argument. It returns a storage object that contains all the steps 
 	computed.The full solve takes a double value argument that is the end point of the 
-	integration. Each fullSolve function (with the execption of the adaptive RKF, explained 
+	integration. Each fullSolve function (with the exception of the adaptive RKF, explained
 	shortly) then checks to see that the value (end - start)/step is an integer value 
 	(it uses this value for condition checking in the integration loop). If this isn't an 
 	integer value it adjusts the end point such that the value is the next largest integer, and 
@@ -43,7 +43,7 @@
 	{
 		check the end value is an integer number of steps from the start value; adjust otherwise.
 		initialise a storage object for our data.
-		assign state m_current to state next (this initialises a tempory/local state holder).
+		assign state m_current to state next (this initialises a temporary/local state holder).
 		while loop to execute the algorithm till end - stores data in storage object
 		stores final state to storage object outside loop (loop exits before we store the final state)
 		return the storage object.
@@ -51,7 +51,7 @@
 
 	Note that because we have defined the necessary operators in the header physVector.hpp we can
 	replace the for loops that scan over the entire vector m_current.y with just the operator syntax,
-	removing the subscript i. To illustrate in the RK4 alogrithm we have the loop:
+	removing the subscript i. To illustrate in the RK4 algorithm we have the loop:
 
 	for(size_t i = 0; i < m_num_of_vars; ++i)
 		next.y[i] = m_current.y[i] + (m_step/2.)*m_k[0][i];
