@@ -18,10 +18,10 @@ namespace phys{
 		stdVec_d fabs_vector ( const stdVec_d& v );
 
 		template<typename T>
-		const T& max( const T& a, const T& b ){ return ((a > b) ? a : b); }
+		T max( const T a, const T b ){ return a > b ? a : b; }
 
 		template<typename T>
-		const T& min(const T& a, const T& b){ return ((a < b) ? a : b); }
+		T min(const T a, const T b){ return a < b ? a : b; }
 
 		/**	@brief computes magnitude of a (cartesian) 2-D vector 
 			@param x double value x-component

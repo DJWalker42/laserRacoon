@@ -33,6 +33,7 @@ Item::Item(std::string name, double weight, int quality) :
 {}
 
 //overloaded operator not a member of Item so does not require the class name scope
+//it is a friend of Item so can access the data members directly
 std::ostream& operator<<(std::ostream& os, const Item& item) {
 	os << item._name << " " << item._weight << " " << item._quality << "\n";
 	return os;
@@ -42,6 +43,7 @@ Potion::Potion(std::string name, int quality) :
 		Item(name, 0.1, quality)
 {}
 
+//initialise a static data member in the source file
 int Tonic::_tonic_count = 0;
 
 Tonic::Tonic(int quality) : Potion("Tonic", quality) {
@@ -51,7 +53,7 @@ Tonic::Tonic(int quality) : Potion("Tonic", quality) {
 void Tonic::ability(season time_of_year) {
 	int modifier {0};
 	//use the LUT for the season names
-	std::string the_season = season_name[toUType(time_of_year)];
+	std::string the_season {season_name[toUType(time_of_year)]};
 
 	switch (time_of_year) {
 	case season::winter:
@@ -67,7 +69,7 @@ void Tonic::ability(season time_of_year) {
 		//default unnecessary; a "season" can only be one of the specified four
 	}
 
-	std::string low_high = this->quality() < 75 ? "low" : "high";
+	std::string low_high {this->quality() < 75 ? "low" : "high"};
 
 	std::cout << "It is " << the_season << ": " << low_high << " quality "
 			<< this->name() << " heals for " << modifier * this->quality()
@@ -107,7 +109,7 @@ Sword::Sword(double weight, int quality) : Weapon("Sword", weight, quality) {}
 void Sword::ability(season time_of_year) {
 
 	//use the map to look-up the season name
-	std::string the_season = season_name_map.find(time_of_year)->second;
+	std::string the_season {season_name_map.find(time_of_year)->second};
 
 	std::ostringstream os;
 
@@ -143,9 +145,9 @@ int main (int argc, char ** argv) {
 	using UPtrItem = std::unique_ptr<Item>;
 	using Backpack = std::vector<UPtrItem>;
 
-	int choice_of_season = 0;
+	int choice_of_season {0};
 
-	const int q_bound = 75; //item quality boundary
+	const int q_bound {75}; //item quality boundary
 
 	if (argc > 1) {
 		choice_of_season = atoi(argv[1]);
@@ -162,7 +164,7 @@ int main (int argc, char ** argv) {
 	}
 
 	//there is no direct conversion from an integer to a enumeration type
-	season the_season;
+	season the_season {season::winter};
 	switch(choice_of_season) {
 	case 0:
 		the_season = season::winter;
@@ -182,10 +184,11 @@ int main (int argc, char ** argv) {
 	//we can call a static member function without the need to instantiate a Tonic object
 	std::cout << "Number of Tonics created: " << Tonic::numberOfTonics() << std::endl;
 
+	//call the defined constructor for a Tonic object
 	Tonic low_quality(10);
 	Tonic high_quality(100);
 
-	//because we have overload the addition operator for Tonic we can write the following:
+	//because we have overloaded the addition operator for Tonic we can write the following:
 	Tonic mix = low_quality + high_quality;
 
 	//Unless we add similar overloads to other derived classes, only Tonic objects can be added
@@ -193,8 +196,9 @@ int main (int argc, char ** argv) {
 	//also, as we overloaded the output stream operator for Item base class we can write:
 	std::cout << "Mixed Tonic: " << mix << std::endl;
 
+
+	//Note that to create 'mix' the compiler auto-generated copy constructor was used
 	//Will it be 2 or 3 here?
-	//Note that the addition assignment uses the compiler provided copy constructor
 	std::cout << "Number of Tonics created: " << Tonic::numberOfTonics() << std::endl;
 
 	//hero gets an empty backpack
@@ -229,7 +233,7 @@ int main (int argc, char ** argv) {
 			item->ability(the_season);
 		} catch (const std::runtime_error& e){
 			std::cerr << "Something exceptional: " << e.what() << std::endl;
-			//code continues from after the catch block when an exception is thrown
+			//code continues from after the catch block(s) when an exception is thrown
 		} catch (...) {
 			//the ellipsis ... means catch anything else not covered by runtime_error
 		}

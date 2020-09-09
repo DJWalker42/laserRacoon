@@ -72,7 +72,7 @@ public:
 	//implicitly inlined member functions
 	std::string name() const noexcept { return _name;}
 	int quality() const noexcept {return _quality;}
-	void setQuality(int new_quality) {_quality = new_quality;}
+	void setQuality(int new_quality) noexcept {_quality = new_quality;}
 
 	//overload the output stream operator for an Item. Note this is a friend function
 	//not a member function of Item. We return a ostream reference such that the operator

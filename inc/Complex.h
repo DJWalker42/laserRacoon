@@ -12,7 +12,7 @@ namespace phys{
 		complex(const complex& c);
 		complex(double re, double im);
 
-		//explicitly define assigment to double 
+		//explicitly define assignment to double
 		const complex& operator=(double);
 
 		//We redefine these operators as they have different meaning from the base class
