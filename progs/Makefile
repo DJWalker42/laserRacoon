@@ -93,6 +93,9 @@ ${BINDIR}/car: car.cpp ${LIB}
 	
 ${BINDIR}/linearInterp: linearInterp.cpp ${LIB}
 	$(PREFIX) $< $(LIBFLAGS) -o $@
+	
+${BINDIR}/leastLinearSquares: leastLinearSqaures.cpp ${LIB}
+	$(PREFIX) $< $(LIBFLAGS) -o $@
 
 $(BIN): | $(BINDIR)
 
