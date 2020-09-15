@@ -12,8 +12,8 @@
  *  Can this be rewritten to remove the use of global variables?
  *  One sticking point is that the RootSearch classes expect a function
  *  prototype that excepts a single, double argument. One possible
- *  solution is to make the matching functions static members of a class
- *  that has V0, half_width, and hbar2 as its data members.
+ *  solution is to make the matching functions static member functions
+ *  of a class that has V0, half_width, and hbar2 as its data members.
  */
 
 
@@ -61,11 +61,16 @@ int main (int argc, char ** argv) {
 	//you may want to change the location of the data file
 	std::string wavefunction_filename {"./wavefunctions.log"};
 
+	//properties of the linespace to plot data
 	const double xmin {-10.}, xmax {10.}, xstep {0.1};
 
+	//the following brackets are only valid for V0 = 10, half_width = 5
+
+	//left and right brackets of the even parity functions
 	phys::stdVec_d even_left {0.1, 2.5, 7.0};
 	phys::stdVec_d even_right {0.5, 3.0, 7.5};
 
+	//left and right brackets of the odd parity functions
 	phys::stdVec_d odd_left {1.0, 4.5, 9.5};
 	phys::stdVec_d odd_right {1.5, 5.0, 9.9};
 

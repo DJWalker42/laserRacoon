@@ -57,6 +57,13 @@ int main ()
 	double left = 0.3;
 	double right = 0.7;
 
+	/*
+	 *  We don't have to use pointers to base class here but if you wanted to put these
+	 *  objects into a single container object then this is (one way) of doing that.
+	 *  How would you change this code so that it takes advantage of more modern C++
+	 *  constructs? (Hint: smart pointers)
+	 */
+
 	phys::roots::RootSearch* bisect = new phys::roots::Bisection(&function, left, right);
 	phys::roots::RootSearch* secant = new phys::roots::Secant(&function, left, right);
 	phys::roots::RootSearch* newton = new phys::roots::Newton_Raphson(&function, &derivative, left);

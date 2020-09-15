@@ -15,7 +15,7 @@
 
 namespace phys{
 	// -------------------------------------------------------
-	// Matrix Factorization Implementation
+	// Matrix Factorisation Implementation
 	// -------------------------------------------------------
 
 	LinearSolver::LinearSolver() : m_factor()

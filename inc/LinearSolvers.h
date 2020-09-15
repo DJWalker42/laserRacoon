@@ -17,9 +17,9 @@ namespace phys{
 	/**	Virtual base class for matrix factorisation methods */
 	class LinearSolver{
 	protected:
-		//Default construtor
+		//Default constructor
 		LinearSolver();
-		//Constructor: A is the matrix you want to m_factor
+		//Constructor: A is the matrix you want to factor
 		LinearSolver( const mat& A );
 	public:
 		virtual ~LinearSolver(){}
@@ -40,7 +40,7 @@ namespace phys{
 		mat m_factor;			
 	};
 
-	// Cholesky Factoriser
+	// Cholesky Factorisation
 	class Cholesky: public LinearSolver { 
 	public:
 		Cholesky();
@@ -48,7 +48,7 @@ namespace phys{
 		void decompose ( const mat& A = mat());
 		/**
 			Solve a linear system A*x = b, using the previously computed
-			cholesky factorization of A: L*L'.
+			Cholesky factorisation of A: L*L'.
 
 			@param  b	A single (column) vector with as many elements as rows in A.
 			@return x	so that L*L'*x = b.
@@ -56,7 +56,7 @@ namespace phys{
 		stdVec_d solve(const stdVec_d& b) const;
 		/**
 			Solve a linear system A*X = B, using the previously computed
-			cholesky factorization of A: L*L'.
+			Cholesky factorisation of A: L*L'.
 
 			@param  B	A Matrix with as many rows as A and any number of columns.
 			@return X	so that L*L'*X = B.
@@ -69,7 +69,7 @@ namespace phys{
 		bool m_spd;
 	};
 
-	// QR Factoriser
+	// QR Factorisation
 	class QR: public LinearSolver {
 	public:
 		QR();
@@ -78,7 +78,7 @@ namespace phys{
 		/**
 			Least squares solution of A*x = b
 			@param b    m-length vector
-			@returns	n-length vector that minimizes the two norm of Q*R*X-B.
+			@returns	n-length vector that minimises the two norm of Q*R*X-B.
 			If B is non-conformant, or if QR.is_full_rank() is false,
 			the routine returns a null vector.
 		*/
@@ -86,7 +86,7 @@ namespace phys{
 		/** 
 			Least squares solution of A*X = B
 			@param B    m x k Array (must conform).
-			@return X	n x k Array that minimizes the two norm of Q*R*X-B.
+			@return X	n x k Array that minimises the two norm of Q*R*X-B.
 			If B is non-conformant, or if QR.is_full_rank() is false,
 			the routine returns a null matrix
 		*/
@@ -100,7 +100,7 @@ namespace phys{
 		*/
 		const mat getQ() const;
 		/**
-			Return the upper triangular m_factor, R, of the QR factorization
+			Return the upper triangular m_factor, R, of the QR factorisation
 			@return     R
 		*/
 		const mat getR() const;

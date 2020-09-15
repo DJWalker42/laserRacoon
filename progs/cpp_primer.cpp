@@ -219,7 +219,7 @@ int main (int argc, char ** argv) {
 	//has the hero picked up any "low quality" items?
 	//Here we use a lambda to express the predicate for the algorithm 'std::any_of'
 	if (std::any_of(backpack.begin(), backpack.end(),
-			[q_bound](const UPtrItem& item){return item->quality() < q_bound;})) {
+			[](const UPtrItem& item){return item->quality() < q_bound;})) {
 		std::cout << "Backpack contains at least one low quality item" << std::endl;
 	}
 

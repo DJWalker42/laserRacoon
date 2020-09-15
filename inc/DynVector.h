@@ -101,7 +101,7 @@ template<typename T>
 std::ostream& operator<< (std::ostream& os, const std::vector<T>& v)
 {
 	return phys::operator<<(os, v);
-}//global output stream operator for covenience
+}//global output stream operator for convenience
 
 #include "DynVector.inl"
 

@@ -11,7 +11,8 @@ non_ocv_programs = rootSearch \
 				matrixFactor \
 				quadrat \
 				linearInterp \
-				leastLinearSqaures
+				leastLinearSqaures \
+				bisection
 				
 sources = $(wildcard *.cpp)
 all_programs = $(sources:%.cpp=%)

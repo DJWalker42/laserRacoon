@@ -80,7 +80,7 @@ namespace phys{
 			double q, u, v;
 			double rtmp, itmp;
 
-			//Apply the required addtions for the transform
+			//Apply the required additions for the transform
 			for(size_t p = 0; p < M; ++p)
 			{
 				q = 0.0;

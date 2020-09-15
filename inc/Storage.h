@@ -156,8 +156,8 @@ namespace phys{
 			void clear_names();
 
 			//This function appends data from another storage object ('add') to *this storage object
-			//Assumes addtional data multi member has same dimensions as the existing multi member
-			//- if the addtional has less an exception wil be thrown, if it has more the data in the 
+			//Assumes additional data multi member has same dimensions as the existing multi member
+			//- if the additional has less an exception will be thrown, if it has more the data in the
 			//extra vectors will be ignored.
 			void append(const Storage<T> &add);
 

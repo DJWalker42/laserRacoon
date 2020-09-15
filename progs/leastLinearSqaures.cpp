@@ -2,6 +2,21 @@
  *  Program to solve the least linear squares fit for the example data
  *  	(1,2), (2,1), (3,3), (4,6)
  *  as explained in section 3.2.1 of the Computation Physics book.
+ *
+ *  Hint for exercise 3:
+ *
+ *  n == number of data pairs
+ *  m == order of fitting polynomial
+ *
+ *  S = sum i=0 -> n [u^2] => dS/du = sum i=0 -> n [2u]
+ *  u = yi - a0 - a1.xi - ... - am.xi^m
+ *  => du/da0 = -1, du/da1 = -xi, ..., du/dam = -xi^m  (partial derivatives)
+ *
+ *  dS/dak = dS/du . du/dak (chain rule)
+ *
+ *  RHS vector 'b' then consists of terms with no ak product, elements
+ *  increasing in order up to m.
+ *
  */
 
 #include "LinearSolvers.h"

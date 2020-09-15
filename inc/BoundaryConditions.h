@@ -13,7 +13,7 @@ namespace phys{
 		
 		For boundary value problems in 2 dimensions the boundary conditions are, in general, functions along the specific dimension. 
 		We would have to store these as function pointers as data members in the class, one function pointer for each boundary (top, bottom, left, right).
-		Each boudary also needs to specify its type. 
+		Each boundary also needs to specify its type.
 	*/
 	class BoundaryConditions{
 		friend class BvpODE;
@@ -50,3 +50,11 @@ namespace phys{
 }
 
 #endif
+
+
+
+
+
+
+
+

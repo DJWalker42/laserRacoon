@@ -179,7 +179,7 @@ namespace phys{
 			if(dxt < dx){++i0;}
 			size_t j0 = i0;
 
-			// set up correction matrices and explictly assign to zero.
+			// set up correction matrices and explicitly assign to zero.
 			double dp[n_max][n_max];
 			double dm[n_max][n_max];
 

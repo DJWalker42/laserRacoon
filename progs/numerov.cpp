@@ -77,7 +77,7 @@ double q (double x)
 	return 2 * 10.0 * electron_mass / (hbar_ev * hbar_ev) * (E - V(x));
 }
 
-//interface to differential equation object -- compilier optimisations *may* remove redundent arguments here - but they are all cheap and quick to pass.
+//interface to differential equation object -- compiler optimisations *may* remove redundant arguments here - but they are all cheap and quick to pass.
 double phys::diffs::User_eqn::differential_function(double x, const stdVec_d& y, int N, int i)
 {
 	return q(x);

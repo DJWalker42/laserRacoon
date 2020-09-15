@@ -10,6 +10,17 @@
 namespace phys{
 	namespace roots{
 
+	/*
+	 *  Would it be better if the brackets for a root be passed to the find_root()
+	 *  interface function, rather than being initialised in the constructor, or
+	 *  explicitly set by the relevant setter functions? e.g.
+	 *
+	 *  	double find_root(double left, double right, bool print_output = false)
+	 *
+	 *  If so, how might this affect the internal representation of a RootSearch class?
+	 */
+
+
 		/** Virtual base class for the root search methods */
 		class RootSearch{
 		protected:
@@ -19,7 +30,7 @@ namespace phys{
 			RootSearch(double (*func)(double));
 			/*	Typical constructor */
 			RootSearch(double (*func)(double), double left, double right);
-			/*	Specific constructor for the Newton-Raphson method with only the m_function and m_derivative */
+			/*	Specific constructor for the Newton-Raphson method with only the function and derivative */
 			RootSearch(double (*func)(double), double (*deriv)(double) );
 			/* Specific constructor for the Newton-Raphson method */
 			RootSearch(double (*func)(double), double (*deriv)(double), double initial_guess);
@@ -47,13 +58,13 @@ namespace phys{
 
 			void set_tolerance(double tol_to_set){ m_tolerance = tol_to_set;}
 
-			//m_function pointer must be provided before using this m_function 
+			//function pointer must be provided before using this function
 			//- it checks a root is contained between the limits provided
 			void set_brackets(double new_lft_brc, double new_rht_brc);
 
-			//Netwon-Raphson specific - use if you change the search m_function
+			//Newton-Raphson specific - use if you change the search function
 			void set_derivative(double(*deriv)(double)) { m_derivative = deriv; }
-			//Newton-Raphson specific - use if you want to set/change the intitial guess for a root
+			//Newton-Raphson specific - use if you want to set/change the initial guess for a root
 			void set_initial_guess(double first_guess){ m_lft_brc = m_rht_brc = first_guess; }
 
 			//Query the left bracket
@@ -63,11 +74,11 @@ namespace phys{
 			//Query the error achieved
 			double get_error() const {return m_error; }
 		protected:
-			/*	Checks that the m_function has been set, the brackets are set, and if a newton method that the m_derivative has been set,
+			/*	Checks that the m_function has been set, the brackets are set, and if a Newton method that the m_derivative has been set,
 				and/or if a bisection method that the brackets contain a root. */
 			void check_all(std::string call_func);
 
-			/* Ouputs the result of a particular root search, including the error acheived, and the number of iteration*/
+			/* Outputs the result of a particular root search, including the error achieved, and the number of iteration*/
 			void output_data(const std::string& calling_func, double root); 
 		private:
 			/*	Defaults: m_tolerance = 1.e-8; iteration_count = 0; iter_max = 100; error = 1.0; m_is_bisec = true;	m_is_newton = false; */
@@ -86,9 +97,9 @@ namespace phys{
 			double m_tolerance;						//!< Accuracy to achieve default 1.e-8
 			double m_error;							//!< (Estimated) error in the root found.
 			size_t m_iter_max;						//!< Maximum number of iterations to try (prevents infinite loops) default 100
-			size_t m_iteration_count;				//!< Number of interations performed to achieve m_tolerance.						
+			size_t m_iteration_count;				//!< Number of iterations performed to achieve m_tolerance.
 			bool m_is_bisec;						//!< Boolean flag; is this a bisection method? default true
-			bool m_is_newton;						//!< Boolean flag; is this a newton method? default false
+			bool m_is_newton;						//!< Boolean flag; is this a Newton method? default false
 		};
 
 		/** Bisection method */

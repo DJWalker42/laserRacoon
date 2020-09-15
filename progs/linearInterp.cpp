@@ -1,6 +1,6 @@
 /*
  *  Program to illustrate the limits of linear interpolation
- *  using the sinc(x**2) function
+ *  using the sinc(x) function
  */
 
 #include "Interpolation.h"
@@ -12,7 +12,7 @@ double sincSqr(double x_value);
 
 int main(int argc, char ** argv) {
 
-	using LinearInterp = phys::interp::Linear;
+	using Linear = phys::interp::Linear;
 	using Data = phys::interp::data;
 
 	const int points = 100;
@@ -21,8 +21,6 @@ int main(int argc, char ** argv) {
 
 	double increment = interval / points;
 
-	int sample = 11; // so we get 10 equidistant "measured" points
-
 	//compute the line-space x for the interval (avoiding zero)
 	phys::stdVec_d x(points);
 	for (int i = 0; i < points; ++i) {
@@ -30,6 +28,8 @@ int main(int argc, char ** argv) {
 	}
 
 	//set-up the "measured" points for the sincSqr function
+	int sample {11}; //so we get 10 equidistant "measured" points
+	// x indices: 0, 11, 22, 33, ...., 88, 99
 	phys::stdVec_d data_x(data_points), data_y(data_points);
 	for (int i = 0; i < data_points; ++i) {
 		data_x[i] = x[i * sample];
@@ -37,10 +37,12 @@ int main(int argc, char ** argv) {
 	}
 
 	//initialise the Linear interpolator object
-	LinearInterp linear_interp(Data(data_x, data_y));
+	Linear linear_interp(Data(data_x, data_y));
 
 	//interpolate the data for the given line-space x
-	//(note we are using the base classes' Interpolator::interpolate(stdVec_d x) here
+	//How should we rewrite the either the Linear derived class or the Interpolator
+	//base class so we don't have to use the class scope resolution operator to access
+	//the member function we want?
 	phys::stdVec_d interp_y = linear_interp.Interpolator::interpolate(x);
 
 	//by printing to stdout we can redirect the output to a file of our choosing
@@ -54,6 +56,6 @@ int main(int argc, char ** argv) {
 }
 
 double sincSqr(double x) {
-	// limit x -> 0, sinc(x**2) -> 1
-	return x == 0 ? 1 : sin(x * x) / x / x;
+	// limit x -> 0, sinc(x) -> 1
+	return x == 0 ? 1 : sin(x ) / x ;
 }

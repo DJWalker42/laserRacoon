@@ -8,7 +8,7 @@ namespace phys{
 	namespace roots{
 
 		/**************************************************************************
-		*	RootSearch fffabstract Base Class
+		*	RootSearch abstract Base Class
 		**************************************************************************/
 		//Constructors
 		RootSearch::RootSearch() : m_function(), m_derivative(), m_lft_brc(), m_rht_brc()
@@ -68,6 +68,8 @@ namespace phys{
 			m_rht_brc = new_rht_brc;
 			if (m_is_bisec)
 				check_root_is_bracketed(__FUNCTION__, m_function(m_lft_brc), m_function(m_rht_brc));
+			//setting new brackets implies looking for a new root so reset error to 1
+			m_error = 1.0;
 		}
 
 		void RootSearch::check_all(std::string call_func)
@@ -104,6 +106,7 @@ namespace phys{
 
 		void RootSearch::check_brackets_set(const std::string& call_func)
 		{
+			//FIXME: what if zero is a valid starting bracket value?
 			if (m_lft_brc == double() || m_rht_brc == double())
 			{
 				std::string errmsg = call_func + ": Brackets have not been set.\n";
@@ -190,7 +193,7 @@ namespace phys{
 			std::string func_name = "NEWTON";
 			check_all(func_name);
 			double root = m_lft_brc;
-			if( m_rht_brc != root ) //i.e. we are not using an intitial guess
+			if( m_rht_brc != root ) //i.e. we are not using an initial guess
 			{
 				root = (fabs(m_function(m_lft_brc)) < fabs(m_function(m_rht_brc))) 
 					? m_lft_brc : m_rht_brc;

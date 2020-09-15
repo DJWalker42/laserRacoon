@@ -186,7 +186,7 @@ namespace phys{
 				output << "#" << m_xTitle;
 				for (size_t i = 0; i < m_keyTitles.size(); ++i)
 					output << "\t" << m_keyTitles[i];
-				output << "\t" << m_yTitle << "\n";
+				output << "\n";
 			}
 			size_t n = m_independent.size(), m = m_multi.size();
 			for (size_t j = 0; j < n; ++j){
