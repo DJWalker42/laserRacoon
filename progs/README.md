@@ -1,4 +1,4 @@
-#laserRacoon Programs
+# laserRacoon Programs
 
 If creating new programs in this directory that make use of the Viewer class then append the filename 
 with '_ocv' so that the Makefile can include and link the required OpenCV headers and libraries. For example,
