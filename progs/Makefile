@@ -2,21 +2,22 @@
 #	make <src_file_name>
 # where the .cpp extension is omitted
 #
+# If writing a program that uses the Viewer class (i.e. OpenCV) you have to
+# append '_ocv' to the source filename in-order for it to compile correctly
+#
 # Any of the variables in this Makefile can be overridden on the command line
 #
-
-# add to this list if creating more programs that do NOT use OpenCV
-# can we automate this in some way? (This is a genuine question, I don't know the answer)
-non_ocv_programs = rootSearch \
-				matrixFactor \
-				quadrat \
-				linearInterp \
-				leastLinearSqaures \
-				bisection
+		
+all_sources := $(wildcard *.cpp)
+all_programs := $(all_sources:%.cpp=%)		
 				
-sources = $(wildcard *.cpp)
-all_programs = $(sources:%.cpp=%)
-ocv_programs = $(filter-out ${non_ocv_programs}, ${all_programs})
+ocv_sources := $(wildcard *_ocv.cpp)
+ocv_programs_temp := $(ocv_sources:%.cpp=%)			
+non_ocv_programs := $(filter-out ${ocv_programs_temp}, ${all_programs})
+
+#remove the _ocv from the binary name
+ocv_programs := $(ocv_programs_temp:%_ocv=%)
+
 
 CXX = g++
 CXXFLAGS = -Wall -O2 -std=c++11
@@ -50,7 +51,7 @@ all: ${ocv_programs} ${non_ocv_programs}
 # as we can make individual programs we have to check for the
 # existence of the 'bin' directory before building the executable
 
-${ocv_programs}: %: %.cpp | ${BINDIR}
+${ocv_programs}: %: %_ocv.cpp | ${BINDIR}
 	@${PREFIX} ${OCVINCFLAGS} $< ${LIBFLAGS} ${OCVLIBFLAGS} -o $@ 
 	@mv $@ ${BINDIR}
 	@echo '*** $@ built and installed ***'

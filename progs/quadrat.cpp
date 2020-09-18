@@ -20,8 +20,8 @@ int main()
 {
 	double a = 0., b = 6.; 
 
-	phys::quad::Quadrature* p_mido = new phys::quad::Mid_ordinate;
-	phys::quad::Quadrature* p_trap = new phys::quad::Trapeziod;
+	phys::quad::Quadrature* p_mido = new phys::quad::MidOrdinate;
+	phys::quad::Quadrature* p_trap = new phys::quad::Trapezoid;
 	phys::quad::Quadrature* p_simp = new phys::quad::Simpson;
 	phys::quad::Quadrature* p_bool = new phys::quad::Boole(true);
 
@@ -74,8 +74,8 @@ int main()
 	std::cout << " --\n";
 
 	p_simp->reset_func_calls(); 
-	phys::quad::Adaptive adapt(p_simp, 1.e-6);
-	double r = adapt.integrate(f, a, b );
+	phys::quad::Adaptive adapt(p_simp);
+	double r = adapt.integrate(f, a, b, 1.e-6);
 	std::cout << "Adaptive: " << r << " Error = " << sol - r << std::endl;
 	std::cout << adapt.get_f_calls() << "\n"; 
 
