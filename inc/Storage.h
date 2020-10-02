@@ -17,18 +17,18 @@ namespace phys{
 		/**	Class used to store the numerical solution of ODEs. As such all data stored will be of double type.
 		There is no read function as it is assumed the data will come directly from the ODE solvers.
 		If you wish to read in data use the general Storage class instead - but be aware that the
-		general class has no idea about the interweaving strategy used by ODE_storage - the user
+		general class has no idea about the interleaving strategy used by ODE_storage - the user
 		will have to ensure they are getting the data they want if using the general storage.
 		*/
-		class ODE_Storage{
+		class ODEStorage{
 		public:
 			/*	Default constructor - use set(initial_system) after calling the default constructor*/
-			ODE_Storage();
+			ODEStorage();
 			/*	Constructor for Storage class using a differential state. Use the initial state of the system to
-			initialise a storage object; the data from the intitial system used is NOT stored. The optional
+			initialise a storage object; the data from the initial system used is NOT stored. The optional
 			string arguments provide headers for any output of the data.
 			*/
-			ODE_Storage(const phys::ode::state& initial_system,
+			ODEStorage(const phys::ode::state& initial_system,
 				const std::string& x_title = "x",
 				const std::string& y_title = "y",
 				const std::string& dy_title = "dy");
@@ -45,7 +45,7 @@ namespace phys{
 			The independent variable is stored to the vector independent_var.
 			The dependent variable(s) are stored to the vector dependent_vars in the following manner:
 
-			For a 1st order system the dependent vector will contain the interweaved variables
+			For a 1st order system the dependent vector will contain the interleaved variables
 			from each dimension. For example, a 1st order system with 3 dimensions (x,y,z) is stored as
 			dependent_vars[0] = x0, dependent_vars[1] = y0, dependent_vars[2] = z0, dependent_vars[3] = x1,
 			and so on, where the number after the variable refers to the integration step index.
@@ -59,16 +59,16 @@ namespace phys{
 			void store(const phys::ode::state& system);
 
 			/*	Appends data from another ODE_Storage object to *this Storage object
-				Warning -- if the data being appended is not of the same dimensions & order of the exsiting data
+				Warning -- if the data being appended is not of the same dimensions & order of the existing data
 				will throw an exception */
-			void append(const ODE_Storage& additional);
+			void append(const ODEStorage& additional);
 
 			/*	Function to wrap the dependent data post solution to either -pi to +pi. The user may 
 				select a particular dimension to wrap; the default is to wrap all dimensions. 	
 
 				Note: This function works by adding or subtracting 2PI until the value falls within the specified range.
 				Therefore the error in the wrapped values is equal to +/- N times the machine epsilon for doubles where N is
-				the number of addtions/subtractions required. In extreme cases this may lead to values not being wrapped correctly. 
+				the number of additions/subtractions required. In extreme cases this may lead to values not being wrapped correctly.
 			*/
 			void wrapTo2Pi(size_t dimension = 0);
 
@@ -125,13 +125,13 @@ namespace phys{
 			/* Default constructor */
 			Storage(const std::string& xName = "x",
 				const std::string& yName = "y");
-			/* Construcor to set names for multiple dependent data */
+			/* Constructor to set names for multiple dependent data */
 			Storage(const std::string& xName,
 				const std::vector<std::string>& yNames);
 
 			//clears all data
 			void clear();
-			//stores a single value of the independnet variable
+			//stores a single value of the independent variable
 			inline void store(const T& x_val);
 			//stores a single value of both the independent and dependent variables.
 			inline void store(const T& x_val, const T& y_val);
@@ -165,7 +165,7 @@ namespace phys{
 			x1 a1 b1 c1 ....
 			x2 a2 b2 c2 ....
 			and so on
-			where x is the independent variable and a,b,c,... are the dependnet variables measured
+			where x is the independent variable and a,b,c,... are the dependent variables measured
 			or computed at x.
 			*/
 			bool read(const std::string& filename);
@@ -204,7 +204,7 @@ namespace phys{
 		private: // representation
 			std::vector<T> m_independent;			//!< e.g. x
 			std::vector<T> m_dependent;				//!< e.g. y (= f(x))
-			std::vector<std::vector<T>> m_multi;	//!< mulitple dependent variables for one independent variable
+			std::vector<std::vector<T>> m_multi;	//!< multiple dependent variables for one independent variable
 			std::string m_xTitle;					//!< For graphical purposes; name of the x-data.
 			std::string m_yTitle;					//!< For graphical purposes; name of the y-data.
 			std::vector<std::string> m_keyTitles;	//!< For graphical purposes; name of the multiple y-data

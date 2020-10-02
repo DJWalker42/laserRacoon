@@ -29,7 +29,7 @@ int main()
 	phys::diffs::Gravity grav;
 	phys::ode::RKF45 rkf45(&grav, initial, step);
 
-	phys::storage::ODE_Storage data = rkf45.fullSolve(300.);
+	phys::storage::ODEStorage data = rkf45.fullSolve(300.);
 
 	{
 		using namespace phys::visual;

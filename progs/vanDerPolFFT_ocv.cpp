@@ -23,7 +23,7 @@ int main()
 
 	phys::ode::RK4 runge_kutta(VDP, initial_sys, h);
 
-	phys::storage::ODE_Storage solution = runge_kutta.fullSolve(double(3*N) * h);
+	phys::storage::ODEStorage solution = runge_kutta.fullSolve(double(3*N) * h);
     solution.set_x_name("Time");
     solution.set_y_name("Amplitude");
 

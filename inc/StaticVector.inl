@@ -7,6 +7,7 @@ namespace phys{
 	template<class T, size_t N>
 	staticVec<T, N>::staticVec( const T& a ) 
 	{
+		std::cout << "staticVec = " << a << std::endl;
 		for (size_t i = 0; i < N; ++i)
 			m_element[i] = a;
 	}
@@ -15,6 +16,7 @@ namespace phys{
 	staticVec<T, N>::staticVec(	const T& a,
 								const T& b )
 	{
+		std::cout << "staticVec double 2 constructor (" << a << "," << b << ")" << std::endl;
 		m_element[0] = a;
 		m_element[1] = b;
 	}
@@ -24,6 +26,8 @@ namespace phys{
 								const T& b,
 								const T& c )
 	{
+		std::cout << "staticVec double 3 constructor (" 
+				<< a << "," << b << "," << c << ")" << std::endl;
 		m_element[0] = a;
 		m_element[1] = b;
 		m_element[2] = c;
@@ -33,6 +37,7 @@ namespace phys{
 	template<class T, size_t N>
 	staticVec<T, N>::staticVec(	const staticVec& v )
 	{
+		std::cout << "staticVec copy constructor" << std::endl;
 		for (size_t i = 0; i < N; ++i)
 			m_element[i] = v.m_element[i];
 	}
@@ -86,6 +91,7 @@ namespace phys{
 	template<class T, size_t N>
 	staticVec<T, N>& staticVec<T,N>::operator/=(const T& a)
 	{
+		std::cout << "staticVec /= T " << *this << std::endl;
 		for (size_t i = 0; i < N; ++i)
 			m_element[i] /= a;
 		return *this;
@@ -94,6 +100,8 @@ namespace phys{
 	template<class T, size_t N>
 	staticVec<T, N>& staticVec<T,N>::operator+=(const staticVec& v)
 	{
+		std::cout << "staticVec += staticVec ";
+		std::cout << *this << " + " << v << std::endl;
 		for (size_t i = 0; i < N; ++ i){
 			this->m_element[i] += v.m_element[i];
 		}

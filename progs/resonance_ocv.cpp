@@ -27,7 +27,7 @@ int main()
 	double k = 9.; //natural frequency w0 = 3 Hz; mass == 1.
 	double D = .5;
 
-	phys::diffs::SHM_eqn shm_eq(k, D, drive_func);
+	phys::diffs::SHM shm_eq(k, D, drive_func);
 	phys::ode::state initial(0., 1., 0.);
 	double step = .01;
 	phys::ode::RK4 rk4_solver(&shm_eq, initial, step);
@@ -59,7 +59,7 @@ int main()
 		for(size_t j = 0; j < omega_N; ++j)
 		{
 			//solve up to 50 seconds to allow solution to stabilise
-			phys::storage::ODE_Storage data = rk4_solver.fullSolve(50.); 
+			phys::storage::ODEStorage data = rk4_solver.fullSolve(50.); 
 			viewer.plot(data);
 			viewer.clear();
 			//find the max amplitude in the stable region - assume we reached stability by half way point.

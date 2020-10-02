@@ -77,7 +77,7 @@ bool show(const cv::Mat& frame)
 	return true;
 }
 
-void animate( const phys::storage::ODE_Storage& data )
+void animate( const phys::storage::ODEStorage& data )
 {
 	phys::stdVec_d theta_1 = data.get_dependent(1);
 	phys::stdVec_d theta_2 = data.get_dependent(2);
@@ -145,11 +145,11 @@ int main()
 	phys::diffs::User_eqn pendulum; 
 	phys::ode::state initial(t, theta, omega);
 
-	//by using a target we save data at the target steps only (the solver still adapts inbetween)
+	//by using a target we save data at the target steps only (the solver still adapts in-between)
 	phys::ode::RKF45 rkf45(&pendulum, initial, step, phys::ode::TARGET); 
 
 	//wraps the solution to [-pi, +pi]
-	phys::storage::ODE_Storage data = rkf45.fullSolveWrapped(static_cast<double>(end));
+	phys::storage::ODEStorage data = rkf45.fullSolveWrapped(static_cast<double>(end));
 
 	animate(data);
 

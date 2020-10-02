@@ -122,7 +122,7 @@ int main()
 	phys::diffs::Diff_eqn *travel = new phys::diffs::User_eqn;
 	travel->set_order(2);
 
-	phys::ode::ODE_solver *rk45 = new phys::ode::RKF45(travel, initial_system, step);
+	phys::ode::ODESolver *rk45 = new phys::ode::RKF45(travel, initial_system, step);
 
 	double moon_radius_check = moon_radius/lunar_dist/1.e2;
 	std::cout << "Target: " << moon_radius_check << "\n";

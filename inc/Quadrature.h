@@ -9,6 +9,11 @@
 
 #include "DynVector.h"
 
+/*
+ *  Primitive rule has a separate implementation to the Composite rule via overloading
+ *  of the interface member function 'integrate'
+ */
+
 
 namespace phys{
 	namespace quad{
@@ -16,24 +21,36 @@ namespace phys{
 		/*	Virtual base class for a non-Gaussian quadrature object */
 		class Quadrature{	
 		protected:
-			//Construtor to specify the accuracy order
+			double m_error;		//!< estimated of the upper bound of error in the quadrature
+			uint m_order;		//!< order of the error improvement
+			uint m_func_calls;	//!< number of function calls made (excluding error estimate)
+		protected:
+			//Default constructor to specify the accuracy order
 			Quadrature(uint n = 2);
 		public:
 			virtual ~Quadrature(){}
-		private:
 			/* No Copy */
-			Quadrature(const Quadrature&);
-			/* No Copy */
-			const Quadrature& operator= (const Quadrature&);
+			Quadrature(const Quadrature&) = delete;
+			const Quadrature& operator= (const Quadrature&) = delete;
+
 		public:
+
+			//Interface function to perform the primitive integral of a derived method:
+			//@param	*func pointer to the integrand function
+			//			note integrand takes one double argument only.
+			//@param	a double value of the left hand limit of the integration
+			//@param	b double value of the right hand limit of the integration
+			//@return	the value of the numerical quadrature for the parameters specified.
+			virtual double integrate(double(*func)(double), double a, double b) = 0;
+
 			//Interface function to perform the derived method of integration:
 			//@param	*func pointer to the integrand function (pass the function identifier as the argument)
 			//			note integrand takes one double argument only.
-			//@param	lft double value of the left hand limit of the integration
-			//@param	rht double value of the right hand limit of the integration
-			//@param	strips unisgned int of the number of strips to use in the composite quadrature method
+			//@param	a double value of the left hand limit of the integration
+			//@param	b double value of the right hand limit of the integration
+			//@param	N unsigned int of the number of strips to use in the composite quadrature method
 			//@return	the value of the numerical quadrature for the parameters specified.
-			virtual double integrate(double(*func)(double), double lft, double rht, uint strips) = 0; 
+			virtual double integrate(double(*func)(double), double a, double b, uint N) = 0;
 
 			//Query functions
 			double get_error() const {return m_error;}
@@ -44,35 +61,35 @@ namespace phys{
 			void reset_func_calls(){ m_func_calls = 0; }
 
 			//interface function to return the name of the method used
-			virtual std::string get_name()=0;
-		protected:
-			double m_error;		//!< estimated error in the numerical quadrature.
-			uint m_order;		//!< order of the error improvement for a particular method (e.g. Simpson is order 4)
-			uint m_func_calls;	//!< number of function calls made during integration (use for assessment of different methods)
+			virtual std::string get_name() const noexcept =0;
+
 		};
 
 		/* Mid-Ordinate method. Derived class of Quadrature*/
-		class Mid_ordinate : public Quadrature{
+		class MidOrdinate : public Quadrature{
 		public:
-			Mid_ordinate() : Quadrature(){}
-			double integrate(double(*f)(double), double lft, double rht, uint strips);
-			std::string get_name(){return "Mid";}
+			MidOrdinate() : Quadrature(){}
+			double integrate (double(*f)(double), double a, double b) override;
+			double integrate(double(*f)(double), double a, double b, uint N) override;
+			std::string get_name() const noexcept override {return "Mid";}
 		};
 
-		/* Trapeziod method. Derived class of Quadrature*/
-		class Trapeziod : public Quadrature{
+		/* Trapezoid method. Derived class of Quadrature*/
+		class Trapezoid : public Quadrature{
 		public:
-			Trapeziod() : Quadrature() {}
-			double integrate(double(*f)(double), double lft, double rht, uint strips);
-			std::string get_name(){return "Trap";}
+			Trapezoid() : Quadrature() {}
+			double integrate (double(*f)(double), double a, double b) override;
+			double integrate(double(*f)(double), double a, double b, uint N) override;
+			std::string get_name() const noexcept override {return "Trap";}
 		};
 		
 		/* Simpson method. Derived class of Quadrature*/
 		class Simpson : public Quadrature{
 		public:
 			Simpson() : Quadrature(4) {}
-			double integrate(double(*f)(double), double lft, double rht, uint strips);
-			std::string get_name(){return "Simp";}
+			double integrate (double(*f)(double), double a, double b) override;
+			double integrate(double(*f)(double), double a, double b, uint N) override;
+			std::string get_name() const noexcept override {return "Simp";}
 		};
 		
 		/*	Boole's method. Derived class of Quadrature.
@@ -89,8 +106,9 @@ namespace phys{
 		public:
 			Boole() :Quadrature(6), error_wanted(false) {}
 			Boole(bool err_req) :Quadrature(6), error_wanted(err_req) {}
-			double integrate(double(*f)(double), double lft, double rht, uint strips);
-			std::string get_name(){return "Boole";}
+			double integrate (double(*f)(double), double a, double b) override;
+			double integrate(double(*f)(double), double a, double b, uint N) override;
+			std::string get_name() const noexcept override {return "Boole";}
 		private:
 			bool error_wanted;		//!< toggle for error estimation at 2*strips.
 		};
@@ -172,11 +190,11 @@ namespace phys{
 		class Laguerre : public Gauss {
 		public:
 			/*	
-				Constructor for the Laguerre class. If the weight function is implict in your integrand
+				Constructor for the Laguerre class. If the weight function is implicit in your integrand
 				set modify to true;this will multiply the weights by the exponential of the 
 				corresponding abscissa. To explain:
 
-				If your intgral is
+				If your integral is
 				|a,+inf) exp(-x)*f(x)dx, then set modify false; else
 				|a,+inf) f(x)dx  then set modify true (this is default).
 
@@ -191,7 +209,7 @@ namespace phys{
 			virtual double integrate(double(*f)(double), double lft = 0., double = double() );
 			std::string get_name(){return "Laguerre";}
 		private:
-			bool modified;						//!< is the exponetial implicit or not?
+			bool modified;						//!< is the exponential implicit or not?
 			virtual void initialise();
 			std::pair<stdVec_d, stdVec_d> compute_x_w();
 		};
@@ -207,29 +225,19 @@ namespace phys{
 		*/
 		class Adaptive {
 		public:
-			Adaptive() :	m_pQuad(new Trapeziod), 
+			Adaptive() :	m_pQuad(new Trapezoid),
 							m_I(), 
 							m_order(m_pQuad->get_order()),
-							m_tolerance(1.e-6), 
-							m_count(0), 
-							m_cnt_min(1), 
+							m_count(0),
 							m_cnt_max(100),
-							m_num_f_calls(0),
-							m_print_output(false),
 							d_ctor(true){}
 
-			Adaptive(	Quadrature* ptr_q, 
-						double tol = 1.e-6,
-						bool print_o = false	) : 
+			Adaptive(Quadrature* ptr_q ) :
 						m_pQuad(ptr_q), 
 						m_I(), 
 						m_order(m_pQuad->get_order()),
-						m_tolerance(tol), 
-						m_count(0), 
-						m_cnt_min(1), 
+						m_count(0),
 						m_cnt_max(100),
-						m_num_f_calls(0),
-						m_print_output(print_o),
 						d_ctor(false) {}
 
 			~Adaptive()
@@ -238,7 +246,7 @@ namespace phys{
 					delete m_pQuad;
 			}
 
-			double integrate(double(*f)(double), double lft, double rht, uint strips = 1, double tol = double());
+			double integrate(double(*f)(double), double a, double b, double tol);
 			void reset_count(){m_count = 0;}
 			void set_quadrature_method(Quadrature* ptr_q)
 			{
@@ -246,33 +254,26 @@ namespace phys{
 				m_order = m_pQuad->get_order();
 				reset_count();
 			}
-			void set_tolerance(double tol)
-			{
-				m_tolerance = tol;
-				reset_count();
-			}
-			void toggle_output(){m_print_output = (m_print_output == false) ? true:false;}
+
+			void set_max_count(uint new_max) {m_cnt_max = new_max;}
+
 			int get_count() const {return m_count;}
-			int get_f_calls() const{return m_num_f_calls;}
+			int get_f_calls() const{return m_pQuad->get_func_calls();}
 
 		private:
-			double recursive(double lft, double rht, uint strips, double tol, uint&cnt, double&error);
+			double recursive(double lft, double rht, double tol, double T0);
 
 		private:
 			Quadrature* m_pQuad;			//!< pointer to the quadrature method to use
-			double(*m_I)(double);				//!< integrand function (assigned in integrate function)
-			uint m_order;					//!< accuracy order (obtained from quad method). For Gaussian types == 1.
-			double m_tolerance;				//!< precision to achieve.
+			double(*m_I)(double);			//!< integrand function (assigned in integrate function)
+			uint m_order;					//!< accuracy order (obtained from quad method).
 			uint m_count;					//!< No of times the adaptive method has halved the interval
-			uint m_cnt_min;					//!< Min no of times to halve to avoid any unexpected initial behaviour
 			uint m_cnt_max;					//!< Max no of times to halve the interval to avoid infinite recursions.
-			uint m_num_f_calls;				//!< Number of function calls made during integration.
-			bool m_print_output;				//!< option to print output for each integration.
 			bool d_ctor;					//!< flag to identify when the default constructor has been used.			
 		};
 
 		/*	Romberg's method of quadrature. This is NOT a derived class of Quadrature.
-			It applies Richardson Extrapolation to the Trapeziod method to obtain a 
+			It applies Richardson Extrapolation to the Trapezoid method to obtain a
 			numerical result to a desired accuracy; default 1.e-6.
 		*/
 		class Romberg {

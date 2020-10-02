@@ -22,7 +22,7 @@ int main()
 	const int num_of_solvers = 7;
 	std::string root = "./data/";
 
-	phys::diffs::Diff_eqn* shm_func = new phys::diffs::SHM_eqn(9.0, 1.0);//spring const., drag coeff.
+	phys::diffs::Diff_eqn* shm_func = new phys::diffs::SHM(9.0, 1.0);//spring const., drag coeff.
 	
 	double step = 0.01;
 	double initial_time = 0.0;
@@ -31,8 +31,8 @@ int main()
 
 	phys::ode::state initial_system(initial_time, initial_position, initial_velocity);
 
-	std::vector<phys::storage::ODE_Storage> container(num_of_solvers); 
-	std::vector<phys::ode::ODE_solver*> solvers(num_of_solvers);
+	std::vector<phys::storage::ODEStorage> container(num_of_solvers); 
+	std::vector<phys::ode::ODESolver*> solvers(num_of_solvers);
 	std::vector<std::string> filenames(num_of_solvers);
 	std::vector<std::string> titles(num_of_solvers);
 

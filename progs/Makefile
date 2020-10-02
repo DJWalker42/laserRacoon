@@ -24,8 +24,13 @@ CXXFLAGS = -Wall -O2 -std=c++11
 
 INCDIR=../inc
 LIBDIR=../lib
+
+# These are locations of OpenCV headers and libraries for Mac OSX
+# For Unix/Linux typically these are /usr/include, /usr/lib, or /usr/local/include, /usr/local/lib
 OCVINC=/opt/local/include
 OCVLIB=/opt/local/lib
+
+
 BINDIR=./bin
 
 LIBNAME = -llaserRacoon

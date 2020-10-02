@@ -8,10 +8,11 @@
 namespace phys{
 	namespace ode{
 
-		/**	Structure for the state of a system under the application of a first or second ordered ODE.
-			Multiple dimensions can be handled. The member vector y will contain both the dependent variable(s)
-			and, when appropriate, the first derivative varaible(s) after construction. The member vector dy is
-			not modified by the ODE_solver class; the first derivative values are handled within the vector y.
+		/**	Structure for the state of a system under the application of a first or second ordered
+		 *  ODE. Multiple dimensions can be handled. The member vector y will contain both the
+		 *  dependent variable(s) and, when appropriate, the first derivative variable(s) after
+		 *  construction. The member vector dy is not modified by the ODE_solver class; the first
+		 *  derivative values are handled within the vector y.
 		*/
 		struct state{
 			//representation

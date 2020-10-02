@@ -104,7 +104,7 @@ double F(double En)
 
 	//integrate from the left up to one step past the matching point.(-5 inc.-> match + step)
 	phys::ode::Numerov numerov_lft(q_func, u_lft, step);
-	phys::storage::ODE_Storage temp = numerov_lft.fullSolve(match + step);
+	phys::storage::ODEStorage temp = numerov_lft.fullSolve(match + step);
 	phys::stdVec_d lft_vals = temp.get_dependent();
 
 	//lft_vals size - 1 gives switching index i_match + 1

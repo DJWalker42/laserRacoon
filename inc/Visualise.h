@@ -24,7 +24,7 @@ and blue (other colour schemes do exist). A greyscale image only has one channel
 cv::Scalar	--	Class to define colour (amongst other things). The constructor can take three integer
 parameters between the values of 0 and 255 inclusively, representing the three colour
 channels blue, green, and red respectively (yes reverse order to RGB). Note that
-the max value is not arbritrary but is equal to 2^8 - 1, i.e. an 8-bit unsigned
+the max value is not arbitrary but is equal to 2^8 - 1, i.e. an 8-bit unsigned
 integer. Hence, for a greyscale image (one channel) there are actually 256 shades of
 grey -- someone please use that as a title for a book!
 
@@ -32,9 +32,9 @@ cv::Point	--	Class defining an (x,y) coordinate of a pixel in a cv::Mat. It has 
 that can be accessed directly.
 
 cv::Rect	--	Class defining a rectangle in terms of pixel coordinates. Can be constructed using
-the top-left (x,y) and width and height parameters, or can be sepcified by the top-
+the top-left (x,y) and width and height parameters, or can be specified by the top-
 left and bottom-right cv::Points. Members can be access directly. Note this is NOT
-a drawing function; it is typically used to specifiy a region of interest (ROI) in
+a drawing function; it is typically used to specify a region of interest (ROI) in
 an image. To draw a rectangle you have to use the cv::rectangle function.
 */
 
@@ -131,12 +131,24 @@ namespace phys{
 			{}
 		};
 
+		/*
+		 *  The Viewer class is a bit of a beast that (probably) indicates it should be redesigned.
+		 *  Things like the graph choice being coded as an enumeration type might be better off as
+		 *  a "Graph" class with a hierarchy and polymorphic behaviour; an "Axis" class that is
+		 *  responsible for its own scale, range, tick marks, labels and so on.
+		 *
+		 *  It should only be used to give the user a cursory view of the data and not be used
+		 *  as a precise plotting tool; there are many professional software suites that
+		 *  are more than adequate at plotting configurable graphs.
+		 */
+
+
 		/* Viewer class */
 		class Viewer{
 			/* Allows shape sub-classes to access private Viewer members */
 			friend class Circle; friend class Square; friend class Triangle;
 			friend class Cross; friend class Arrow;
-            /* c++11 using typedef for covenience */
+            /* c++11 using typedef for convenience */
             using UPtrShape = std::unique_ptr<Shape>;
             
 		private:
@@ -163,7 +175,8 @@ namespace phys{
 			std::string m_plot_name;				//!< Viewer window name
 			int m_g_choice;							//!< choice between x vs. y(x), x vs. dy/dx, y1(x) vs. y2(x), y(x) vs. dy/dx
 			int m_pause;							//!< optional delay makes plot pause; default zero: Viewer hangs until key pressed.
-			bool m_lines;							//!< do you want m_lines with your points? 
+			bool m_lines;							//!< do you want lines with your points?
+			bool m_pulses;							//!< pulse lines from x-axis to data point
 			bool m_animate;							//!< switches between a static and animated plot.
 			bool m_is_drawn;						//!< check that a plot has been plotted before trying to add data.
 			double m_font_scale;					//!< overall font scale for labels drawn.
@@ -195,6 +208,7 @@ namespace phys{
 				m_g_choice(0),
 				m_pause(0),
 				m_lines(false),
+				m_pulses(false),
 				m_animate(false),
 				m_is_drawn(false),
 				m_font_scale(1.0),
@@ -216,6 +230,7 @@ namespace phys{
 				const std::string& x_name = "x",
 				const std::string& y_name = "y",
 				bool lines_wanted = false,
+				bool pulses_wanted = false,
 				bool ani = false,
 				const std::vector<std::string> key_names = std::vector<std::string>()) :
 				m_rows(height),
@@ -239,6 +254,7 @@ namespace phys{
 				m_g_choice(0),
 				m_pause(0),
 				m_lines(lines_wanted),
+				m_pulses(pulses_wanted),
 				m_animate(ani),
 				m_is_drawn(false),
 				m_font_scale(m_rows*m_cols / 1000. / 1000.),
@@ -259,7 +275,7 @@ namespace phys{
 
 			enum graph_choice { DEPEN, DERIV, XY, PHASE };
 
-			void plot(const phys::storage::ODE_Storage& data,
+			void plot(const phys::storage::ODEStorage& data,
 				graph_choice choice = DEPEN,
 				uint dim1 = 1,
 				uint dim2 = 2);
@@ -272,7 +288,7 @@ namespace phys{
 
 			void plot_split(const stdVec_d& x, const std::vector<stdVec_d>& y);
 
-			void add_data(const phys::storage::ODE_Storage& data,
+			void add_data(const phys::storage::ODEStorage& data,
 				uint dim1 = 1,
 				uint dim2 = 2);
 
@@ -307,7 +323,7 @@ namespace phys{
 					set_bg_col(bg_clr);
 			}
 			/*	Warning: calls matrix constructor and assigns
-			This will clear the enitre image matrix and set the colour to that passed */
+			This will clear the entire image matrix and set the colour to that passed */
 			void set_bg_col(const cv::Scalar& colour)
 			{
 				m_bg_colour = colour;
@@ -347,11 +363,19 @@ namespace phys{
 					std::cout << "Warning\nLines cannot be drawn when using animation.\n";
 				m_lines = true;
 			}
+			void withPulses()
+			{
+				if (m_animate)
+					std::cout << "Warning\nPulses cannot be drawn when using animation.\n";
+				m_pulses = true;
+			}
 			void withPoints() { m_lines = false; }
 			void animation()
 			{
 				if (m_lines)
 					std::cout << "Warning\nLines cannot be drawn when using animation.\n";
+				if (m_pulses)
+					std::cout << "Warning\nPulses cannot be drawn when using animation.\n";
 				m_animate = true;
 			}
 			void noAnimation() { m_animate = false; }
@@ -471,7 +495,7 @@ namespace phys{
 		}
 
 
-		//Function to find the overall min and max values in a set of mulitple dependent data.
+		//Function to find the overall min and max values in a set of multiple dependent data.
 		template<typename T>
 		void find_min_max(const std::vector<std::vector<T>>& values,
 			T &minVal,

@@ -46,7 +46,7 @@ namespace phys{
 
 		};
 
-		class SHM_eqn : public Diff_eqn{
+		class SHM : public Diff_eqn{
 		private:
 			double k;						//!< Spring constant
 			double D;						//!< Drag coefficient
@@ -55,20 +55,20 @@ namespace phys{
 			/*	Default constructor
 				Default values: spring const, k = 9.0; drag coeff, D = 0.0.
 			*/
-			SHM_eqn():	Diff_eqn(),
+			SHM():	Diff_eqn(),
 						k(9.0),
 						D(0.0),
 						drive_func() {}
 			/*	Constructor to set spring constant and drag.
 			*/
-			SHM_eqn(	double spring,
+			SHM(	double spring,
 						double drag		):
 						Diff_eqn(),
 						k(spring),
 						D(drag),
 						drive_func(){}
 			/*	Constructor for a user defined drive function */
-			SHM_eqn(	double spring,
+			SHM(	double spring,
 						double drag,
 						double(*d_func)(double)		):
 						Diff_eqn(),
@@ -198,14 +198,16 @@ namespace phys{
 			1 and 2 ODEs supported. The vector 'params' is available for you to use in
 			your differential_function; just use set_parameters function in your main.
 		*/
-		class User_eqn : public Diff_eqn{
+		class User_eqn : public Diff_eqn {
+		public:
+			User_eqn(uint order) : Diff_eqn(order), params() {}
 		public:
 			void set_parameters(const stdVec_d& user_parameters)
 			{
 				params = user_parameters;
 			}
 			/*	@brief All arguments automatically passed in by the ODE_solver of choice.
-				@param x double value of the independent varaible
+				@param x double value of the independent variable
 				@param y vector<double> of the state of the system (dependent values in first half, first derivative in the second half)
 				@param N integer variable of the number of dimensions in the system
 				@param c integer variable of the specific dimension for which to compute the differential

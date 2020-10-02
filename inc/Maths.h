@@ -5,7 +5,6 @@
 #include <algorithm>
 
 #include "DynVector.h"
-#include "Complex.h"
 
 #ifdef USING_PHYS_MATHS_DEF
 	#define PI 3.1415926535897932384626433832795028841971693993751 
@@ -23,14 +22,14 @@ namespace phys{
 		template<typename T>
 		T min(const T a, const T b){ return a < b ? a : b; }
 
-		/**	@brief computes magnitude of a (cartesian) 2-D vector 
+		/**	@brief computes magnitude of a (Cartesian) 2-D vector
 			@param x double value x-component
 			@param y double value y-component
 			@returns magnitude double value.
 		*/
 		double mag2D(const double x, const double y);
 
-		/**	@brief computes magnitude of a (cartesian) 3-D vector 
+		/**	@brief computes magnitude of a (Cartesian) 3-D vector
 			@param x double value x-component
 			@param y double value y-component
 			@param z double value z-component
@@ -68,23 +67,6 @@ namespace phys{
 			return retval;
 		}
 
-
-		///**	@brief locates minimum and maximum values contained in a vector of doubles
-		//	@param minVal reference to the minimum value found (double)
-		//	@param maxVal reference to the maximum value found (double)
-		//	@returns a pair of indices: first is location of minVal, second is location of maxVal.
-		//*/
-		//std::pair<size_t,size_t> minMax(	const stdVec_d& values, 
-		//									double &minVal, 
-		//									double &maxVal );
-		///**	@brief locates minimum and maximum values contained in a vector of integers
-		//	@param minVal reference to the minimum value found (int)
-		//	@param maxVal reference to the maximum value found (int)
-		//	@returns a pair of indices: first is location of minVal, second is location of maxVal.
-		//*/
-		//std::pair<size_t,size_t> minMax(	const stdVec_i& values, 
-		//									int &minVal, 
-		//									int &maxVal);
 		/** @brief rounds the value to the nearest whole digit with the policy that X.5 rounds up to X+1
 		*/
 		double round ( double val );

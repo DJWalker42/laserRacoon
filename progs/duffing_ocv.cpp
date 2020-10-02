@@ -20,8 +20,8 @@ int main ()
 
 	phys::ode::state initial_system(t,p,v); 
 	phys::diffs::Diff_eqn* eqn = new phys::diffs::Duffing(-1.0, 1.0, 0.2, 0.3, 1.0);
-	phys::ode::ODE_solver* rk4_solver = new phys::ode::RK4(eqn, initial_system, step);
-	phys::storage::ODE_Storage container = rk4_solver->fullSolve(finish);
+	phys::ode::ODESolver* rk4_solver = new phys::ode::RK4(eqn, initial_system, step);
+	phys::storage::ODEStorage container = rk4_solver->fullSolve(finish);
 
 	delete eqn;
 	delete rk4_solver;

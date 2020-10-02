@@ -36,22 +36,22 @@ namespace phys{
 		for a 2D (or higher dimensional) general finite difference grid.
 
 		First assume we cannot add or remove nodes from the grid once it is created - requires reordering/refactoring
-		of indicies. However, we can move individual nodes within the grid, up to a limit of the nearest neighbour
-		location (indicies would have to swap otherwise). The Boundary Value ODE solver class has been written to
+		of indices. However, we can move individual nodes within the grid, up to a limit of the nearest neighbour
+		location (indices would have to swap otherwise). The Boundary Value ODE solver class has been written to
 		solve on 1D grids of general spacing i.e. not necessarily grids of uniformly spaced nodes - note that a 2D
 		implementation of the BvpODE solver class remains to be written.
 
 		We use the Node class in the FiniteDifferenceGrid class to construct the grid; the grid is simply a container of
 		nodes with a description of the connections between them. The nodes are either interior nodes or boundary nodes
-		(any corner nodes **must** be boundary nodes by defintion) and they must not be confused (an argument perhaps for
-		avoiding inheritence/polymorphism?)
+		(any corner nodes **must** be boundary nodes by definition) and they must not be confused (an argument perhaps for
+		avoiding inheritance/polymorphism?)
 
-		Note that if the grid is a uniform array (or its indicies can be described as a uniform array) then the
-		FiniteDifferenceGrid class should be made responsible for computing the connections between nodes; it's a trival
-		task. For an arbritrary grid the responsibility of the connections between nodes lies with the user.
+		Note that if the grid is a uniform array (or its indices can be described as a uniform array) then the
+		FiniteDifferenceGrid class should be made responsible for computing the connections between nodes; it's a trivial
+		task. For an arbitrary grid the responsibility of the connections between nodes lies with the user.
 
 		As written, the BoundaryNode class currently shares the same internal description as a Node class. However,
-		it will require data members to descripe which boundary it is on and/or to which other nodes it is connected.
+		it will require data members to describe which boundary it is on and/or to which other nodes it is connected.
 
 		As written, the InteriorNode class is a Node so should inherit from the Node class rather than repeat code.
 		An InteriorNode stores the locations of its four nearest neighbours for reference; we're assuming a 2D grid.
@@ -60,13 +60,13 @@ namespace phys{
 
 		What about nodes at the corners of the grid, assuming it has corners? Two boundary nodes, different boundaries
 
-		How would you handle circular or arbritrary grid shapes? - not an easy answer to this question.
+		How would you handle circular or arbitrary grid shapes? - not an easy answer to this question.
 
 		Would you consider a BoundaryNode to be a special case of an InteriorNode, given the internal
 		description of an InteriorNode? Would it better to keep theses classes distinct? A Node is either an InteriorNode
 		or a BoundaryNode, it cannot be both.
 
-		As an alternative to seperate classes we could give the Node class an attribute flag (set up as an internal enum
+		As an alternative to separate classes we could give the Node class an attribute flag (set up as an internal enum
 		say) that identifies it as either a interior node or a boundary node.
 	*/
 	class BoundaryNode{

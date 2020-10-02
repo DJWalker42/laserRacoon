@@ -23,6 +23,7 @@
 
 
 //normalised Lorentzian Line
+/*
 double f(double lambda) {
 
 	double lambda_0 = 10.;
@@ -42,6 +43,15 @@ double f_int(double x) {
 
 	return atan(x_sub) * gamma / 2.;
 }
+*/
+
+double f(double x) {
+	return sin(x);
+}
+
+double f_int(double x) {
+	return -cos(x);
+}
 
 
 int main (int argc, char ** argv) {
@@ -50,9 +60,10 @@ int main (int argc, char ** argv) {
 	using Trapezoid = phys::quad::Trapezoid;
 
 	Adaptive adaptive;
+	Trapezoid trapezoid;
 
-	double left {6.};
-	double right {14.};
+	double left {0.}; // 6.
+	double right {1.}; // 14.
 
 	adaptive.set_max_count(1000);
 	double adaptive_soln = adaptive.integrate(f, left, right, 1.e-3);
@@ -66,6 +77,16 @@ int main (int argc, char ** argv) {
 	std::cout << "number of function calls: " << adaptive.get_f_calls() << std::endl;
 	std::cout << "Analytic soln: " << soln << std::endl;
 	std::cout << "Adpative - soln: " << fabs(adaptive_soln - soln) << std::endl;
+
+	for (int i = 1; i < 5; ++i) {
+		uint n = static_cast<uint>(pow(10., i));
+		double trapezoid_soln = trapezoid.integrate(f, left, right, n);
+
+		std::cout << "Trap soln (" << n << ") = " << trapezoid_soln;
+		std::cout << " error = " << fabs(trapezoid_soln - soln) << "\n";
+	}
+
+
 
 	return 0;
 }

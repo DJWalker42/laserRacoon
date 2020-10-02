@@ -15,30 +15,30 @@
 namespace phys{
 	namespace ode{
 
-		class ODE_solver{
+		class ODESolver{
 		protected:						
 			/*	Constructor for the ODE_solver class. Protected as this is a virtual base class
 				i.e. we cannot make a direct instance of it.
 			*/
-			ODE_solver(		phys::diffs::Diff_eqn* p_diff, 
+			ODESolver(		phys::diffs::Diff_eqn* p_diff, 
 							const state& system, 
 							double step	);
 		public:
 			//virtual destructor as this is an abstract base class
-			virtual ~ODE_solver(){}
+			virtual ~ODESolver(){}
 		public:
 			//interface
 			/* Advances the system a single step.*/
 			virtual state solve()=0;
 
 			/*	Solves the system from initial independent value to the specified end. */
-			virtual phys::storage::ODE_Storage fullSolve(double end) = 0;
+			virtual phys::storage::ODEStorage fullSolve(double end) = 0;
 
 			/* Solves the system from initial independent value to end, wrapping the dependent variable to the range -pi to +pi*/
-			virtual phys::storage::ODE_Storage fullSolveWrapped(double end)
+			virtual phys::storage::ODEStorage fullSolveWrapped(double end)
 			{
 				size_t N = num_steps(m_current.x, end), count = 0;
-				phys::storage::ODE_Storage container(m_current);
+				phys::storage::ODEStorage container(m_current);
 				while(count++ < N){
 					this->wrap();
 					container.store(m_current); //need to store the initial state before first solve
@@ -107,44 +107,44 @@ namespace phys{
 			uint m_mid_idx;                         //!< index at which y changes to dy in the dependent vector.
 		};
 
-		class Euler: public ODE_solver{
+		class Euler: public ODESolver{
 		public:
 			Euler(		phys::diffs::Diff_eqn* p_diff, 
 						const state& system, 
 						double h	) 
-				: ODE_solver(p_diff, system, h){}
+				: ODESolver(p_diff, system, h){}
 			state solve();
-			phys::storage::ODE_Storage fullSolve(double end);
+			phys::storage::ODEStorage fullSolve(double end);
 		};
 
-		class Imp_Euler: public ODE_solver{
+		class Imp_Euler: public ODESolver{
 		public:
 			Imp_Euler(		phys::diffs::Diff_eqn* p_diff, 
 							const state& system, 
 							double h	) 
-				: ODE_solver(p_diff, system, h){}
+				: ODESolver(p_diff, system, h){}
 			state solve();
-			phys::storage::ODE_Storage fullSolve(double end);
+			phys::storage::ODEStorage fullSolve(double end);
 		};
 
-		class Mod_Euler: public ODE_solver{
+		class Mod_Euler: public ODESolver{
 		public:
 			Mod_Euler(		phys::diffs::Diff_eqn* p_diff, 
 							const state& system, 
 							double h	) 
-				: ODE_solver(p_diff, system, h){}
+				: ODESolver(p_diff, system, h){}
 			state solve();
-			phys::storage::ODE_Storage fullSolve(double end);
+			phys::storage::ODEStorage fullSolve(double end);
 		};
 
-		class RK4: public ODE_solver{
+		class RK4: public ODESolver{
 		public:
 			RK4(	phys::diffs::Diff_eqn* p_diff, 
 					const state& system, 
 					double h	) 
-				: ODE_solver(p_diff, system, h){}
+				: ODESolver(p_diff, system, h){}
 			state solve();
-			phys::storage::ODE_Storage fullSolve(double end);
+			phys::storage::ODEStorage fullSolve(double end);
 		};
 
 		/*	On construction of a Stomer-Verlet solver the first step is automatically initialised.
@@ -154,40 +154,40 @@ namespace phys{
 			equations of the type y'' = f(y), i.e. the differential function does not have an independent or
 			first derivative term. 
 		*/
-		class Stormer_Verlet: public ODE_solver{
+		class Stormer_Verlet: public ODESolver{
 		public:
 			Stormer_Verlet(	phys::diffs::Diff_eqn* p_diff, 
 								const state& system, 
 								double h	) 
-				: ODE_solver(p_diff, system, h)
+				: ODESolver(p_diff, system, h)
 			{
 				init_method();
 			}
 			state solve();
-			phys::storage::ODE_Storage fullSolve(double end);
+			phys::storage::ODEStorage fullSolve(double end);
 		private:
 			virtual void init_method();
 		private:
 			state m_previous;
 		};
 
-		/*	Leapfrog integrates postion (dependent variable) at integer steps and the velocity 
+		/*	Leapfrog integrates position (dependent variable) at integer steps and the velocity
 			(first derivative) at half integer steps. First half step for velocity is computed
 			using init_method() at construction (it uses an Euler step).
 		*/
-		class Leapfrog : public ODE_solver{
+		class Leapfrog : public ODESolver{
 		public:
 			Leapfrog(		phys::diffs::Diff_eqn* p_diff, 
 							const state& system, 
 							double h,
 							bool synced = false) 
-				:	ODE_solver(p_diff, system, h),
+				:	ODESolver(p_diff, system, h),
 					m_synchronise(synced)
 			{
 				init_method();
 			}
 			state solve();
-			phys::storage::ODE_Storage fullSolve(double end);
+			phys::storage::ODEStorage fullSolve(double end);
 			
 			/*	
 				Use this function to synchronise the velocity to the position after each step 
@@ -199,26 +199,26 @@ namespace phys{
 				Use this function after a full solve to synchronise the velcocity to the position 
 				This can be selected to run automatically by switching the synchronise flag to true
 			*/
-			phys::storage::ODE_Storage sync ( const phys::storage::ODE_Storage& data );
+			phys::storage::ODEStorage sync ( const phys::storage::ODEStorage& data );
 		private:
 			virtual void init_method();
 		private:
-			bool m_synchronise;	//!< is the velcoicty to be synchronised to the position or not? default false
+			bool m_synchronise;	//!< is the velocity to be synchronised to the position or not? default false
 		};
 
-		class Velocity_Verlet: public ODE_solver{
+		class Velocity_Verlet: public ODESolver{
 		public:
 			Velocity_Verlet(	phys::diffs::Diff_eqn* p_diff, 
 								const state& system, 
 								double h	) 
-				: ODE_solver(p_diff, system, h){}
+				: ODESolver(p_diff, system, h){}
 			state solve();
-			phys::storage::ODE_Storage fullSolve(double end);
+			phys::storage::ODEStorage fullSolve(double end);
 		};
 
 		enum targetState { TARGET, NO_TARGET };
 
-		class RKF45 : public ODE_solver{
+		class RKF45 : public ODESolver{
 		public:
 			/*	Constructor for the adaptive step Runge-Kutta-Fehlberg solver.
 				This will set up the required constants used in the method.
@@ -231,7 +231,7 @@ namespace phys{
 					const state& system, 
 					double h_init,
 					targetState target = NO_TARGET) : 
-					ODE_solver(p_diff, system, h_init),
+					ODESolver(p_diff, system, h_init),
 					alpha(9.e-1),
 					tol(1.e-5),
 					hmax(h_init),
@@ -246,8 +246,8 @@ namespace phys{
 			void set_hmax(double hmax_to_set){hmax = hmax_to_set;}
 			void set_hmin(double hmin_to_set){hmin = hmin_to_set;}			
 			state solve();
-			phys::storage::ODE_Storage fullSolve(double end);
-			virtual phys::storage::ODE_Storage fullSolveWrapped(double end);
+			phys::storage::ODEStorage fullSolve(double end);
+			virtual phys::storage::ODEStorage fullSolveWrapped(double end);
 
 			bool isTargetHit(){return m_targetHit;}
 
@@ -315,16 +315,16 @@ namespace phys{
 			See the example program that uses the Numerov method to solve the wavefunctions and energies 
 			of a quantum particle bound in a harmonic potential (Harmonic_states.cpp).
 		*/
-		class Numerov : public ODE_solver
+		class Numerov : public ODESolver
 		{
 		public:
 			Numerov(	phys::diffs::Diff_eqn* p_diff, 
 						const state& initial, 
 						double h	):
-						ODE_solver(p_diff, initial, h)
+						ODESolver(p_diff, initial, h)
 						{ init_method();}		
 			state solve();
-			phys::storage::ODE_Storage fullSolve(double end);
+			phys::storage::ODEStorage fullSolve(double end);
 		private:
 			virtual void init_method();
 		private:
@@ -338,18 +338,18 @@ namespace phys{
 				u''(x) + q(x)u(x) = s(x)
 			where q(x) is our differential equation function and s(x) is the so called source function.
 		*/
-		class Numerov_s : public ODE_solver
+		class Numerov_s : public ODESolver
 		{
 		public:
 			Numerov_s(	phys::diffs::Diff_eqn* p_diff, 
 							const state& initial, 
 							double h, 
 							double (*s)(double) ):
-							ODE_solver(p_diff, initial, h), 
+							ODESolver(p_diff, initial, h), 
 							m_src_func(s)	{ init_method();}
 			void set_src_func(double (*s)(double)){ m_src_func = s; }			
 			state solve();
-			phys::storage::ODE_Storage fullSolve(double end);
+			phys::storage::ODEStorage fullSolve(double end);
 		private:
 			virtual void init_method();
 		private:

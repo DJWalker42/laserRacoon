@@ -156,4 +156,5 @@ namespace phys{
 
 		return std::vector<T>(first, last); 
 	}
-}
+	
+} //namespace

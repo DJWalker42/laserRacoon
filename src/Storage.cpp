@@ -5,10 +5,10 @@ namespace phys{
 
 		static const double PI = 3.141592653589793; 
 
-		//Class ODE_Storage implemetation ------------------------------------------------
+		//Class ODE_Storage implementation ------------------------------------------------
 
 		//Default constructor - use set(initial_system) after calling the default constructor
-		ODE_Storage::ODE_Storage() : m_independent(),
+		ODEStorage::ODEStorage() : m_independent(),
 			m_dependent(),
 			m_size_of_y(0),
 			m_odeOrder(0),
@@ -17,7 +17,7 @@ namespace phys{
 			m_dyName("dy"){}
 
 		//Constructor using an (ODE) state - note the initial_system is not stored on construction
-		ODE_Storage::ODE_Storage(const phys::ode::state& initial_system,
+		ODEStorage::ODEStorage(const phys::ode::state& initial_system,
 			const std::string& x_title,
 			const std::string& y_title,
 			const std::string& dy_title) :
@@ -30,7 +30,7 @@ namespace phys{
 			set(initial_system); //sets m_size_of_y and m_odeOrder
 		}
 
-		void ODE_Storage::set(const phys::ode::state & system)
+		void ODEStorage::set(const phys::ode::state & system)
 		{
 			clear(); //ensures vectors empty before storing any new data.
 			m_size_of_y = system.y.size(); // equals dims times ode order
@@ -38,13 +38,13 @@ namespace phys{
 		}
 
 
-		void ODE_Storage::clear()
+		void ODEStorage::clear()
 		{
 			m_independent.clear();
 			m_dependent.clear();
 		}
 
-		void ODE_Storage::store(const phys::ode::state& system)
+		void ODEStorage::store(const phys::ode::state& system)
 		{
 			m_independent.push_back(system.x);
 
@@ -55,17 +55,17 @@ namespace phys{
 		}
 
 		/* works even if vectors are (initially) empty */
-		void ODE_Storage::append(const ODE_Storage& add)
+		void ODEStorage::append(const ODEStorage& add)
 		{
 			if (add.m_size_of_y != this->m_size_of_y && this->m_size_of_y > 0)
 			{
-				throw(std::runtime_error("Addtional data does not match the exisitng data - please check your code"));
+				throw(std::runtime_error("Additional data does not match the existing data - please check your code"));
 			}
 			m_independent.insert(m_independent.end(), add.m_independent.begin(), add.m_independent.end());
 			m_dependent.insert(m_dependent.end(), add.m_dependent.begin(), add.m_dependent.end());
 		}
 
-		void ODE_Storage::wrapTo2Pi(size_t dim)
+		void ODEStorage::wrapTo2Pi(size_t dim)
 		{
 			/*	error check the choice of dimension wanted */
 			if (dim * m_odeOrder > m_size_of_y){
@@ -95,7 +95,7 @@ namespace phys{
 		}
 
 
-		void ODE_Storage::write(const std::string& filename, bool write_headers) const
+		void ODEStorage::write(const std::string& filename, bool write_headers) const
 		{
 			if (m_independent.empty())
 			{
@@ -137,12 +137,12 @@ namespace phys{
 			output_file.close();
 		}
 
-		stdVec_d ODE_Storage::get_independent() const
+		stdVec_d ODEStorage::get_independent() const
 		{
 			return m_independent;
 		}
 
-		stdVec_d ODE_Storage::get_dependent(size_t dim, bool first_deriv) const
+		stdVec_d ODEStorage::get_dependent(size_t dim, bool first_deriv) const
 		{
 			if(dim == 0){
 				//std::cout << "\nDimension zero requested; assuming you want dimension one\n"; 
@@ -164,7 +164,7 @@ namespace phys{
 			size_t base = dim - 1;
 
 			/*	If first derivative wanted offset base by num of dimensions
-			(see interweaving description of the ODE_Storage)	*/
+			(see interleaving description of the ODE_Storage)	*/
 			if (first_deriv) base += m_size_of_y / m_odeOrder;
 
 			stdVec_d retval;
@@ -174,7 +174,7 @@ namespace phys{
 			return retval;
 		}
 
-		stdVec_d ODE_Storage::get_first_deriv(size_t dim) const
+		stdVec_d ODEStorage::get_first_deriv(size_t dim) const
 		{
 			/*	error check that we have an ode of order 2 */
 			if (m_odeOrder != 2) __error_first_deriv();
@@ -184,13 +184,13 @@ namespace phys{
 			return retval;
 		}
 
-		void ODE_Storage::__error_does_not_exist(std::string which) const
+		void ODEStorage::__error_does_not_exist(std::string which) const
 		{
 			std::string errmsg = which;
 			errmsg += ": the dimension chosen does not exist. Please check your code.";
 			throw (std::runtime_error(errmsg));
 		}
-		void ODE_Storage::__error_first_deriv() const
+		void ODEStorage::__error_first_deriv() const
 		{
 			std::string errmsg = "This solution is for an ode of order 1, i.e. it does not have a\n";
 			errmsg += "first derivative value computed. Please check your code.";

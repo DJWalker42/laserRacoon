@@ -16,12 +16,8 @@
 	the time duration as a double in case a user wishes to use or store this elsewhere. Simples.
 
 	Note we have given three wrappers for each clock defined in chrono. However, on my system
-	(Dell optiplex 7010, intel i7, Windows 7 professional) all three clocks are synonymous*. You
-	will have to test to see if this is the case on your specific platform. From experience on my
-	machine I would trust only the first three significant figures of the display; possibly the fourth. 
-	Again this is something you should test for yourselves on your particular platform.
-
-	*I might be misunderstanding the use of the clocks in chrono so feel free to correct my code.
+	all three clocks are synonymous. You will have to test to see if this is the case on your specific
+	platform.
 
 	As a point about effective C++ code I have inherited from the chrono namespace, for example, the 
 	timer class is a chrono::steady_clock class. But as I haven't written any of my own constructors 

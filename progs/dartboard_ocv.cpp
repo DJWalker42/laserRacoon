@@ -34,7 +34,14 @@ int main(){
 	std::cout << "Input the number of repeats: "; 
 	std::cin >> repeat;
 
-	phys::stdVec_d bin(100,0.); //vector to in-order to bin results to plot as a histogram
+
+	double xmin {2.1};
+	double xmax {4.1};
+	double x_span {xmax - xmin};
+
+	size_t num_bins = 100;
+
+	phys::stdVec_d bin(num_bins, 0.); //vector to in-order to bin results to plot as a histogram
 	phys::stdVec_d pi_est; //value to store the current pi estimate for a given experiment
 	
 	
@@ -61,9 +68,9 @@ int main(){
 
 		pi_est.push_back(4.0*double(hit)/double((hit+miss)));
 
-		size_t idx = size_t((pi_est[k]*100.0/0.3) - 1000);// bin range [3.0, 3.3) steps 0.003
+		size_t idx = size_t((pi_est[k] - xmin) * num_bins / x_span);
 
-		if(idx < 100) ++bin[idx]; //else out-of-range of bins
+		if(idx < num_bins) ++bin[idx]; //else out-of-range of bins
 		//std::cout << "Done " << k << "/" << repeat << "\n"; 
 	}
 
@@ -72,17 +79,18 @@ int main(){
 	std::cout << "No darts thrown: " << darts_to_throw << "\n";
 	std::cout << "Mean value: " << stats.first << " Sigma:" << stats.second << "\n";
 
-	phys::stdVec_d xbin(100);
+	phys::stdVec_d xbin(num_bins);
 
-	for(size_t i = 0; i < 100; ++i)
-		xbin[i] = 3.0 + 0.003 * i;
+	for(size_t i = 0; i < num_bins; ++i)
+		xbin[i] = xmin + double(i) * x_span/num_bins;
 
 	phys::storage::Storage<double> pi_dart("Pi estimate", "Frequency");
 	pi_dart.copy(xbin, bin);
 
 	phys::visual::Viewer viewer;
 
-	viewer.set_x_range(3., 3.3);
+	viewer.set_x_range(xmin, xmax);
+	viewer.withPulses();
 
 	viewer.plot(pi_dart);
 

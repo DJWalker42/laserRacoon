@@ -69,7 +69,7 @@ namespace phys{
 		/*	Constructor for the ODE virtual base class. 
 			Any member not in list is assigned using initialise_solver(), 
 			except m_k which is assigned in the implementation of solve or fullSolve*/
-		ODE_solver::ODE_solver(	phys::diffs::Diff_eqn* p_diff,
+		ODESolver::ODESolver(	phys::diffs::Diff_eqn* p_diff,
 								const state& system,
 								double step) :								
 								m_ptr_diff_eqn(p_diff),
@@ -79,7 +79,7 @@ namespace phys{
 			initialise_solver();
 		}
 
-		void ODE_solver::set_system(const state& system, phys::diffs::Diff_eqn* p_diff, double step)
+		void ODESolver::set_system(const state& system, phys::diffs::Diff_eqn* p_diff, double step)
 		{
 			m_current = system;
 			if (p_diff != 0)
@@ -90,13 +90,13 @@ namespace phys{
 			init_method();
 		}
 
-		void ODE_solver::set_step(double step)
+		void ODESolver::set_step(double step)
 		{ 
 			m_step = step; 
 			init_method(); 
 		}
 
-		void ODE_solver::initialise_solver()
+		void ODESolver::initialise_solver()
 		{
 			int order = m_ptr_diff_eqn->get_order();
 			if (order == 1 && m_current.dy.empty() == false)
@@ -114,14 +114,14 @@ namespace phys{
 			and we skip the loop in deriv and only call deriv_B. Else if 2nd order m_mid_idx = num of 
 			dimensions in the problem and necessarily shuffle the values in the m_deriv_result vector.
 		*/
-		stdVec_d ODE_solver::deriv(double x, const stdVec_d& y)
+		stdVec_d ODESolver::deriv(double x, const stdVec_d& y)
 		{
 			for(size_t i = 0; i < m_mid_idx; ++i)
 				m_deriv_result[i]= y[i + m_mid_idx];			
 			return deriv_B(x,y); 
 		}
 
-		stdVec_d ODE_solver::deriv_B(double x, const stdVec_d& y)
+		stdVec_d ODESolver::deriv_B(double x, const stdVec_d& y)
 		{
 			for(int i = m_mid_idx; i < m_num_of_vars; ++i)
 				m_deriv_result[i] = m_ptr_diff_eqn->differential_function(x,y,m_dims,i-m_mid_idx);
@@ -129,7 +129,7 @@ namespace phys{
 		}
 
 		//@query: The tolerance for an end being close enough is hard coded - should this be changed to a variable?
-		size_t ODE_solver::num_steps(double start, double& end)
+		size_t ODESolver::num_steps(double start, double& end)
 		{			
 			double N = (end - start)/m_step; 
 			assert(N > 0); //Could we handle this better?
@@ -145,7 +145,7 @@ namespace phys{
 		}
 
 		/* --- Euler --- */
-		/* Here we can directly update m_current w/o a local state being instantiated */
+		/* Here we can directly update m_current without a local state being instantiated */
 		state Euler::solve() 
 		{
 			m_k[0] = deriv(m_current.x, m_current.y); 
@@ -155,10 +155,10 @@ namespace phys{
 			return m_current;
 		}
 
-		phys::storage::ODE_Storage Euler::fullSolve(double end)
+		phys::storage::ODEStorage Euler::fullSolve(double end)
 		{
 			size_t N = num_steps(m_current.x, end), count = 0;
-			phys::storage::ODE_Storage container(m_current);
+			phys::storage::ODEStorage container(m_current);
 			while( count++ < N )
 			{
 				container.store(m_current);
@@ -186,10 +186,10 @@ namespace phys{
 			return next;
 		}
 
-		phys::storage::ODE_Storage Imp_Euler::fullSolve(double end)
+		phys::storage::ODEStorage Imp_Euler::fullSolve(double end)
 		{
 			size_t N = num_steps(m_current.x, end), count = 0;
-			phys::storage::ODE_Storage container(m_current);
+			phys::storage::ODEStorage container(m_current);
 			state next = m_current;
 			while( count++ < N )
 			{
@@ -222,10 +222,10 @@ namespace phys{
 			return next;
 		}
 
-		phys::storage::ODE_Storage Mod_Euler::fullSolve(double end)
+		phys::storage::ODEStorage Mod_Euler::fullSolve(double end)
 		{
 			size_t N = num_steps(m_current.x, end), count = 0;
-			phys::storage::ODE_Storage container(m_current);
+			phys::storage::ODEStorage container(m_current);
 			state next = m_current;
 			while( count++ < N )
 			{
@@ -268,10 +268,10 @@ namespace phys{
 			return next;
 		}
 
-		phys::storage::ODE_Storage RK4::fullSolve(double end)
+		phys::storage::ODEStorage RK4::fullSolve(double end)
 		{
 			size_t N = num_steps(m_current.x, end), count = 0;
-			phys::storage::ODE_Storage container(m_current);
+			phys::storage::ODEStorage container(m_current);
 			state next = m_current;
 			while( count++ < N )
 			{
@@ -323,10 +323,10 @@ namespace phys{
 			return next;
 		}
 
-		phys::storage::ODE_Storage Stormer_Verlet::fullSolve(double end)
+		phys::storage::ODEStorage Stormer_Verlet::fullSolve(double end)
 		{
 			size_t N = num_steps(m_current.x, end), count = 0;
-			phys::storage::ODE_Storage container(m_current);
+			phys::storage::ODEStorage container(m_current);
 			container.store(m_previous); //initial system data
 			state next = m_current;
 			while( count++ < N )
@@ -376,10 +376,10 @@ namespace phys{
 		}
 
 		/*	This will store the data with the velocity synchronised to the position as an option. */
-		phys::storage::ODE_Storage Leapfrog::fullSolve(double end)
+		phys::storage::ODEStorage Leapfrog::fullSolve(double end)
 		{
 			size_t N = num_steps(m_current.x, end), count = 0;
-			phys::storage::ODE_Storage container(m_current);
+			phys::storage::ODEStorage container(m_current);
 			state next = m_current;
 			while( count++ < N )
 			{
@@ -396,14 +396,14 @@ namespace phys{
 			return (m_synchronise) ? sync(container) : container;
 		}
 
-		phys::storage::ODE_Storage Leapfrog::sync(const phys::storage::ODE_Storage& data)
+		phys::storage::ODEStorage Leapfrog::sync(const phys::storage::ODEStorage& data)
 		{
 			//grab the stored system data
 			stdVec_d inde = data.get_independent();
 			stdVec_d depn = data.get_dependent();
 			stdVec_d deri = data.get_first_deriv();
 
-			phys::storage::ODE_Storage retval(state(inde[0], depn[0], deri[0]));
+			phys::storage::ODEStorage retval(state(inde[0], depn[0], deri[0]));
 			size_t n = inde.size();
 			//sync the velocity at each integration step
 			for (size_t p = 0; p < n; ++p)
@@ -433,10 +433,10 @@ namespace phys{
 			return next;
 		}
 
-		phys::storage::ODE_Storage Velocity_Verlet::fullSolve(double end)
+		phys::storage::ODEStorage Velocity_Verlet::fullSolve(double end)
 		{
 			size_t N = num_steps(m_current.x, end), count = 0;
-			phys::storage::ODE_Storage container(m_current);
+			phys::storage::ODEStorage container(m_current);
 			state next = m_current;
 			while( count++ < N )
 			{
@@ -534,9 +534,9 @@ namespace phys{
 			return next;
 		}
 
-		phys::storage::ODE_Storage RKF45::fullSolve(double end)
+		phys::storage::ODEStorage RKF45::fullSolve(double end)
 		{
-			phys::storage::ODE_Storage container(m_current);
+			phys::storage::ODEStorage container(m_current);
 			state next = m_current;
 			yhat = m_current.y;
 			while( sign*next.x < sign*end ){
@@ -615,9 +615,9 @@ namespace phys{
 			return container;
 		}
 
-		phys::storage::ODE_Storage RKF45::fullSolveWrapped(double end)
+		phys::storage::ODEStorage RKF45::fullSolveWrapped(double end)
 		{
-			phys::storage::ODE_Storage container(m_current);
+			phys::storage::ODEStorage container(m_current);
 			do{
 				this->wrap();
 				if (m_targetState == NO_TARGET || m_targetHit == true){
@@ -645,7 +645,7 @@ namespace phys{
 		}
 
 		/* As Numerov is designed to only deal with one dimension we know that the vectors
-		involved will only ever be of size 2 holding the m_current two values of u(x) or q(x)*/
+		involved will only ever be of size 2 holding the current two values of u(x) or q(x)*/
 		state Numerov::solve()
 		{
 			state next = m_current;
@@ -665,11 +665,11 @@ namespace phys{
 		/*	Set up the storage as a first order ode with one dimension --
 			avoids saving repeat values from the previous iteration
 		*/ 
-		phys::storage::ODE_Storage Numerov::fullSolve(double end)
+		phys::storage::ODEStorage Numerov::fullSolve(double end)
 		{
 			size_t N = num_steps(m_current.x, end), count = 0;
 			state temp (0.0, 0.0); //arbitrary double values.
-			phys::storage::ODE_Storage container(temp); //this just sets up the storage, it doesn't store data.
+			phys::storage::ODEStorage container(temp); //this just sets up the storage, it doesn't store data.
 			state next = m_current;
 			while( count++ < N )
 			{
@@ -740,10 +740,10 @@ namespace phys{
 			return next;
 		}
 
-		phys::storage::ODE_Storage Numerov_s::fullSolve(double end)
+		phys::storage::ODEStorage Numerov_s::fullSolve(double end)
 		{
 			size_t N = num_steps(m_current.x, end), count = 0;
-			phys::storage::ODE_Storage container(m_current);
+			phys::storage::ODEStorage container(m_current);
 			state next = m_current;
 			while( count++ < N )
 			{
@@ -779,7 +779,7 @@ namespace phys{
 
 		/* ---------General error messages for the ODE solver class --------------------------------*/
 
-		void ODE_solver::__error_message_order_1() const
+		void ODESolver::__error_message_order_1() const
 		{
 			std::string errmsg = "You have called/defined an order one ODE but have\n";
 			errmsg += "specified first derivative varibles which are NOT required.\n";
@@ -788,7 +788,7 @@ namespace phys{
 			throw(std::runtime_error(errmsg));
 		}
 
-		void ODE_solver::__error_message_order_2() const
+		void ODESolver::__error_message_order_2() const
 		{
 			std::string errmsg = "You have called/defined an order two ODE but have\n";
 			errmsg += "not specified first derivative varibles which ARE required.\n";

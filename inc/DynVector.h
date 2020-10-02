@@ -1,16 +1,14 @@
-#ifndef PHYSVECTOR_HPP
-#define PHYSVECTOR_HPP
+#ifndef LASER_RACOON_DYNVECTOR_H
+#define LASER_RACOON_DYNVECTOR_H
 
-#include "Complex.h"
 #include "Helpers.h"
 #include <cassert>
-
+#include <complex>
+#include <cstdint>
 
 namespace phys{
 	/*****************************************************************
 	*	Overload operators for the std::vector class inside our namespace
-		@TODO: add global operators to call these so that we don't have
-		to use using namespace, or the function-type call
 	*****************************************************************/
 
 	/* Increment the elements in the lhs by the corresponding elements in the rhs
@@ -89,20 +87,19 @@ namespace phys{
 	template<typename T>
 	const std::vector<T> sub_vector( const std::vector<T>& vec, size_t start, size_t end); 
 
+	/* Type definition for the std::complex template - we only want doubles*/
+	using complex = std::complex<double>; //access using phys::complex
+
 	/* Type definitions for convenience */    
     using stdVec_d = std::vector<double>;
-    using stdVec_i = std::vector<int>;
-    using stdVec_u = std::vector<unsigned int>;
+    using stdVec_i = std::vector<int32_t>;
+    using stdVec_u = std::vector<uint32_t>;
     using stdVec_s = std::vector<size_t>;
     using stdVec_c = std::vector<phys::complex>;
-}
 
-template<typename T>
-std::ostream& operator<< (std::ostream& os, const std::vector<T>& v)
-{
-	return phys::operator<<(os, v);
-}//global output stream operator for convenience
+} //namespace
 
-#include "DynVector.inl"
 
-#endif
+#include "DynVector.inl" //include implementations
+
+#endif //header guard

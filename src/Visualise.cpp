@@ -44,7 +44,7 @@ namespace phys{
 				{				
 					originX += plot.x + x_axis.scale * fabs(x_axis.min);
 				}
-				else if (fabs(x_axis.max) > fabs(x_axis.min)) //both +ve
+				else if (fabs(x_axis.max) >= fabs(x_axis.min)) //both +ve
 				{
 					originX = plot.x;
 				}
@@ -60,7 +60,7 @@ namespace phys{
 					originY = (plot.y + y_axis.scale * y_axis.max) - originY;
 
 				}
-				else if (fabs(y_axis.max) > fabs(y_axis.min)) //both +ve
+				else if (fabs(y_axis.max) >= fabs(y_axis.min)) //both +ve
 				{
 					originY = plot.y + plot.height;
 				}
@@ -178,7 +178,7 @@ namespace phys{
 		//Viewer functions	
 		//--------------------------------------------------------------------------------------------------------
 		// ODE storage argument - makes a choice then calls usual plot function
-		void Viewer::plot(const phys::storage::ODE_Storage& data,
+		void Viewer::plot(const phys::storage::ODEStorage& data,
 			graph_choice choice,
 			uint dim1,
 			uint dim2)
@@ -417,6 +417,15 @@ namespace phys{
 						cv::Point((it + 1)->first, (it + 1)->second), m_dt_colour);
 				}
 			}
+
+			if (m_pulses) {
+				for (ccoords_it it = data.begin(); it != data.end(); ++it) {
+					cv::line(m_BG, cv::Point(it->first, it->second),
+					cv::Point(it->first, m_axis_origin.y), m_dt_colour);
+				}
+
+			}
+
 			cv::imshow(m_plot_name, m_BG);
 			cv::waitKey(m_pause);
 			return;
@@ -453,8 +462,11 @@ namespace phys{
 			using namespace phys::maths;
 			cv::Point temp, start(-1, -1), end(-1, -1);
 
+			if (m_using_range_y) c -= m_y_range.first;
+
 			//compute intercept point
 			int intercept = int(round(m_y_axis.scale * c));
+
 			temp = cv::Point(m_axis_origin.x, m_axis_origin.y - intercept);
 
 			/***** We need to maintain dx and dy parity throughout ******/
@@ -649,7 +661,7 @@ namespace phys{
 			}
 		}
 
-		void Viewer::add_data(const phys::storage::ODE_Storage& data,
+		void Viewer::add_data(const phys::storage::ODEStorage& data,
 			uint dim1,
 			uint dim2)
 		{
