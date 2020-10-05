@@ -11,16 +11,22 @@
 	User is asked for the number of darts to throw to get an estimate of pi.
 	Then asked the number of times to repeat the experiment for statistical analysis.
 	
-	Pi is estimated by throwing darts at a unit square board defined by (0,0), (1,0), (0,1), and (1,1). 
+	Pi is estimated by throwing darts at a unit square board defined by (0,0), (1,0), (0,1),
+	and (1,1).
 	All darts thrown hit this unit square by design.
-	By comparing the ratio of darts to land within a unit quarter circle (centred at the origin) to those that
-	land outside said quarter circle we can obtain an estimate for pi.To explain, the probability that a randomly thrown
-	dart will land within a given area is proportional to the size of that given area. Thus, the probability that a
-	dart lands within the unit quarter circle is given by k.pi/4, where k is the constant of proportionality. 
-	In this case we can state that k is unity as we have designed all darts thrown to hit the unit square. Thus, the ratio
-	of "hits" (landed in the quarter circle) to "misses" (not landed in the quarter circle) should equal pi/4.
+	By comparing the ratio of darts to land within a unit quarter circle (centred at the origin)
+	to those that land outside said quarter circle we can obtain an estimate for pi.To explain,
+	the probability that a randomly thrown dart will land within a given area is proportional to
+	the size of that given area. Thus, the probability that a dart lands within the unit quarter
+	circle is given by k.pi/4, where k is the constant of proportionality. In this case, we can
+	state that k is unity as we have designed all darts thrown to hit the unit square. Thus,
+	the ratio of "hits" (landed in the quarter circle) to "misses" (not landed in the quarter
+	circle) should equal pi/4.
+
+	Experiment with the number of darts thrown vs. the number of repeats paying specific attention
+	to the statistics.
 	
-	Experiment with the number of darts thrown vs. the number of repeats paying specific attention to the statistics.
+	NOTE: bin size is constant, x_span/num_bins == 0.02 (with x_span = 2, num_bins = 100)
 	
 */
 
@@ -48,7 +54,7 @@ int main(){
 	/** main loop **/
 	for(size_t k = 0; k < repeat; ++k)
 	{
-		phys::RNG<> rand_0_1(0.,1.);//,k);
+		phys::RNG<> rand_0_1(0.,1.); //uniform distribution on [0, 1)
 		std::vector<double> v_rand = rand_0_1.random_vector(2*darts_to_throw);
 
 		std::vector<double> result;
