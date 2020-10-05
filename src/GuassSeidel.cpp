@@ -11,7 +11,7 @@ void gaussSeidel(	stdVec_d& f,
 
 	double a {coeffs[0]}, b {coeffs[1]}, c {coeffs[2]}, d {coeffs[3]};
 
-	int n {f.size()};
+	int n {int(f.size())};
 	double h {(x_n - x_1)/(n - 1)};
 
 	double theta {c - 2 * a /h/h};
@@ -35,7 +35,7 @@ void gaussSeidel(	stdVec_d& f,
 
 			if ( fabs( (ff - f[i])/ff ) > tol ) tol_achieved = false;
 
-			f[i] == ff;
+			f[i] = ff;
 		}
 	}
 
