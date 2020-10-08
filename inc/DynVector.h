@@ -75,10 +75,6 @@ namespace phys{
 	template<typename T>
 	const std::vector<T> operator/(const std::vector<T>& lhs, const T& rhs);
 
-	//Output operator for vectors - returns non-const reference for chaining
-	template<typename T>
-	std::ostream & operator<<(std::ostream& os, const std::vector<T>& v);
-
 	/* Read in a vector from a text file: use std::getline to get string argument.*/
 	template<typename T>
 	const std::vector<T> read_vector(const std::string& line, const T& t = T());
@@ -99,6 +95,9 @@ namespace phys{
 
 } //namespace
 
+//Output operator for vectors - returns non-const reference for chaining
+template<typename T>
+std::ostream & operator<<(std::ostream& os, const std::vector<T>& v);
 
 #include "DynVector.inl" //include implementations
 

@@ -11,7 +11,7 @@ int main(){
 
 	size_t N = 3;
 
-	mat A;
+	mat_d A;
 
 	stdVec_d row1(N), row2(N), row3(N);
 
@@ -23,7 +23,7 @@ int main(){
 	A.append_row(row2);
 	A.append_row(row3);
 
-	mat B;
+	mat_d B;
 	stdVec_d rowA(2), rowB(2), rowC(2);
 	rowA[0] = 40; rowA[1] = -30;
 	rowB[0] = 51; rowB[1] = -15;
@@ -35,7 +35,7 @@ int main(){
 
 	LinearSolver* chol = new Cholesky( A );
 	
-	mat X = chol->solve(B); //should give the solution vectors [1,2,3] and [-1,0,1]
+	mat_d X = chol->solve(B); //should give the solution vectors [1,2,3] and [-1,0,1]
 
 	std::cout << "Cholesky\n";
 	std::cout << X << "\n";

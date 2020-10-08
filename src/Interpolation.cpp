@@ -3,7 +3,6 @@
 #include "Interpolation.h"
 
 namespace phys{
-	namespace interp{
 
 		/********************************************************
 		*	Constructors
@@ -234,6 +233,4 @@ namespace phys{
 		*	Cubic Spline Implementation in "Spline.cpp"
 		*************************************************************************/
 
-
-	}
-}
+} //namespace

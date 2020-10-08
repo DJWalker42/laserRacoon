@@ -27,7 +27,7 @@ double f2(double x){
 int fresnel_guass()
 {
 	//use Gauss-Legendre quadrature with 20 knots
-	phys::quad::Legendre lege(20);
+	phys::Legendre lege(20);
 
 	//set lower limit to zero, increment upper limit to a max of 5.0
 	double b = 0.0;
@@ -46,7 +46,7 @@ int fresnel_guass()
 	}
 
 	//plot result
-	phys::visual::Viewer viewer;
+	phys::Viewer viewer;
 	viewer.withLines();
 	viewer.set_plot_name("Guass");
 	viewer.plot(v, I);
@@ -56,7 +56,7 @@ int fresnel_guass()
 
 int fresnel_romberg()
 {
-	phys::quad::Romberg romb;
+	phys::Romberg romb;
 
 	//set lower limit to zero, adjust upper limit to a max of 5.0
 	double b = 0.0;
@@ -73,7 +73,7 @@ int fresnel_romberg()
 		v.push_back(b);
 	}
 
-	phys::visual::Viewer viewer;
+	phys::Viewer viewer;
 
 	viewer.set_plot_name("Romberg");
 	viewer.withLines();

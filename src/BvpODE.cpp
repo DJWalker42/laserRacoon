@@ -18,7 +18,7 @@ namespace phys{
 					m_pBCs(pBCs),
 					m_numNodes(numNodes),
 					m_pGrid(new FiniteDifferenceGrid(m_numNodes, m_pODE->m_xMin, m_pODE->m_xMax)),
-					m_pLhsMat(new mat(numNodes - 2, numNodes - 2)),
+					m_pLhsMat(new mat_d(numNodes - 2, numNodes - 2)),
 					m_pRhsVec(new stdVec_d(numNodes - 2)),					
 					m_SolVec(numNodes - 2)					
 #ifdef _HAVE_EIGEN
@@ -60,7 +60,7 @@ namespace phys{
 
 	void BvpODE::plot() const
 	{
-		visual::Viewer viewer;
+		Viewer viewer;
 		viewer.plot(m_pGrid->getGrid1D(), m_SolVec);
 	}
 

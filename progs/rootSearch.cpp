@@ -64,11 +64,11 @@ int main ()
 	 *  constructs? (Hint: smart pointers)
 	 */
 
-	phys::roots::RootSearch* bisect = new phys::roots::Bisection(&function, left, right);
-	phys::roots::RootSearch* secant = new phys::roots::Secant(&function, left, right);
-	phys::roots::RootSearch* newton = new phys::roots::Newton_Raphson(&function, &derivative, left);
-	phys::roots::RootSearch* hybri1 = new phys::roots::Hybrid_B_N_R(&function, &derivative, left, right);
-	phys::roots::RootSearch* hybri2 = new phys::roots::Hybrid_B_S(&function, left, right);
+	phys::RootSearch* bisect = new phys::Bisection(&function, left, right);
+	phys::RootSearch* secant = new phys::Secant(&function, left, right);
+	phys::RootSearch* newton = new phys::Newton_Raphson(&function, &derivative, left);
+	phys::RootSearch* hybri1 = new phys::Hybrid_B_N_R(&function, &derivative, left, right);
+	phys::RootSearch* hybri2 = new phys::Hybrid_B_S(&function, left, right);
 	bisect->find_root(1); //the argument requests the function to print its output
 	secant->find_root(1);
 	newton->find_root(1);

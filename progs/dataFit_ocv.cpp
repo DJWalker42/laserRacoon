@@ -14,30 +14,30 @@
 
 int main(int argc, char** argv)
 {
-	std::string filename = "../../../../laserRacoon/progs/resource/millikanData.txt";
+	std::string filename = "../resource/millikanData.txt";
 
 	//... or use an argument in the call to the binary
 	if (argc > 1) {
 		filename = std::string (argv[1]); 
 	}
 
-	phys::storage::Storage<double> data;
+	phys::Storage<double> data;
 
 	data.read(filename); 
 
-	std::pair<double,double> llsq_result = phys::dfit::llsq(data.get_independent(), data.get_dependent()); 
+	std::pair<double,double> llsq_result = phys::llsq(data.get_independent(), data.get_dependent());
 
 	std::cout << "Gradient = " << llsq_result.first << ", y intercept = " << llsq_result.second  << "\n";
 
-	std::pair<double,double> direct_res = phys::dfit::linear_fit(data.get_independent(), data.get_dependent());
+	std::pair<double,double> direct_res = phys::linear_fit(data.get_independent(), data.get_dependent());
 
 	std::cout << "Gradient = " << direct_res.first << ", y intercept = " << direct_res.second  << "\n";
 
-	std::pair<phys::stdVec_d,phys::mat> poly_fit = phys::dfit::polynomial_fit(size_t(6), data.get_independent(), data.get_dependent());
+	std::pair<phys::stdVec_d,phys::mat_d> poly_fit = phys::polynomial_fit(size_t(6), data.get_independent(), data.get_dependent());
 
 	std::cout << "coeff = \t" << poly_fit.first << "\n";
 
-	phys::mat U = poly_fit.second;
+	phys::mat_d U = poly_fit.second;
 
 	size_t n = U[0].size();
 
@@ -55,9 +55,9 @@ int main(int argc, char** argv)
 
 	std::cout << " electron charge = " << e0 << "\t +/- " << de << "\n";
 
-	phys::visual::Viewer viewer;
+	phys::Viewer viewer;
 
-	viewer.set_shape(phys::visual::CROSS, 10);
+	viewer.set_shape(phys::CROSS, 10);
 
 	viewer.plot(data); 
 

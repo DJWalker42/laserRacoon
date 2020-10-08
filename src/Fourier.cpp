@@ -65,7 +65,7 @@ const stdVec_c DFT(const stdVec_c &data) {
 
 const stdVec_c FFT(stdVec_c &data) {
 	size_t N = data.size();
-	size_t tN = phys::maths::next_power_of_2(N);
+	size_t tN = phys::next_power_of_2(N);
 	N = tN;
 	size_t M = 0;
 	while (tN >>= 1)

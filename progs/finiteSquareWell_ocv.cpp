@@ -18,10 +18,10 @@
 
 
 //convenience globals to compute hbar2
-double h = phys::constants::planck;
-double eV = phys::constants::electron_charge;
-double me = phys::constants::electron_mass;
-double pi = phys::constants::PI;
+double h = phys::planck;
+double eV = phys::electron_charge;
+double me = phys::electron_mass;
+double pi = phys::PI;
 
 // using these units for hbar^2 keeps numbers computer friendly
 // and we can say the mass of the electron is unity in calculations
@@ -55,8 +55,8 @@ double odd(double energy) {
 
 int main (int argc, char ** argv) {
 
-	using Bisecant = phys::roots::Hybrid_B_S;
-	using Storage = phys::storage::Storage<double>;
+	using Bisecant = phys::Hybrid_B_S;
+	using Storage = phys::Storage<double>;
 
 	//you may want to change the location of the data file
 	std::string wavefunction_filename {"./wavefunctions.log"};
@@ -176,7 +176,7 @@ int main (int argc, char ** argv) {
 
 	wavefunctions.write(wavefunction_filename, true); //2nd arg. == print headers
 
-	phys::visual::Viewer viewer;
+	phys::Viewer viewer;
 	viewer.set_key_name(wavefunctions.get_key_names());
 	viewer.set_x_name("x/Angs.");
 	viewer.set_y_name("energy/eV");

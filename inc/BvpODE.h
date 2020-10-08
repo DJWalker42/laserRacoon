@@ -48,7 +48,7 @@ namespace phys{
 
 		FiniteDifferenceGrid* m_pGrid;
 				
-		mat* m_pLhsMat; 
+		mat_d* m_pLhsMat; 
 		stdVec_d* m_pRhsVec;
 		stdVec_d m_SolVec;
 

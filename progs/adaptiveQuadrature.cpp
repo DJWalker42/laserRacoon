@@ -56,8 +56,8 @@ double f_int(double x) {
 
 int main (int argc, char ** argv) {
 
-	using Adaptive = phys::quad::Adaptive;
-	using Trapezoid = phys::quad::Trapezoid;
+	using Adaptive = phys::Adaptive;
+	using Trapezoid = phys::Trapezoid;
 
 	Adaptive adaptive;
 	Trapezoid trapezoid;

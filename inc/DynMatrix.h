@@ -215,11 +215,11 @@ namespace phys{
 	template<class T>
 	matrix<T> read_matrix( const std::string& filename, bool transpose = false );
 
-	typedef matrix<double>	mat;
-	typedef matrix<int>		mat_i;
-	typedef matrix<size_t>	mat_s;
-}
+	using mat_d = matrix<double>;
+	using mat_i = matrix<int>;
+
+} //namespace
 
 #include "DynMatrix.inl"
 
-#endif
+#endif //header guard

@@ -22,15 +22,15 @@ int main ()
 	double step = 0.02; //integration step
 	double finish = 10.0; //end time
 
-	phys::ode::state initial_system(t,p,v); 
-	phys::diffs::Diff_eqn* shm_eqn = new phys::diffs::SHM();
-	phys::ode::ODESolver* rk4_solver = new phys::ode::RKF45(shm_eqn, initial_system, step);
-	phys::storage::ODEStorage container = rk4_solver->fullSolve(finish);
+	phys::state initial_system(t,p,v);
+	phys::Diff_eqn* shm_eqn = new phys::SHM();
+	phys::ODESolver* rk4_solver = new phys::RKF45(shm_eqn, initial_system, step);
+	phys::ODEStorage container = rk4_solver->fullSolve(finish);
 
 	delete shm_eqn;
 	delete rk4_solver;
 
-	phys::visual::Viewer viewer;
+	phys::Viewer viewer;
 
 	//uncomment the second argument to see the phase-space plot
 	viewer.plot(container);//, phys::visual::Viewer::PHASE ); 

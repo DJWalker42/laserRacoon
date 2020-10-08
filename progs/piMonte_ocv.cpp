@@ -40,7 +40,7 @@ int main (int argc, char ** argv) {
 
 	printf("\nfinal pi estimate: %f\n\n", 4.* hits/n);
 
-	phys::visual::Viewer viewer;
+	phys::Viewer viewer;
 	viewer.set_y_range(2.5, 3.5);
 	//viewer.withLines();
 	viewer.plot(darts_thrown, pi_estimate);

@@ -12,8 +12,8 @@ double sincSqr(double x_value);
 
 int main(int argc, char ** argv) {
 
-	using Linear = phys::interp::Linear;
-	using Data = phys::interp::data;
+	using Linear = phys::Linear;
+	using Data = phys::data;
 
 	const int points = 100;
 	const int data_points = 10;

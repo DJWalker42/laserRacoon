@@ -40,15 +40,15 @@ double u1 = 1.e-10;					//!< value of wavefunction at second grid point
 phys::stdVec_d phi;					//!< Storage for the wavefunction(s)
 size_t i_match_p1;					//!< Index location where phi switches from left to right integration.
 
-phys::ode::state u_lft(x_lft, u0, u1);	//!< Constructs for the Numerov solver Left initial
-phys::ode::state u_rht(x_rht, u0, u1);	//!< Right initial
+phys::state u_lft(x_lft, u0, u1);	//!< Constructs for the Numerov solver Left initial
+phys::state u_rht(x_rht, u0, u1);	//!< Right initial
 
-phys::diffs::Diff_eqn* q_func = new phys::diffs::User_eqn(); //auto deleted at end of program
+phys::Diff_eqn* q_func = new phys::User_eqn(2); //auto deleted at end of program
 
 //!< harmonic oscillator potential / square potential well (uncomment choice)
 double V(double x)      
 {
-	using namespace phys::constants;
+	using namespace phys;
 	return (0.5 * electron_mass * omega * omega * x * x);// harmonic potential
 	//return fabs(x) > 1.0 ? 10.0 : 0.0; //square potential Vo = 10 eV, width = 2 nm
 }
@@ -73,12 +73,12 @@ double find_match( double start, double step, double end )
 //!< q(x) function for the Numerov method.
 double q (double x)
 {
-	using namespace phys::constants;
+	using namespace phys;
 	return 2 * 10.0 * electron_mass / (hbar_ev * hbar_ev) * (E - V(x));
 }
 
 //interface to differential equation object -- compiler optimisations *may* remove redundant arguments here - but they are all cheap and quick to pass.
-double phys::diffs::User_eqn::differential_function(double x, const stdVec_d& y, int N, int i)
+double phys::User_eqn::differential_function(double x, const stdVec_d& y, int N, int i)
 {
 	return q(x);
 }
@@ -103,8 +103,8 @@ double F(double En)
 	phys::stdVec_d phi_lft(3, 0.0), phi_rht(3, 0.0); 
 
 	//integrate from the left up to one step past the matching point.(-5 inc.-> match + step)
-	phys::ode::Numerov numerov_lft(q_func, u_lft, step);
-	phys::storage::ODEStorage temp = numerov_lft.fullSolve(match + step);
+	phys::Numerov numerov_lft(q_func, u_lft, step);
+	phys::ODEStorage temp = numerov_lft.fullSolve(match + step);
 	phys::stdVec_d lft_vals = temp.get_dependent();
 
 	//lft_vals size - 1 gives switching index i_match + 1
@@ -115,7 +115,7 @@ double F(double En)
 	phi_lft[2] = lft_vals[i_match_p1];		//match + step
 
 	//integrate from the right up to one step before the matching point (+5 dec.-> match - step)
-	phys::ode::Numerov numerov_rht(q_func, u_rht, -step);
+	phys::Numerov numerov_rht(q_func, u_rht, -step);
 	temp = numerov_rht.fullSolve(match - step);
 	phys::stdVec_d rht_vals = temp.get_dependent();
 
@@ -197,7 +197,7 @@ int main()
 		std::cin >> E_max;
 	}while(E_max > V(x_rht));
 
-	phys::storage::Storage<double> potential, levels, wavefunction;
+	phys::Storage<double> potential, levels, wavefunction;
 
 	for(size_t i = 0; i <= size_t(N) ; ++i)
 	{
@@ -220,7 +220,7 @@ int main()
 		//monitor dE
         E_old = E;
         E += dE;
-		phys::roots::Hybrid_B_S secant(F); //default tolerance 1.e-8
+		phys::Hybrid_B_S secant(F); //default tolerance 1.e-8
 		if( secant.find_brackets(E, dE, E_max) )
 		{
 			E = secant.find_root();
@@ -260,15 +260,15 @@ int main()
 			data[j][i] += energy[j];
 		}
 
-	phys::visual::Viewer viewer;
+	phys::Viewer viewer;
 	viewer.set_key_name( wavefunction.get_key_names() );
 	viewer.set_x_name("x/nm");
 	viewer.set_y_name("Energy/eV");
-	viewer.set_shape(phys::visual::CROSS, 5);
+	viewer.set_shape(phys::CROSS, 5);
 	viewer.set_x_range(-3,3);
 	viewer.animation();
 	viewer.plot(wavefunction.get_independent(), data);
-	viewer.set_shape(phys::visual::SQUARE, 5);
+	viewer.set_shape(phys::SQUARE, 5);
 	viewer.noAnimation();
 	viewer.withLines();
 	viewer.add_data(potential.get_independent(), potential.get_dependent(), true);

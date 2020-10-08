@@ -46,12 +46,12 @@ int main(){
 		}
 	}
 
-	phys::storage::Storage<double> nuclear_container("time", "N");
+	phys::Storage<double> nuclear_container("time", "N");
 	nuclear_container.copy(time, nuclei);
 
 	//nuclear_container.write("./nuclear_decay.txt", true);
 
-	phys::visual::Viewer viewer;
+	phys::Viewer viewer;
 	viewer.plot(nuclear_container);
 
 	return 0;

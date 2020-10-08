@@ -14,7 +14,7 @@ double deriv(double x) {
 
 int main (int argc, char ** argv) {
 
-	using NewtonRaphson = phys::roots::Newton_Raphson;
+	using NewtonRaphson = phys::Newton_Raphson;
 
 	double x0 = 0.5; //initial guess
 

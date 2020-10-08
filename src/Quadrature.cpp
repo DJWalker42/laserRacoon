@@ -7,8 +7,6 @@
 #include "GaussKnotsWeights.h"
 
 namespace phys {
-namespace quad {
-
 
 /*
  * |E| is the upper bound of the error of the quadrature rule
@@ -251,7 +249,7 @@ Legendre::Legendre(uint points) :
 
 void Legendre::initialise() //function called in body of constructor
 {
-	// operator >> in this context is bit shift: x >> 1 means bit shift the value in x one to the right.
+	// operator>> in this context is bit shift: x >> 1 means bit shift the value in x one to the right.
 	uint m = (m_numKnots + 1) >> 1;
 	/* Load appropriate predefined values for abscissas and weights */
 	uint i = 0;
@@ -423,8 +421,9 @@ void Laguerre::initialise() //function called in body of constructor
 			}
 		}
 	} while (m_knots.empty() && ++i < max);
-	/*	If the values have not been predefined for a particular n
-	 then compute values	*/
+
+	//i = max;
+	/*	If the values have not been predefined for a particular n then compute values	*/
 	if (i == max) {
 		std::pair<stdVec_d, stdVec_d> xw = compute_x_w();
 		m_knots = xw.first;
@@ -564,9 +563,9 @@ double Romberg::integrate(double (*f)(double), double lft, double rht,
 		for (unsigned i = 1; i <= k; i++) {
 			if (i == 1) {
 				temp = s[i];
-				s[i] = trap.integrate(f, lft, rht, uint(pow(2, k - 1)));
+				s[i] = trap.integrate(f, lft, rht, uint(pow(2., k - 1)));
 			} else {
-				s[k] = (pow(4, i - 1) * s[i - 1] - temp) / (pow(4, i - 1) - 1);
+				s[k] = (pow(4., i - 1) * s[i - 1] - temp) / (pow(4., i - 1) - 1);
 				temp = s[i];
 				s[i] = s[k];
 			}
@@ -591,5 +590,4 @@ double Romberg::integrate(double (*f)(double), double lft, double rht,
 	return s[k - 1];
 }
 
-}//namespace quad
-}//namespace phys
+}//namespace

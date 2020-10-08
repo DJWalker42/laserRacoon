@@ -20,14 +20,14 @@ int main()
 {
 	double a = 0., b = 6.; 
 
-	phys::quad::Quadrature* p_mido = new phys::quad::MidOrdinate;
-	phys::quad::Quadrature* p_trap = new phys::quad::Trapezoid;
-	phys::quad::Quadrature* p_simp = new phys::quad::Simpson;
-	phys::quad::Quadrature* p_bool = new phys::quad::Boole(true);
+	phys::Quadrature* p_mido = new phys::MidOrdinate;
+	phys::Quadrature* p_trap = new phys::Trapezoid;
+	phys::Quadrature* p_simp = new phys::Simpson;
+	phys::Quadrature* p_bool = new phys::Boole(true);
 
 	std::cout << "Gauss-Legendre\n";
 	double sol = 0.;
-	phys::quad::Legendre legen(2);
+	phys::Legendre legen(2);
 	for (int i = 3; i < 33; ++i)
 	{
 		sol = legen.integrate(f, a, b);
@@ -74,12 +74,12 @@ int main()
 	std::cout << " --\n";
 
 	p_simp->reset_func_calls(); 
-	phys::quad::Adaptive adapt(p_simp);
+	phys::Adaptive adapt(p_simp);
 	double r = adapt.integrate(f, a, b, 1.e-6);
 	std::cout << "Adaptive: " << r << " Error = " << sol - r << std::endl;
 	std::cout << adapt.get_f_calls() << "\n"; 
 
-	phys::quad::Romberg romb(1.e-6);
+	phys::Romberg romb(1.e-6);
 	double r1 = romb.integrate(f, a, b);
 
 	std::cout << "Romberg: " << r1 << " Error = " << sol - r1 << " Err = " << romb.get_error() << std::endl;

@@ -24,7 +24,7 @@
 
 int main (int argc, char ** argv) {
 	const size_t n = 2;
-	phys::mat A;
+	phys::mat_d A;
 	phys::stdVec_d row1(n) , row2(n);
 	row1[0] = 4; row1[1] = 10;
 	row2[0] = 10; row2[1]= 30;

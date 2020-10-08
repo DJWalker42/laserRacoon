@@ -66,7 +66,7 @@ int main(){
 	test[7].first = I7; test[7].second = S7;
 	test[8].first = I8; test[8].second = S8;
 
-	phys::quad::Gauss* p_lag = new phys::quad::Laguerre; 
+	phys::Gauss* p_lag = new phys::Laguerre;
 
 	phys::stdVec_d numKnots;
 	phys::stdVec_d value;
@@ -81,7 +81,7 @@ int main(){
 			numKnots.push_back(j);
 			value.push_back(result);
 		}
-		phys::visual::Viewer viewer;
+		phys::Viewer viewer;
 		viewer.set_plot_name(functions[i]);	
 		viewer.plot(numKnots, value);
 		viewer.draw_line(0., test[i].second); 

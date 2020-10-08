@@ -80,7 +80,7 @@ int main(){
 		//std::cout << "Done " << k << "/" << repeat << "\n"; 
 	}
 
-	std::pair<double, double> stats = phys::maths::mean_stdDev(pi_est);
+	std::pair<double, double> stats = phys::mean_stdDev(pi_est);
 
 	std::cout << "No darts thrown: " << darts_to_throw << "\n";
 	std::cout << "Mean value: " << stats.first << " Sigma:" << stats.second << "\n";
@@ -90,10 +90,10 @@ int main(){
 	for(size_t i = 0; i < num_bins; ++i)
 		xbin[i] = xmin + double(i) * x_span/num_bins;
 
-	phys::storage::Storage<double> pi_dart("Pi estimate", "Frequency");
+	phys::Storage<double> pi_dart("Pi estimate", "Frequency");
 	pi_dart.copy(xbin, bin);
 
-	phys::visual::Viewer viewer;
+	phys::Viewer viewer;
 
 	viewer.set_x_range(xmin, xmax);
 	viewer.withPulses();

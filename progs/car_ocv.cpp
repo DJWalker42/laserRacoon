@@ -68,7 +68,7 @@ int main()
 		time.push_back(i);
 	}
 
-	phys::visual::Viewer viewer;
+	phys::Viewer viewer;
 	viewer.set_x_name("time/s");
 	viewer.set_y_name("velocity/m/s");
 	viewer.plot(time, velocity);

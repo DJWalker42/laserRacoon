@@ -1,7 +1,8 @@
-#include <ODESolvers.h>
-#include <Storage.h>
-#include <Visualise.h>
-#include <PhysicalUnits.h>
+#include "ODESolvers.h"
+#include "Storage.h"
+#include "Visualise.h"
+#include "PhysicalUnits.h"
+
 #include <opencv2/opencv.hpp>
 
 /*
@@ -42,7 +43,7 @@
 
 
 /* Global variables*/
-const double MM = phys::constants::moon_mass/phys::constants::earth_mass/1.e2;
+const double MM = phys::moon_mass/phys::earth_mass/1.e2;
 const double rm = 1 / ( MM + 1 ); //distance of the centre of the Moon from the centre of mass
 const double re = rm * MM; //distance of the centre of the Earth from the centre of mass
 
@@ -61,10 +62,8 @@ const double orbit_speed = 7.657; //units: km/s
 //and the specific dimension to currently compute.
 //Note that 'y' also contains the craft's x-y velocity in indices 2 and 3, respectively, but these are unused.
 
-double phys::diffs::User_eqn::differential_function(double t, const std::vector<double>& y, int N, int c)
+double phys::User_eqn::differential_function(double t, const std::vector<double>& y, int N, int c)
 {
-	using namespace phys::constants; // for PI and GE
-
 	//Compute where the Earth and Moon have moved to in their circular orbit about centre-of-mass
 	e_coords[0] = re * cos(2*PI*t + PI);
 	e_coords[1] = re * sin(2*PI*t + PI); 
@@ -84,8 +83,6 @@ double phys::diffs::User_eqn::differential_function(double t, const std::vector<
 
 int main()
 {
-	using namespace phys::constants;
-
 	int rows = 1000;
 	int cols = 1000;
 
@@ -112,22 +109,21 @@ int main()
 	//Space craft starts out in low earth orbit with an instantaneous kick to its tangential velocity.
 	//The magic numbers 1.e-2 and 1.e1 are required to get the correct scale for our choice of units found in Physical_Units.cpp
 	//In current parity (+vx, -vy) orbit is clockwise, swap to get an anti-clockwise orbit (-vx, +vy).
-	position.push_back( (orbit_radius * 1.e-2 * sin(theta)/lunar_dist) - re );					//initial x position
-	position.push_back( (orbit_radius * 1.e-2 * cos(theta)/lunar_dist) - e_coords[1] );			//initial y position
-	velocity.push_back( (orbit_speed * 1.e1 + dv) * cos(theta) * sidereal_month/lunar_dist );	//initial x velocity
-	velocity.push_back( -(orbit_speed * 1.e1 + dv) * sin(theta) * sidereal_month/lunar_dist);	//initial y velocity
+	position.push_back( (orbit_radius * 1.e-2 * sin(theta)/phys::lunar_dist) - re );					//initial x position
+	position.push_back( (orbit_radius * 1.e-2 * cos(theta)/phys::lunar_dist) - e_coords[1] );			//initial y position
+	velocity.push_back( (orbit_speed * 1.e1 + dv) * cos(theta) * phys::sidereal_month/phys::lunar_dist );	//initial x velocity
+	velocity.push_back( -(orbit_speed * 1.e1 + dv) * sin(theta) * phys::sidereal_month/phys::lunar_dist);	//initial y velocity
 
-	phys::ode::state initial_system(initial_time, position, velocity);
+	phys::state initial_system(initial_time, position, velocity);
 
-	phys::diffs::Diff_eqn *travel = new phys::diffs::User_eqn;
-	travel->set_order(2);
+	phys::Diff_eqn *travel = new phys::User_eqn(2); //2nd order ODE
 
-	phys::ode::ODESolver *rk45 = new phys::ode::RKF45(travel, initial_system, step);
+	phys::ODESolver *rk45 = new phys::RKF45(travel, initial_system, step);
 
-	double moon_radius_check = moon_radius/lunar_dist/1.e2;
+	double moon_radius_check = phys::moon_radius/phys::lunar_dist/1.e2;
 	std::cout << "Target: " << moon_radius_check << "\n";
 
-	phys::ode::state next = initial_system;
+	phys::state next = initial_system;
 
 	double distance_to_moon = sqrt( (next.y[0] - m_coords[0]) * (next.y[0] - m_coords[0]) + 
 			(next.y[1] - m_coords[1]) * (next.y[1] - m_coords[1]) );
@@ -138,7 +134,7 @@ int main()
 
 	//coordinate origin == centre of mass for the system: found at (cols/2, rows/2) in the window.
 
-	int i_earth_radius = int(scale*earth_radius/lunar_dist/1.e2);
+	int i_earth_radius = int(scale*phys::earth_radius/phys::lunar_dist/1.e2);
 	int i_moon_radius = int(scale*moon_radius_check);
 
 	cv::Mat display, display2;
@@ -171,7 +167,7 @@ int main()
 		{
 			cv::putText( display, "Success!", moon_centre + cv::Point(-40,-40), cv::FONT_HERSHEY_PLAIN, 3.0, cv::Scalar(127,255,60), 3 );
 			std::cout << "Success!\n" ;
-			std::cout << "time taken = " << next.x*sidereal_month*1e6/60/60/24 << " days" << std::endl;
+			std::cout << "time taken = " << next.x*phys::sidereal_month*1e6/60/60/24 << " days" << std::endl;
 			cv::imshow(winname, display);
 			cv::waitKey();
 			exit(EXIT_SUCCESS); //break out here on success
@@ -189,7 +185,7 @@ int main()
 	//if here while loop conditional returned false, display a failure message.
 	std::cout << "Missed!\n";
 	std::cout << "You are now " << distance_to_moon << " lunar distances from the moon\n";
-	std::cout << "You have been travelling for " << next.x*sidereal_month*1e6/60/60/24 << " days" << std::endl;
+	std::cout << "You have been travelling for " << next.x*phys::sidereal_month*1e6/60/60/24 << " days" << std::endl;
 	cv::waitKey();
 	return 0;
 }

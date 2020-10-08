@@ -15,7 +15,7 @@ int main (int argc, char ** argv) {
 	double left {0.1};
 	double right {1.57};
 
-	phys::roots::Bisection bisection(&func, left, right);
+	phys::Bisection bisection(&func, left, right);
 
 	bisection.find_root(true); //we want to print the output
 

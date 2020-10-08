@@ -22,27 +22,27 @@ int main()
 	const int num_of_solvers = 7;
 	std::string root = "./data/";
 
-	phys::diffs::Diff_eqn* shm_func = new phys::diffs::SHM(9.0, 1.0);//spring const., drag coeff.
+	phys::Diff_eqn* shm_func = new phys::SHM(9.0, 1.0);//spring const., drag coeff.
 	
 	double step = 0.01;
 	double initial_time = 0.0;
 	double initial_position = 1.0;
 	double initial_velocity = 0.0; 
 
-	phys::ode::state initial_system(initial_time, initial_position, initial_velocity);
+	phys::state initial_system(initial_time, initial_position, initial_velocity);
 
-	std::vector<phys::storage::ODEStorage> container(num_of_solvers); 
-	std::vector<phys::ode::ODESolver*> solvers(num_of_solvers);
+	std::vector<phys::ODEStorage> container(num_of_solvers);
+	std::vector<phys::ODESolver*> solvers(num_of_solvers);
 	std::vector<std::string> filenames(num_of_solvers);
 	std::vector<std::string> titles(num_of_solvers);
 
-	solvers[0] = new phys::ode::Euler(shm_func, initial_system, step);
-	solvers[1] = new phys::ode::Imp_Euler(shm_func, initial_system, step);
-	solvers[2] = new phys::ode::Mod_Euler(shm_func, initial_system, step);
-	solvers[3] = new phys::ode::Velocity_Verlet(shm_func, initial_system, step);
-	solvers[4] = new phys::ode::Stormer_Verlet(shm_func, initial_system, step);	
-	solvers[5] = new phys::ode::RK4(shm_func, initial_system, step);
-	solvers[6] = new phys::ode::Leapfrog(shm_func, initial_system, step);
+	solvers[0] = new phys::Euler(shm_func, initial_system, step);
+	solvers[1] = new phys::Imp_Euler(shm_func, initial_system, step);
+	solvers[2] = new phys::Mod_Euler(shm_func, initial_system, step);
+	solvers[3] = new phys::Velocity_Verlet(shm_func, initial_system, step);
+	solvers[4] = new phys::Stormer_Verlet(shm_func, initial_system, step);
+	solvers[5] = new phys::RK4(shm_func, initial_system, step);
+	solvers[6] = new phys::Leapfrog(shm_func, initial_system, step);
 
 	filenames[0] = root + "euler_shm.txt";
 	filenames[1] = root + "imp_euler_shm.txt";
@@ -60,14 +60,14 @@ int main()
 	titles[5] = "Runge Kutta";
 	titles[6] = "Leapfrog";
 
-	phys::visual::Viewer viewer;
+	phys::Viewer viewer;
 	for(unsigned i = 0; i < container.size(); i++)
 	{
 		container[i] = solvers[i]->fullSolve(10.);
 		//container[i].write(filenames[i]);
 		viewer.set_plot_name(titles[i]);
 		try{
-			viewer.plot(container[i], phys::visual::Viewer::PHASE); //use Viewer::DEPEN to see y(t) plots instead
+			viewer.plot(container[i], phys::Viewer::PHASE); //use Viewer::DEPEN to see y(t) plots instead
 		} catch(const std::exception& e) {
 			if (i == 4){
 				std::cout << "Cannot plot phase-space for the Stormer-Verlet solution as it contains no velocity data\n";

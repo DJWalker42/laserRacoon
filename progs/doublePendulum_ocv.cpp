@@ -34,7 +34,7 @@ double m[] = {1., 2.}; //basic array representing the masses of the two pendula
 
 //here the parameter 'y' contains the angular positions and velocities for both pendula.
 
-double phys::diffs::User_eqn::differential_function(double t, const phys::stdVec_d& y, int N, int c)
+double phys::User_eqn::differential_function(double t, const phys::stdVec_d& y, int N, int c)
 {
 	double G = 9.81;
 	double del = y[1] - y[0];
@@ -77,7 +77,7 @@ bool show(const cv::Mat& frame)
 	return true;
 }
 
-void animate( const phys::storage::ODEStorage& data )
+void animate( const phys::ODEStorage& data )
 {
 	phys::stdVec_d theta_1 = data.get_dependent(1);
 	phys::stdVec_d theta_2 = data.get_dependent(2);
@@ -142,21 +142,21 @@ int main()
 	double t = 0.;
 	double step = static_cast<double>(delay) / 1000.;
 
-	phys::diffs::User_eqn pendulum; 
-	phys::ode::state initial(t, theta, omega);
+	phys::User_eqn pendulum(2); //2nd order ODE
+	phys::state initial(t, theta, omega);
 
 	//by using a target we save data at the target steps only (the solver still adapts in-between)
-	phys::ode::RKF45 rkf45(&pendulum, initial, step, phys::ode::TARGET); 
+	phys::RKF45 rkf45(&pendulum, initial, step, phys::TARGET);
 
 	//wraps the solution to [-pi, +pi]
-	phys::storage::ODEStorage data = rkf45.fullSolveWrapped(static_cast<double>(end));
+	phys::ODEStorage data = rkf45.fullSolveWrapped(static_cast<double>(end));
 
 	animate(data);
 
-	phys::visual::Viewer viewer; 
+	phys::Viewer viewer;
 	viewer.set_plot_name("Foxy?"); 
 	viewer.withLines();
-	viewer.plot(data, phys::visual::Viewer::PHASE, 1); //the final argument specifies that we want to see the data for the *second* pendulum.
+	viewer.plot(data, phys::Viewer::PHASE, 1); //the final argument specifies that we want to see the data for the *second* pendulum.
 
 	return 0;
 }

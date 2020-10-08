@@ -95,7 +95,7 @@ int main (int argc, char ** argv) {
 		freq_axis.push_back(x / t_range);
 	}
 
-	phys::visual::Viewer viewer;
+	phys::Viewer viewer;
 	viewer.withLines();
 	viewer.plot(freq_axis, spectrum);
 

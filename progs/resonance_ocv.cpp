@@ -27,10 +27,10 @@ int main()
 	double k = 9.; //natural frequency w0 = 3 Hz; mass == 1.
 	double D = .5;
 
-	phys::diffs::SHM shm_eq(k, D, drive_func);
-	phys::ode::state initial(0., 1., 0.);
+	phys::SHM shm_eq(k, D, drive_func);
+	phys::state initial(0., 1., 0.);
 	double step = .01;
-	phys::ode::RK4 rk4_solver(&shm_eq, initial, step);
+	phys::RK4 rk4_solver(&shm_eq, initial, step);
 
 	double omega_step = .05, omega_max = 5.;
 	double drag_step = .5, drag_max = 3.;
@@ -49,7 +49,7 @@ int main()
 
 	std::vector<std::string> key_names(drag_N);
 
-	phys::visual::Viewer viewer;
+	phys::Viewer viewer;
 	viewer.set_pause(30);
 	viewer.set_y_range(-1., 1.);
 
@@ -59,14 +59,14 @@ int main()
 		for(size_t j = 0; j < omega_N; ++j)
 		{
 			//solve up to 50 seconds to allow solution to stabilise
-			phys::storage::ODEStorage data = rk4_solver.fullSolve(50.); 
+			phys::ODEStorage data = rk4_solver.fullSolve(50.);
 			viewer.plot(data);
 			viewer.clear();
 			//find the max amplitude in the stable region - assume we reached stability by half way point.
 			phys::stdVec_d amplitude = data.get_dependent(); 
 			phys::stdVec_d sub_amp(amplitude.begin() + amplitude.size()/2, amplitude.end()); 
 			double maxVal, minVal;
-			phys::maths::minMax(sub_amp, minVal, maxVal);
+			phys::minMax(sub_amp, minVal, maxVal);
 			amp_vals[i].push_back(maxVal);
 			//increase driving frequency		
 			omega += omega_step;			 

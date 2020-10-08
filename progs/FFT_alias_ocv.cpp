@@ -77,7 +77,7 @@ int main(int argc, char ** argv) {
 		spectrum.push_back(norm(elem));
 	}
 
-	phys::visual::Viewer viewer;
+	phys::Viewer viewer;
 	viewer.plot(freq_axis, spectrum);
 
 	fprintf(stdout, "freq\t\tspectrum\n");

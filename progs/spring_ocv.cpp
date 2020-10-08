@@ -53,7 +53,7 @@ int main()
 	std::vector<std::string> stateID { "Pos.", "Vel." };
 
 	//storage for the data using the names specified. This allows us to store time, position, and velocity
-	phys::storage::Storage<double> state("time", stateID);
+	phys::Storage<double> state("time", stateID);
 
 	//initialise a time step
 	double step = 0.00001;
@@ -64,7 +64,7 @@ int main()
 	}
 
 	//create a viewer using the default constructor
-	phys::visual::Viewer viewer;
+	phys::Viewer viewer;
 	viewer.withLines(); //option to draw lines between points
 	viewer.plot(state, true); //plot the data using split vertical axes
 
