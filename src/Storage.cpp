@@ -8,8 +8,8 @@ namespace phys {
 
 //Default constructor - use set(initial_system) after calling the default constructor
 ODEStorage::ODEStorage() :
-		m_independent(), m_dependent(), m_size_of_y(0), m_odeOrder(0), m_xName(
-				"x"), m_yName("y"), m_dyName("dy") {
+		m_independent(), m_dependent(), m_size_of_y(0), m_odeOrder(0),
+		m_xName("x"), m_yName("y"), m_dyName("dy") {
 }
 
 //Constructor using an (ODE) state - note the initial_system is not stored on construction
@@ -20,6 +20,12 @@ ODEStorage::ODEStorage(const phys::state &initial_system,
 				dy_title) {
 	set(initial_system); //sets m_size_of_y and m_odeOrder
 }
+
+ODEStorage::ODEStorage(const std::string& ode_store_file, int order, int dimensions)
+{
+	read(ode_store_file, order, dimensions);
+}
+
 
 void ODEStorage::set(const phys::state &system) {
 	clear(); //ensures vectors empty before storing any new data.
@@ -111,16 +117,49 @@ void ODEStorage::write(const std::string &filename, bool write_headers) const {
 		output_file << "\n";
 	}
 
-	for (size_t i = 0; i < m_independent.size(); ++i) {
-		output_file << m_independent[i];
-		for (size_t j = 0; j < m_size_of_y; ++j) {
-			output_file << "\t" << m_dependent[m_size_of_y * i + j];
-		}
-		output_file << "\n";
-	}
+	output_file << *this;
 
 	output_file.close();
 }
+
+void ODEStorage::read(const std::string & filename, int ode_order, int num_dims) {
+	if (ode_order > 2 || ode_order < 0) {
+		throw std::runtime_error("1st or 2nd ode order only");
+	}
+	if (num_dims <= 0) {
+		throw std::runtime_error("number of dimensions strictly positive required");
+	}
+
+	std::ifstream input_file(filename);
+	if (input_file.is_open() == false) {
+		throw std::runtime_error(std::string("Unable to open ") + filename);
+	}
+
+	m_odeOrder = ode_order;
+	m_size_of_y = ode_order * num_dims;
+
+	if(input_file.get() == '#') {
+		//extract variable titles from the header
+		std::string line;
+		std::getline(input_file, line);
+		std::stringstream line_stream(line);
+		line_stream >> m_xName;
+		line_stream >> m_yName;
+		//remove the appended dimension number from the y (dy) name(s)
+		m_yName.pop_back();
+		if (ode_order == 2) {
+			line_stream >> m_dyName;
+			m_dyName.pop_back();
+		}
+	}
+
+	//reset file to beginning
+	input_file.seekg(0);
+
+	input_file >> *this;
+}
+
+
 
 stdVec_d ODEStorage::get_independent() const {
 	return m_independent;
@@ -179,5 +218,55 @@ void ODEStorage::__error_first_deriv() const {
 	errmsg += "first derivative value computed. Please check your code.";
 	throw(std::runtime_error(errmsg));
 }
+
+//make the ODE_Storage class serialise / deserialise using streams
+std::ostream& operator<<(std::ostream &os, const ODEStorage &ode_s) {
+	for (size_t i = 0; i < ode_s.m_independent.size(); ++i) {
+		os << ode_s.m_independent[i];
+		for (size_t j = 0; j < ode_s.m_size_of_y; ++j) {
+			os<< "\t" << ode_s.m_dependent[ode_s.m_size_of_y * i + j];
+		}
+		os << "\n";
+	}
+
+	return os;
+}
+std::istream& operator>>(std::istream &is, ODEStorage &ode_s) {
+
+	//clear any data
+	ode_s.clear();
+
+	//ignore the header line if present
+	if (is.get() == '#') is.ignore(1000, '\n');
+
+	/*
+	 * Rows look like:
+	 *  order 1: x y0 y1 y2 ....
+	 *  order 2: x y0 dy0 y1 dy1 ...
+	 *
+	 *  numbers refer to dimensions in the system,
+	 */
+	std::string line;
+	while (std::getline(is, line)){
+		std::stringstream line_stream(line);
+		int count{0};
+		double value;
+		while (line_stream >> value) {
+			if (count++) {
+				ode_s.m_dependent.push_back(value);
+			} else {
+				//zero case
+				ode_s.m_independent.push_back(value);
+			}
+		}
+	}
+
+	//you will have to know the order of the ODE to which the data refers
+
+	return is;
+}
+
+
+
 
 }//namespace

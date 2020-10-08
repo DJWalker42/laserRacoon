@@ -78,5 +78,9 @@ int main()
 		viewer.clear();
 	}
 
+	//to test ODEStorage::read member function elsewhere
+	container[0].write("./euler_shm.log", true);
+
+
 	return 0;
 }

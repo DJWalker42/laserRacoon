@@ -31,6 +31,8 @@ public:
 			const std::string &x_title = "x", const std::string &y_title = "y",
 			const std::string &dy_title = "dy");
 
+	ODEStorage(const std::string& ode_store_file, int order, int dimensions);
+
 public: //interface functions
 	/*	Function to clear the storage vectors
 	 */
@@ -105,6 +107,12 @@ public: //interface functions
 	/*	Function to write the stored system to <filename>. Can handle both first and second ordered systems
 	 with multiple dimensions.*/
 	void write(const std::string &filename, bool write_headers = false) const;
+
+	/*
+	 * Function to read ODEStorage data from the provided file, file created by the 'write'
+	 * member function
+	 */
+	void read(const std::string & filename, int ode_order, int num_dims);
 
 	/*	Returns the stepped independent variable (i.e. start -> end in steps of h)
 	 Use after applying a full_solve() to get access to the data.*/
