@@ -4,6 +4,7 @@
 
 int main() {
 
+	//file created and written by odeSolvers program
 	phys::ODEStorage ode_store("./euler_shm.log", 2, 1);
 
 	phys::Viewer viewer;

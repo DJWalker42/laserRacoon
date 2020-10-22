@@ -605,11 +605,12 @@ ODEStorage RKF45::fullSolve(double end) {
 				throw(std::runtime_error(errmsg));
 			}
 
-			if (fabs(bigerr) > fabs(m_step * tol)) //repeat integration with new step size
-					{
+			if (fabs(bigerr) > fabs(m_step * tol)) {
+				//repeat integration with new step size
 				m_step = hnew;
-			} else // accept the integration at m_current step size
-			{
+			} else {
+				// accept the integration at m_current step size
+
 				/*	Reduce the m_step size if it takes the solution beyond the target if set.
 				 When this occurs we have hit the target so set the bool flag to true in order to store the data*/
 				if (m_targetState == TARGET

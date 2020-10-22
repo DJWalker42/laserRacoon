@@ -19,31 +19,38 @@ non_ocv_programs := $(filter-out ${ocv_programs_temp}, ${all_programs})
 ocv_programs := $(ocv_programs_temp:%_ocv=%)
 
 
-CXX = g++
-CXXFLAGS = -Wall -O0 -std=c++11
 
-INCDIR=../inc
-LIBDIR=../lib
+#-Xpreprocessor is required on Mac OSX to get clang to recognise -fopenmp
+CXX = g++
+CXXFLAGS = -Wall -O2 -std=c++11 -Xpreprocessor -fopenmp
+
+INCDIR=../../inc
+LIBDIR=../../lib
 
 # These are locations of OpenCV headers and libraries for Mac OSX
 # For Unix/Linux typically these are /usr/include, /usr/lib, or /usr/local/include, /usr/local/lib
 OCVINC=/opt/local/include
 OCVLIB=/opt/local/lib
 
+OMPINC=${OCVINC}
+OMPLIB=/opt/local/lib/libomp
+
 
 BINDIR=./bin
 
 LIBNAME = -llaserRacoon
 OCVLIBNAMES = -lopencv_core -lopencv_highgui -lopencv_imgproc -lopencv_imgcodecs
+OMPLIBNAME = -lomp
 
 #Note: opencv_imgcodecs is only used by the numerov program so including it with
 # all opencv programs is redundant
 
-INCFLAGS = -I${INCDIR}
-LIBFLAGS = -L${LIBDIR} ${LIBNAME}
+INCFLAGS = -I${INCDIR} -I${OMPINC}
+LIBFLAGS = -L${LIBDIR} ${LIBNAME} -L${OMPLIB} ${OMPLIBNAME}
 
 OCVINCFLAGS = -I${OCVINC}
 OCVLIBFLAGS = -L${OCVLIB} ${OCVLIBNAMES}
+
 
 # to add any additional options to the compiler command
 OPTIONS =
@@ -71,5 +78,5 @@ clean:
 	@rm -rf ${BINDIR}
 
 $(BINDIR):
-	@mkdir -p $(BINDIR) && mkdir -p $(BINDIR)/data
+	@mkdir -p $(BINDIR)
 	@echo '*** ${BINDIR} created ***'

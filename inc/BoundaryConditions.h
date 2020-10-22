@@ -6,10 +6,10 @@ namespace phys{
 	//forward declaration of the BvpODE class
 	class BvpODE;
 
-	enum boundaryType {DIRICHLET, NEUMANN};//, CAUCHY}; //note to implement Cauchy BCs we'd need _TWO_ doubles for each boundary (value _AND_ derviative).
+	enum boundaryType {DIRICHLET, NEUMANN};//, CAUCHY}; //note to implement Cauchy BCs we'd need _TWO_ doubles for each boundary (value _AND_ derivative).
 
 	/*	BoundaryConditions: a class to store the type and value of boundary conditions use when solving boundary value problems in one-dimension. As we are
-		in one dimension the boundary values are necessarly singluar values. 
+		in one dimension the boundary values are necessarily singular values.
 		
 		For boundary value problems in 2 dimensions the boundary conditions are, in general, functions along the specific dimension. 
 		We would have to store these as function pointers as data members in the class, one function pointer for each boundary (top, bottom, left, right).

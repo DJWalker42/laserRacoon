@@ -187,7 +187,7 @@ int main()
 	std::string lvl_filename = rootDir + "/levels.txt";
 	std::string wvf_filename = rootDir + "/wavefunction.txt";
 
-	std::cout	<< " Eigenvalues of the Schroedinger equation\n"
+	std::cout	<< " Eigenvalues of the Schrodinger equation\n"
 				<< " for the harmonic oscillator V(x) = 0.5 x^2\n"
 				<< " ------------------------------------------\n";
 	double E_max;
