@@ -43,7 +43,7 @@ int main(int argc, char ** argv) {
 	    	break;
 	    case '?':
 	        if (optopt == 'r') {
-	            phys::errExit("Option -f requires a value");
+	            phys::errExit("Option -r requires a value");
 	        } else if ( isprint(optopt) ) {
 	            phys::errExit("Option '-%c' unknown", optopt);
 	        } else {
