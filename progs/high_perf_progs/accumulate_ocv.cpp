@@ -7,6 +7,10 @@
 #include <libomp/omp.h>
 #include "phys_accumulate.h"
 
+/*
+ *  Program to compare alternative methods od accumulating a vector of values
+ */
+
 int main () {
 
 	omp_set_dynamic(0); //disable dynamic "teams", ensures we get the number of threads we want
