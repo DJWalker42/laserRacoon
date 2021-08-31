@@ -21,5 +21,7 @@ This will compile the source code into binaries, create './bin', then move those
 To compile individual programs invoke 'make binary_name' 
 
 where the binary_name is the source filename without the .cpp extension, and in the case of OpenCV programs also
-without the '_ocv'. 
+without the '_ocv'. For example to build the 'double pendulum' program you type:
+
+`make doublePendulum` 
 
