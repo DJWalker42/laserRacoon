@@ -2,6 +2,7 @@
 #define MONTE_CARLO
 
 #include <utility>
+#include <cstdint>
 
 namespace phys {
 
