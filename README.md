@@ -8,6 +8,7 @@ intended to be as clear and straightforward as possible.
 
 ### Notice 2: For excellent YouTube videos of how to run Physics simulations in Python I highly recommend:
 https://www.youtube.com/@MrPSolver/featured
+
 It's a great jumping off point to learn Python in general, as well as learning the detials of libraries such as numPy
 and sciPy.
 
