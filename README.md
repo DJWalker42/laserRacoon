@@ -1,10 +1,15 @@
 # laserRacoon
 ## A mostly object orientated library providing C++ code for physics computations.
 
-### Notice: This code was written with education and learning in mind so do not expect a fully optimised library. 
+### Notice 1: This code was written with education and learning in mind so do not expect a fully optimised library. 
 For example, the linear algebra solvers (Cholesky, LU decomposition, etc) are much better done elsewhere 
 ([Eigen3](http://eigen.tuxfamily.org/index.php?title=Main_Page) for an example) but the code as presented is 
 intended to be as clear and straightforward as possible.
+
+### Notice 2: For excellent YouTube videos of how to run Physics simulations in Python I highly recommend:
+https://www.youtube.com/@MrPSolver/featured
+It's a great jumping off point to learn Python in general, as well as learning the detials of libraries such as numPy
+and sciPy.
 
 The library can be constructed from the header and source files found in the _inc_ and _src_ directories respectively. 
 As provided the Makefile will build the library using the g++ compiler the output will be placed into a directory 
